@@ -133,7 +133,7 @@ Format for Telegram with emojis:
 
 KEEP UNDER 1800 CHARACTERS. Be direct, no fluff."""
 
-    try:
+try:
         r = requests.post(
             "https://api.anthropic.com/v1/messages",
             headers={
@@ -148,10 +148,14 @@ KEEP UNDER 1800 CHARACTERS. Be direct, no fluff."""
             },
             timeout=30,
         )
+        print(f"  Claude API status: {r.status_code}")
+        print(f"  Claude API response: {r.text[:500]}")
         r.raise_for_status()
         return r.json()["content"][0]["text"]
     except Exception as e:
         print(f"  ⚠ Claude API error: {e}")
+        if hasattr(e, 'response') and e.response is not None:
+            print(f"  ⚠ Response body: {e.response.text[:500]}")
         return f"⚠️ Analysis unavailable: {e}\n\n📊 Prices:\n" + "\n".join(price_lines)
 
 
