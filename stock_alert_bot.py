@@ -1,12 +1,13 @@
 """
-Stock Alert Telegram Bot — GitHub Actions Version
-Multi-source news aggregation: Finnhub + Google News + Company-specific news
-Fetches stock prices + aggregated news → Claude analysis → Telegram alert.
+Stock Alert Telegram Bot v4 — GitHub Actions Version
+Dynamic watchlist + Multi-source news + Sector scanning
+Fetches prices + aggregated news → Claude analysis → Telegram alert.
 """
 
 import os
 import sys
 import time
+import re
 import requests
 from datetime import datetime, timezone, timedelta
 
@@ -18,31 +19,37 @@ ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
-# Optional — add these for even more news (free tiers)
-GNEWS_API_KEY = os.environ.get("GNEWS_API_KEY", "")  # gnews.io (100 req/day free)
-
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# CUSTOMIZE YOUR WATCHLISTS HERE
+# YOUR STOCK UNIVERSE
+# The bot picks top 2 from each sector + scans
+# all of them for big movers (>2% change)
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CORE_WATCHLIST = ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN"]
 
 SECTORS = {
-    "Tech": ["META", "TSLA", "AMD", "INTC", "CRM"],
-    "Finance": ["JPM", "GS", "V", "MA"],
-    "Healthcare": ["JNJ", "UNH", "PFE", "ABBV"],
-    "Energy": ["XOM", "CVX", "NEE"],
-    "German/EU": ["SAP", "SIE.DE", "BMW.DE"],
-    "ETFs": ["SPY", "QQQ", "VGT"],
-    "Crypto-adjacent": ["COIN", "MSTR"],
+    "Tech": ["META", "TSLA", "AMD", "INTC", "CRM", "ORCL"],
+    "Finance": ["JPM", "GS", "V", "MA", "BRK.B"],
+    "Healthcare": ["JNJ", "UNH", "PFE", "ABBV", "LLY"],
+    "Energy": ["XOM", "CVX", "NEE", "OXY", "SLB"],
+    "Defense/Military": ["LMT", "RTX", "NOC", "GD", "BA", "LHX"],
+    "Semiconductors": ["TSM", "AVGO", "ASML", "QCOM", "MU"],
+    "AI/Cloud": ["PLTR", "SNOW", "NET", "DDOG", "AI"],
+    "Consumer": ["WMT", "COST", "NKE", "SBUX", "MCD"],
+    "German/EU": ["SAP", "SIE.DE", "BMW.DE", "ADS.DE", "DTE.DE"],
+    "ETFs": ["SPY", "QQQ", "VGT", "XLF", "XLE", "ITA"],
+    "Crypto-adjacent": ["COIN", "MSTR", "MARA"],
 }
 
-MAX_DYNAMIC_STOCKS = 5
+# Big mover threshold — stocks moving more than this % get auto-added
+BIG_MOVER_THRESHOLD = 2.0
+MAX_DYNAMIC_STOCKS = 10
 
 
 # ──────────────────────────────────────────────
 # Dynamic Stock Discovery
 # ──────────────────────────────────────────────
-def get_market_movers() -> list:
+def get_news_mentioned_tickers() -> list:
+    """Find tickers mentioned in breaking news."""
     movers = []
     try:
         r = requests.get(
@@ -51,35 +58,106 @@ def get_market_movers() -> list:
             timeout=10,
         )
         r.raise_for_status()
-        mentioned_tickers = set()
+        mentioned = set()
         for article in r.json()[:20]:
             related = article.get("related", "")
             if related:
                 for ticker in related.split(","):
                     ticker = ticker.strip().upper()
                     if ticker and len(ticker) <= 5 and ticker.isalpha():
-                        mentioned_tickers.add(ticker)
-        movers = list(mentioned_tickers)[:MAX_DYNAMIC_STOCKS]
-        print(f"  📈 News-mentioned tickers: {movers}")
+                        mentioned.add(ticker)
+        movers = list(mentioned)[:MAX_DYNAMIC_STOCKS]
+        if movers:
+            print(f"  📰 News-mentioned tickers: {', '.join(movers)}")
     except Exception as e:
-        print(f"  ⚠ Error fetching movers: {e}")
+        print(f"  ⚠ Error fetching news tickers: {e}")
     return movers
 
 
-def build_watchlist() -> list:
-    watchlist = list(CORE_WATCHLIST)
+def get_top_movers_by_price() -> list:
+    """Scan ALL sector stocks and find today's biggest movers."""
+    scan_list = set()
     for symbols in SECTORS.values():
-        for s in symbols[:2]:
-            if s not in watchlist:
-                watchlist.append(s)
-    for s in get_market_movers():
+        scan_list.update(symbols)
+
+    print(f"  🔍 Scanning {len(scan_list)} stocks for big movers (>{BIG_MOVER_THRESHOLD}% change)...")
+
+    movers = []
+    for symbol in sorted(scan_list):
+        try:
+            r = requests.get(
+                "https://finnhub.io/api/v1/quote",
+                params={"symbol": symbol, "token": FINNHUB_API_KEY},
+                timeout=10,
+            )
+            r.raise_for_status()
+            d = r.json()
+            pct = d.get("dp", 0)
+            price = d.get("c", 0)
+            if price > 0 and abs(pct) >= BIG_MOVER_THRESHOLD:
+                movers.append({"symbol": symbol, "change_pct": pct, "price": price})
+            time.sleep(0.1)
+        except Exception:
+            pass
+
+    movers.sort(key=lambda x: abs(x["change_pct"]), reverse=True)
+    top = movers[:MAX_DYNAMIC_STOCKS]
+
+    if top:
+        print(f"  🔥 Big movers found:")
+        for m in top:
+            emoji = "▲" if m["change_pct"] > 0 else "▼"
+            print(f"     {emoji} {m['symbol']}: {m['change_pct']:+.2f}% (${m['price']:.2f})")
+    else:
+        print(f"  😴 No stocks moving >{BIG_MOVER_THRESHOLD}% today")
+
+    return [m["symbol"] for m in top]
+
+
+def build_watchlist() -> list:
+    """Build final watchlist: core + sector picks + dynamic discoveries."""
+    print("\n🔍 Building watchlist...")
+
+    watchlist = list(CORE_WATCHLIST)
+    print(f"  Core: {', '.join(CORE_WATCHLIST)}")
+
+    # Top 2 from each sector
+    sector_picks = []
+    for sector, symbols in SECTORS.items():
+        picked = symbols[:2]
+        sector_picks.extend(picked)
+    for s in sector_picks:
         if s not in watchlist:
             watchlist.append(s)
-    return watchlist[:25]
+    print(f"  Sector picks: +{len(sector_picks)} from {len(SECTORS)} sectors")
+
+    # News-mentioned tickers
+    news_tickers = get_news_mentioned_tickers()
+    added_news = 0
+    for s in news_tickers:
+        if s not in watchlist:
+            watchlist.append(s)
+            added_news += 1
+    if added_news:
+        print(f"  News discoveries: +{added_news} trending tickers")
+
+    # Big movers scan
+    big_movers = get_top_movers_by_price()
+    added_movers = 0
+    for s in big_movers:
+        if s not in watchlist:
+            watchlist.append(s)
+            added_movers += 1
+    if added_movers:
+        print(f"  Big movers: +{added_movers} stocks moving >{BIG_MOVER_THRESHOLD}%")
+
+    watchlist = watchlist[:30]
+    print(f"  📋 Final watchlist: {len(watchlist)} stocks")
+    return watchlist
 
 
 # ──────────────────────────────────────────────
-# Finnhub API
+# Finnhub Price API
 # ──────────────────────────────────────────────
 def fetch_quote(symbol: str) -> dict:
     try:
@@ -103,15 +181,13 @@ def fetch_quote(symbol: str) -> dict:
             "change_pct": d.get("dp", 0),
         }
     except Exception as e:
-        print(f"  ⚠ Error fetching {symbol}: {e}")
         return {"symbol": symbol, "error": str(e)}
 
 
 # ──────────────────────────────────────────────
-# NEWS SOURCE 1: Finnhub (market + sector news)
+# NEWS SOURCE 1: Finnhub Market News
 # ──────────────────────────────────────────────
 def fetch_finnhub_news() -> list:
-    """Fetch market and tech news from Finnhub."""
     articles = []
     for category in ["general", "technology"]:
         try:
@@ -126,20 +202,18 @@ def fetch_finnhub_news() -> list:
                     "source": f"Finnhub/{item.get('source', 'Unknown')}",
                     "headline": item.get("headline", ""),
                     "summary": item.get("summary", "")[:200],
-                    "url": item.get("url", ""),
                 })
             time.sleep(0.12)
         except Exception as e:
-            print(f"  ⚠ Finnhub {category} news error: {e}")
-    print(f"  [Finnhub] Got {len(articles)} articles")
+            print(f"  ⚠ Finnhub {category} error: {e}")
+    print(f"  [Finnhub Market] {len(articles)} articles")
     return articles
 
 
 # ──────────────────────────────────────────────
-# NEWS SOURCE 2: Finnhub Company News (per ticker)
+# NEWS SOURCE 2: Finnhub Company News
 # ──────────────────────────────────────────────
 def fetch_finnhub_company_news(symbols: list) -> list:
-    """Fetch company-specific news for given symbols."""
     articles = []
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     past = (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d")
@@ -156,84 +230,48 @@ def fetch_finnhub_company_news(symbols: list) -> list:
                     "source": f"Finnhub/{item.get('source', 'Unknown')}",
                     "headline": f"[{symbol}] {item.get('headline', '')}",
                     "summary": item.get("summary", "")[:200],
-                    "url": item.get("url", ""),
                 })
             time.sleep(0.12)
-        except Exception as e:
-            print(f"  ⚠ Finnhub company news error for {symbol}: {e}")
-    print(f"  [Finnhub Company] Got {len(articles)} articles for {len(symbols)} tickers")
+        except Exception:
+            pass
+    print(f"  [Finnhub Company] {len(articles)} articles for {len(symbols)} tickers")
     return articles
 
 
 # ──────────────────────────────────────────────
-# NEWS SOURCE 3: Google News via gnews package
+# NEWS SOURCE 3: Google News RSS (free, no key)
 # ──────────────────────────────────────────────
 def fetch_google_news() -> list:
-    """Fetch stock market news from Google News RSS (no API key needed)."""
     articles = []
-    queries = ["stock market today", "Wall Street", "tech stocks", "S&P 500"]
-
+    queries = [
+        "stock market today",
+        "Wall Street trading",
+        "tech stocks earnings",
+        "S&P 500 nasdaq",
+        "defense military stocks",
+        "oil energy stocks",
+    ]
     for query in queries:
         try:
-            # Google News RSS feed — free, no key needed
             url = f"https://news.google.com/rss/search?q={query.replace(' ', '+')}&hl=en-US&gl=US&ceid=US:en"
             r = requests.get(url, timeout=10)
             r.raise_for_status()
-
-            # Simple XML parsing (avoid importing extra libraries)
-            import re
             items = re.findall(r'<item>(.*?)</item>', r.text, re.DOTALL)
             for item in items[:3]:
                 title_match = re.search(r'<title>(.*?)</title>', item)
                 source_match = re.search(r'<source[^>]*>(.*?)</source>', item)
                 if title_match:
-                    title = title_match.group(1).replace('&amp;', '&').replace('&#39;', "'").replace('&quot;', '"')
+                    title = title_match.group(1)
+                    title = title.replace('&amp;', '&').replace('&#39;', "'").replace('&quot;', '"').replace('&lt;', '<').replace('&gt;', '>')
                     source = source_match.group(1) if source_match else "Google News"
                     articles.append({
                         "source": f"Google/{source}",
                         "headline": title,
                         "summary": "",
-                        "url": "",
                     })
-        except Exception as e:
-            print(f"  ⚠ Google News error for '{query}': {e}")
-
-    print(f"  [Google News] Got {len(articles)} articles")
-    return articles
-
-
-# ──────────────────────────────────────────────
-# NEWS SOURCE 4: GNews API (optional, if key provided)
-# ──────────────────────────────────────────────
-def fetch_gnews_api() -> list:
-    """Fetch business news from GNews.io API (100 free requests/day)."""
-    if not GNEWS_API_KEY:
-        return []
-
-    articles = []
-    try:
-        r = requests.get(
-            "https://gnews.io/api/v4/top-headlines",
-            params={
-                "category": "business",
-                "lang": "en",
-                "max": 10,
-                "apikey": GNEWS_API_KEY,
-            },
-            timeout=10,
-        )
-        r.raise_for_status()
-        for item in r.json().get("articles", []):
-            articles.append({
-                "source": f"GNews/{item.get('source', {}).get('name', 'Unknown')}",
-                "headline": item.get("title", ""),
-                "summary": item.get("description", "")[:200],
-                "url": item.get("url", ""),
-            })
-    except Exception as e:
-        print(f"  ⚠ GNews API error: {e}")
-
-    print(f"  [GNews API] Got {len(articles)} articles")
+        except Exception:
+            pass
+    print(f"  [Google News] {len(articles)} articles")
     return articles
 
 
@@ -241,40 +279,27 @@ def fetch_gnews_api() -> list:
 # News Aggregator
 # ──────────────────────────────────────────────
 def aggregate_news(core_symbols: list) -> list:
-    """Pull news from all sources, deduplicate, and return unified list."""
     print("\n📰 Aggregating news from multiple sources...")
 
     all_articles = []
-
-    # Source 1: Finnhub market news
     all_articles.extend(fetch_finnhub_news())
-
-    # Source 2: Finnhub company-specific news
     all_articles.extend(fetch_finnhub_company_news(core_symbols[:5]))
-
-    # Source 3: Google News RSS (free, no key)
     all_articles.extend(fetch_google_news())
 
-    # Source 4: GNews API (optional)
-    all_articles.extend(fetch_gnews_api())
-
-    # Deduplicate by headline similarity
-    seen_headlines = set()
+    # Deduplicate by headline
+    seen = set()
     unique = []
     for article in all_articles:
-        # Use first 50 chars of headline as dedup key
         key = article["headline"][:50].lower().strip()
-        if key and key not in seen_headlines:
-            seen_headlines.add(key)
+        if key and key not in seen:
+            seen.add(key)
             unique.append(article)
 
-    # Sort: company-specific news first, then general
+    # Company-specific news first
     unique.sort(key=lambda x: (0 if "[" in x["headline"] else 1))
 
-    print(f"  📊 Total: {len(all_articles)} raw → {len(unique)} unique articles")
-    print(f"  Sources: Finnhub Market, Finnhub Company, Google News" +
-          (", GNews API" if GNEWS_API_KEY else ""))
-
+    sources = set(n.get("source", "").split("/")[0] for n in unique if n.get("source"))
+    print(f"  📊 Total: {len(all_articles)} raw → {len(unique)} unique from {len(sources)} sources")
     return unique
 
 
@@ -292,8 +317,7 @@ def analyze_with_claude(prices: list, news: list, watchlist_info: str) -> str:
         emoji = "🟢" if p["change_pct"] >= 0 else "🔴"
         line = (
             f"{emoji} {p['symbol']}: ${p['current']:.2f} "
-            f"({'+' if p['change_pct'] >= 0 else ''}{p['change_pct']:.2f}%) "
-            f"| H: ${p['high']:.2f} L: ${p['low']:.2f}"
+            f"({'+' if p['change_pct'] >= 0 else ''}{p['change_pct']:.2f}%)"
         )
         if p["change_pct"] >= 0:
             gainers.append((p["change_pct"], line))
@@ -304,7 +328,6 @@ def analyze_with_claude(prices: list, news: list, watchlist_info: str) -> str:
     losers.sort(key=lambda x: x[0])
     price_lines = [line for _, line in gainers] + [line for _, line in losers]
 
-    # Format news with source attribution
     news_lines = []
     for n in news[:25]:
         source = n.get("source", "Unknown")
@@ -312,37 +335,34 @@ def analyze_with_claude(prices: list, news: list, watchlist_info: str) -> str:
         summary = n.get("summary", "")
         line = f"- [{source}] {headline}"
         if summary:
-            line += f" — {summary[:100]}"
+            line += f" — {summary[:80]}"
         news_lines.append(line)
 
-    # Count sources for context
-    sources = set()
-    for n in news:
-        main_source = n.get("source", "").split("/")[0]
-        if main_source:
-            sources.add(main_source)
+    sources = set(n.get("source", "").split("/")[0] for n in news if n.get("source"))
 
-    prompt = f"""You are a senior stock market analyst creating a Telegram alert from MULTIPLE news sources.
+    prompt = f"""You are a senior stock market analyst. Create a beautiful Telegram alert from multi-source data.
 
-## Watchlist
+## Coverage
 {watchlist_info}
 
-## Stock Prices (sorted by performance)
+## Prices (sorted by performance)
 {chr(10).join(price_lines)}
 {f"No data: {', '.join(errors)}" if errors else ""}
 
-## Aggregated News ({len(news)} articles from {', '.join(sources)})
+## News ({len(news)} articles from {', '.join(sources)})
 {chr(10).join(news_lines)}
 
-## FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
+## FORMAT EXACTLY LIKE THIS:
 
-🌡 MARKET PULSE: [one-line overall sentiment]
+🌡 MARKET PULSE: [one-line sentiment with market direction]
 
 ━━━━━━━━━━━━━━━━━━━━
 
 📊 TOP MOVERS
 ▲ [TICKER] +X.XX% ($XXX) — [reason]
 ▲ [TICKER] +X.XX% ($XXX) — [reason]
+▲ [TICKER] +X.XX% ($XXX) — [reason]
+▼ [TICKER] -X.XX% ($XXX) — [reason]
 ▼ [TICKER] -X.XX% ($XXX) — [reason]
 ▼ [TICKER] -X.XX% ($XXX) — [reason]
 
@@ -351,23 +371,26 @@ def analyze_with_claude(prices: list, news: list, watchlist_info: str) -> str:
 🎯 SIGNALS
 
 🟢 BUY: [TICKER] @ $XXX
-   → [one-line reasoning with news source]
+   → [reasoning citing news source]
 
 🟢 BUY: [TICKER] @ $XXX
-   → [one-line reasoning with news source]
+   → [reasoning citing news source]
+
+🟢 BUY: [TICKER] @ $XXX
+   → [reasoning citing news source]
 
 🔴 SELL: [TICKER] @ $XXX
-   → [one-line reasoning]
+   → [reasoning]
 
 🟡 WATCH: [TICKER]
-   → [what to watch for]
+   → [catalyst to watch]
 
 ━━━━━━━━━━━━━━━━━━━━
 
-📰 KEY NEWS (cross-referenced from {len(sources)} sources)
-• [headline + which sources confirm it + impact]
-• [headline + impact]
-• [headline + impact]
+📰 KEY NEWS
+• [most impactful headline + market impact]
+• [second headline + impact]
+• [third headline + impact]
 
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -377,15 +400,15 @@ def analyze_with_claude(prices: list, news: list, watchlist_info: str) -> str:
 ━━━━━━━━━━━━━━━━━━━━
 
 ⚡ BOTTOM LINE
-[2-3 sentence actionable summary]
+[2-3 sentence actionable summary: what to buy, what to avoid, key risk]
 
 ## RULES:
-- Cross-reference news across sources for higher confidence signals
-- If multiple sources report the same story, flag it as HIGH CONFIDENCE
-- Show only TOP 2 gainers and TOP 2 losers
-- 2-3 BUY signals, 1-2 SELL signals with exact prices
+- Cross-reference news — if multiple sources report same story, mark HIGH CONFIDENCE
+- TOP 3 gainers and TOP 3 losers in movers section
+- 3 BUY signals with prices, 1-2 SELL signals
+- Include defense/military sector in heat map if relevant
 - Sector heat map: 🟩 up 🟥 down 🟨 flat
-- NO markdown (no * or _ characters)
+- NO markdown formatting (no * or _ characters)
 - KEEP UNDER 2800 CHARACTERS"""
 
     try:
@@ -405,13 +428,13 @@ def analyze_with_claude(prices: list, news: list, watchlist_info: str) -> str:
         )
         print(f"  Claude API status: {r.status_code}")
         if r.status_code != 200:
-            print(f"  Claude API response: {r.text[:500]}")
+            print(f"  Claude response: {r.text[:500]}")
         r.raise_for_status()
         return r.json()["content"][0]["text"]
     except Exception as e:
-        print(f"  ⚠ Claude API error: {e}")
+        print(f"  ⚠ Claude error: {e}")
         if hasattr(e, "response") and e.response is not None:
-            print(f"  ⚠ Response body: {e.response.text[:500]}")
+            print(f"  ⚠ Body: {e.response.text[:500]}")
         return f"⚠️ Analysis unavailable: {e}\n\n📊 Prices:\n" + "\n".join(price_lines[:10])
 
 
@@ -432,7 +455,7 @@ def send_telegram(text: str) -> bool:
             timeout=10,
         )
         r.raise_for_status()
-        print("  ✅ Telegram message sent!")
+        print("  ✅ Telegram sent!")
         return True
     except Exception as e:
         print(f"  ❌ Telegram failed: {e}")
@@ -443,12 +466,14 @@ def send_telegram(text: str) -> bool:
 # Main
 # ──────────────────────────────────────────────
 def main():
-    print("🤖 Stock Alert Bot v3 - Multi-Source News Aggregation")
-    print("=" * 50)
+    print("🤖 Stock Alert Bot v4")
+    print("Dynamic Watchlist + Multi-Source News + Sector Scanning")
+    print("=" * 55)
+
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     berlin_time = (datetime.now(timezone.utc) + timedelta(hours=1)).strftime("%H:%M")
 
-    # Validate secrets
+    # Validate
     missing = []
     if not FINNHUB_API_KEY:
         missing.append("FINNHUB_API_KEY")
@@ -459,18 +484,21 @@ def main():
     if not TELEGRAM_CHAT_ID:
         missing.append("TELEGRAM_CHAT_ID")
     if missing:
-        print(f"❌ Missing secrets: {', '.join(missing)}")
+        print(f"❌ Missing: {', '.join(missing)}")
         sys.exit(1)
 
-    # Build watchlist
-    print("\n🔍 Building watchlist...")
+    # 1. Build dynamic watchlist
     watchlist = build_watchlist()
     sector_names = ", ".join(SECTORS.keys())
-    watchlist_info = f"Core: {', '.join(CORE_WATCHLIST)} | Sectors: {sector_names} | Total: {len(watchlist)}"
-    print(f"  Tracking {len(watchlist)} stocks")
+    watchlist_info = (
+        f"Core: {', '.join(CORE_WATCHLIST)}\n"
+        f"Sectors: {sector_names}\n"
+        f"Dynamic: news-trending + big movers (>{BIG_MOVER_THRESHOLD}%)\n"
+        f"Total tracking: {len(watchlist)} stocks"
+    )
 
-    # 1. Fetch prices
-    print(f"\n📊 Fetching prices...")
+    # 2. Fetch prices for final watchlist
+    print(f"\n📊 Fetching prices for {len(watchlist)} stocks...")
     prices = []
     for symbol in watchlist:
         quote = fetch_quote(symbol)
@@ -480,18 +508,18 @@ def main():
             print(f"  {emoji} {symbol}: ${quote['current']:.2f} ({quote['change_pct']:+.2f}%)")
         time.sleep(0.12)
 
-    valid_prices = [p for p in prices if "error" not in p]
-    print(f"  Got {len(valid_prices)}/{len(watchlist)} prices")
+    valid = [p for p in prices if "error" not in p]
+    print(f"  Got {len(valid)}/{len(watchlist)} prices")
 
-    # 2. Aggregate news from all sources
+    # 3. Aggregate news
     news = aggregate_news(CORE_WATCHLIST)
 
-    # 3. Claude analysis
-    print("\n🧠 Analyzing with Claude (multi-source)...")
+    # 4. Claude analysis
+    print("\n🧠 Claude analysis (multi-source)...")
     analysis = analyze_with_claude(prices, news, watchlist_info)
-    print(f"  Analysis: {len(analysis)} chars")
+    print(f"  Generated {len(analysis)} chars")
 
-    # 4. Build message and send
+    # 5. Send
     print("\n📱 Sending alert...")
 
     utc_hour = datetime.now(timezone.utc).hour
@@ -502,41 +530,35 @@ def main():
     else:
         session = "🌙 AFTER-HOURS"
 
-    num_gainers = len([p for p in valid_prices if p.get("change_pct", 0) >= 0])
-    num_losers = len(valid_prices) - num_gainers
-
-    # Count news sources
-    sources = set()
-    for n in news:
-        main_source = n.get("source", "").split("/")[0]
-        if main_source:
-            sources.add(main_source)
+    num_up = len([p for p in valid if p.get("change_pct", 0) >= 0])
+    num_down = len(valid) - num_up
+    sources = set(n.get("source", "").split("/")[0] for n in news if n.get("source"))
 
     header = (
         f"{'═' * 28}\n"
-        f"   🤖 STOCK ALERT BOT\n"
+        f"   🤖 STOCK ALERT BOT v4\n"
         f"   {session}\n"
         f"{'═' * 28}\n"
         f"🕐 {berlin_time} Berlin | {now}\n"
-        f"📋 {len(valid_prices)} stocks | "
-        f"🟢 {num_gainers} up | 🔴 {num_losers} down\n"
-        f"📰 {len(news)} articles from {len(sources)} sources\n"
+        f"📋 {len(valid)} stocks across {len(SECTORS)} sectors\n"
+        f"🟢 {num_up} up | 🔴 {num_down} down\n"
+        f"📰 {len(news)} news from {', '.join(sorted(sources))}\n"
         f"{'═' * 28}\n\n"
     )
 
     footer = (
         f"\n\n{'═' * 28}\n"
-        f"  Sources: {', '.join(sorted(sources))}\n"
-        f"  Powered by Finnhub + Claude AI\n"
+        f"  🔄 Next alert in ~4 hours\n"
+        f"  📡 Finnhub + Google News + Claude AI\n"
         f"{'═' * 28}"
     )
 
     success = send_telegram(header + analysis + footer)
 
     if success:
-        print("\n✅ Complete! Check Telegram.")
+        print("\n✅ Done! Check Telegram.")
     else:
-        print("\n❌ Telegram delivery failed.")
+        print("\n❌ Telegram failed.")
         sys.exit(1)
 
 
