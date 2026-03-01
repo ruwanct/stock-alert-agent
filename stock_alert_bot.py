@@ -133,7 +133,7 @@ Format for Telegram with emojis:
 
 KEEP UNDER 1800 CHARACTERS. Be direct, no fluff."""
 
-try:
+    try:
         r = requests.post(
             "https://api.anthropic.com/v1/messages",
             headers={
@@ -154,7 +154,7 @@ try:
         return r.json()["content"][0]["text"]
     except Exception as e:
         print(f"  ⚠ Claude API error: {e}")
-        if hasattr(e, 'response') and e.response is not None:
+        if hasattr(e, "response") and e.response is not None:
             print(f"  ⚠ Response body: {e.response.text[:500]}")
         return f"⚠️ Analysis unavailable: {e}\n\n📊 Prices:\n" + "\n".join(price_lines)
 
@@ -206,14 +206,22 @@ def main():
 
     # Validate secrets
     missing = []
-    if not FINNHUB_API_KEY: missing.append("FINNHUB_API_KEY")
-    if not ANTHROPIC_API_KEY: missing.append("ANTHROPIC_API_KEY")
-    if not TELEGRAM_BOT_TOKEN: missing.append("TELEGRAM_BOT_TOKEN")
-    if not TELEGRAM_CHAT_ID: missing.append("TELEGRAM_CHAT_ID")
+    if not FINNHUB_API_KEY:
+        missing.append("FINNHUB_API_KEY")
+    if not ANTHROPIC_API_KEY:
+        missing.append("ANTHROPIC_API_KEY")
+    if not TELEGRAM_BOT_TOKEN:
+        missing.append("TELEGRAM_BOT_TOKEN")
+    if not TELEGRAM_CHAT_ID:
+        missing.append("TELEGRAM_CHAT_ID")
     if missing:
         print(f"❌ Missing secrets: {', '.join(missing)}")
         print("Add them in GitHub → Settings → Secrets → Actions")
         sys.exit(1)
+
+    # Print key info for debugging (masked)
+    print(f"  API Key starts with: {ANTHROPIC_API_KEY[:10]}...")
+    print(f"  Telegram Chat ID: {TELEGRAM_CHAT_ID}")
 
     # 1. Fetch stock prices
     print(f"\n📊 Fetching prices for: {', '.join(WATCHLIST)}")
