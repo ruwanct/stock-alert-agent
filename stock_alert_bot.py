@@ -142,7 +142,7 @@ KEEP UNDER 1800 CHARACTERS. Be direct, no fluff."""
                 "content-type": "application/json",
             },
             json={
-                "model": "claude-sonnet-4-20250514",
+                "model": "claude-3-5-sonnet-20241022",
                 "max_tokens": 1024,
                 "messages": [{"role": "user", "content": prompt}],
             },
