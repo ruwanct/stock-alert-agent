@@ -1,0 +1,40 @@
+name: Stock Alert Bot
+
+on:
+  # Runs 3x daily on weekdays (Mon-Fri)
+  # Times in UTC → Berlin is UTC+1 (winter) / UTC+2 (summer)
+  # 06:00 UTC = 08:00 Berlin (summer) / 07:00 Berlin (winter)
+  # 10:00 UTC = 12:00 Berlin (summer) / 11:00 Berlin (winter)
+  # 15:00 UTC = 17:00 Berlin (summer) / 16:00 Berlin (winter)
+  schedule:
+    - cron: '0 6 * * 1-5'   # Morning alert
+    - cron: '0 10 * * 1-5'  # Midday alert
+    - cron: '0 15 * * 1-5'  # Evening alert
+
+  # Manual trigger — click "Run workflow" in GitHub to test anytime
+  workflow_dispatch:
+
+jobs:
+  stock-alert:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run stock alert bot
+        env:
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python stock_alert_bot.py
