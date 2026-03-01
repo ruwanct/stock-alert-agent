@@ -1,7 +1,7 @@
 """
-Stock Alert Telegram Bot v4 — GitHub Actions Version
+Stock Alert Telegram Bot v5 — GitHub Actions Version
 Dynamic watchlist + Multi-source news + Sector scanning
-Fetches prices + aggregated news → Claude analysis → Telegram alert.
+Sends to BOTH Telegram and Discord simultaneously.
 """
 
 import os
@@ -18,11 +18,10 @@ FINNHUB_API_KEY = os.environ.get("FINNHUB_API_KEY", "")
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL", "")
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # YOUR STOCK UNIVERSE
-# The bot picks top 2 from each sector + scans
-# all of them for big movers (>2% change)
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CORE_WATCHLIST = ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN"]
 
@@ -40,7 +39,6 @@ SECTORS = {
     "Crypto-adjacent": ["COIN", "MSTR", "MARA"],
 }
 
-# Big mover threshold — stocks moving more than this % get auto-added
 BIG_MOVER_THRESHOLD = 2.0
 MAX_DYNAMIC_STOCKS = 10
 
@@ -49,7 +47,6 @@ MAX_DYNAMIC_STOCKS = 10
 # Dynamic Stock Discovery
 # ──────────────────────────────────────────────
 def get_news_mentioned_tickers() -> list:
-    """Find tickers mentioned in breaking news."""
     movers = []
     try:
         r = requests.get(
@@ -75,12 +72,11 @@ def get_news_mentioned_tickers() -> list:
 
 
 def get_top_movers_by_price() -> list:
-    """Scan ALL sector stocks and find today's biggest movers."""
     scan_list = set()
     for symbols in SECTORS.values():
         scan_list.update(symbols)
 
-    print(f"  🔍 Scanning {len(scan_list)} stocks for big movers (>{BIG_MOVER_THRESHOLD}% change)...")
+    print(f"  🔍 Scanning {len(scan_list)} stocks for big movers (>{BIG_MOVER_THRESHOLD}%)...")
 
     movers = []
     for symbol in sorted(scan_list):
@@ -115,23 +111,19 @@ def get_top_movers_by_price() -> list:
 
 
 def build_watchlist() -> list:
-    """Build final watchlist: core + sector picks + dynamic discoveries."""
     print("\n🔍 Building watchlist...")
 
     watchlist = list(CORE_WATCHLIST)
     print(f"  Core: {', '.join(CORE_WATCHLIST)}")
 
-    # Top 2 from each sector
     sector_picks = []
     for sector, symbols in SECTORS.items():
-        picked = symbols[:2]
-        sector_picks.extend(picked)
+        sector_picks.extend(symbols[:2])
     for s in sector_picks:
         if s not in watchlist:
             watchlist.append(s)
     print(f"  Sector picks: +{len(sector_picks)} from {len(SECTORS)} sectors")
 
-    # News-mentioned tickers
     news_tickers = get_news_mentioned_tickers()
     added_news = 0
     for s in news_tickers:
@@ -141,7 +133,6 @@ def build_watchlist() -> list:
     if added_news:
         print(f"  News discoveries: +{added_news} trending tickers")
 
-    # Big movers scan
     big_movers = get_top_movers_by_price()
     added_movers = 0
     for s in big_movers:
@@ -286,7 +277,6 @@ def aggregate_news(core_symbols: list) -> list:
     all_articles.extend(fetch_finnhub_company_news(core_symbols[:5]))
     all_articles.extend(fetch_google_news())
 
-    # Deduplicate by headline
     seen = set()
     unique = []
     for article in all_articles:
@@ -295,7 +285,6 @@ def aggregate_news(core_symbols: list) -> list:
             seen.add(key)
             unique.append(article)
 
-    # Company-specific news first
     unique.sort(key=lambda x: (0 if "[" in x["headline"] else 1))
 
     sources = set(n.get("source", "").split("/")[0] for n in unique if n.get("source"))
@@ -340,7 +329,7 @@ def analyze_with_claude(prices: list, news: list, watchlist_info: str) -> str:
 
     sources = set(n.get("source", "").split("/")[0] for n in news if n.get("source"))
 
-    prompt = f"""You are a senior stock market analyst. Create a beautiful Telegram alert from multi-source data.
+    prompt = f"""You are a senior stock market analyst. Create a beautiful Telegram/Discord alert from multi-source data.
 
 ## Coverage
 {watchlist_info}
@@ -442,6 +431,10 @@ def analyze_with_claude(prices: list, news: list, watchlist_info: str) -> str:
 # Telegram
 # ──────────────────────────────────────────────
 def send_telegram(text: str) -> bool:
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        print("  ⏭ Telegram not configured, skipping")
+        return False
+
     if len(text) > 4000:
         text = text[:3950] + "\n\n... (truncated)"
     try:
@@ -463,29 +456,87 @@ def send_telegram(text: str) -> bool:
 
 
 # ──────────────────────────────────────────────
+# Discord
+# ──────────────────────────────────────────────
+def send_discord(text: str) -> bool:
+    if not DISCORD_WEBHOOK_URL:
+        print("  ⏭ Discord not configured, skipping")
+        return False
+
+    # Discord has 2000 char limit per message — split if needed
+    chunks = []
+    if len(text) <= 2000:
+        chunks = [text]
+    else:
+        # Split at section separators
+        sections = text.split("━━━━━━━━━━━━━━━━━━━━")
+        current = ""
+        for section in sections:
+            test = current + "━━━━━━━━━━━━━━━━━━━━" + section if current else section
+            if len(test) > 1950:
+                if current:
+                    chunks.append(current)
+                current = section
+            else:
+                current = test
+        if current:
+            chunks.append(current)
+
+    success = True
+    for i, chunk in enumerate(chunks):
+        try:
+            r = requests.post(
+                DISCORD_WEBHOOK_URL,
+                json={"content": chunk},
+                timeout=10,
+            )
+            r.raise_for_status()
+            if i < len(chunks) - 1:
+                time.sleep(0.5)  # Avoid rate limiting
+        except Exception as e:
+            print(f"  ❌ Discord failed (chunk {i+1}): {e}")
+            success = False
+
+    if success:
+        print(f"  ✅ Discord sent! ({len(chunks)} message{'s' if len(chunks) > 1 else ''})")
+    return success
+
+
+# ──────────────────────────────────────────────
 # Main
 # ──────────────────────────────────────────────
 def main():
-    print("🤖 Stock Alert Bot v4")
-    print("Dynamic Watchlist + Multi-Source News + Sector Scanning")
-    print("=" * 55)
+    print("🤖 Stock Alert Bot v5")
+    print("Dynamic Watchlist + Multi-Source News + Telegram + Discord")
+    print("=" * 58)
 
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     berlin_time = (datetime.now(timezone.utc) + timedelta(hours=1)).strftime("%H:%M")
 
-    # Validate
+    # Validate — only Finnhub and Anthropic are required
+    # Telegram and Discord are optional (at least one should be set)
     missing = []
     if not FINNHUB_API_KEY:
         missing.append("FINNHUB_API_KEY")
     if not ANTHROPIC_API_KEY:
         missing.append("ANTHROPIC_API_KEY")
-    if not TELEGRAM_BOT_TOKEN:
-        missing.append("TELEGRAM_BOT_TOKEN")
-    if not TELEGRAM_CHAT_ID:
-        missing.append("TELEGRAM_CHAT_ID")
     if missing:
-        print(f"❌ Missing: {', '.join(missing)}")
+        print(f"❌ Missing required: {', '.join(missing)}")
         sys.exit(1)
+
+    has_telegram = bool(TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID)
+    has_discord = bool(DISCORD_WEBHOOK_URL)
+
+    if not has_telegram and not has_discord:
+        print("❌ No delivery channel! Set TELEGRAM or DISCORD secrets.")
+        sys.exit(1)
+
+    channels = []
+    if has_telegram:
+        channels.append("Telegram")
+    if has_discord:
+        channels.append("Discord")
+    print(f"  📡 Delivery: {' + '.join(channels)}")
 
     # 1. Build dynamic watchlist
     watchlist = build_watchlist()
@@ -497,7 +548,7 @@ def main():
         f"Total tracking: {len(watchlist)} stocks"
     )
 
-    # 2. Fetch prices for final watchlist
+    # 2. Fetch prices
     print(f"\n📊 Fetching prices for {len(watchlist)} stocks...")
     prices = []
     for symbol in watchlist:
@@ -519,9 +570,7 @@ def main():
     analysis = analyze_with_claude(prices, news, watchlist_info)
     print(f"  Generated {len(analysis)} chars")
 
-    # 5. Send
-    print("\n📱 Sending alert...")
-
+    # 5. Build message
     utc_hour = datetime.now(timezone.utc).hour
     if utc_hour < 9:
         session = "🌅 PRE-MARKET"
@@ -536,7 +585,7 @@ def main():
 
     header = (
         f"{'═' * 28}\n"
-        f"   🤖 STOCK ALERT BOT v4\n"
+        f"   🤖 STOCK ALERT BOT v5\n"
         f"   {session}\n"
         f"{'═' * 28}\n"
         f"🕐 {berlin_time} Berlin | {now}\n"
@@ -553,12 +602,22 @@ def main():
         f"{'═' * 28}"
     )
 
-    success = send_telegram(header + analysis + footer)
+    full_message = header + analysis + footer
 
-    if success:
-        print("\n✅ Done! Check Telegram.")
+    # 6. Send to all channels
+    print("\n📱 Sending alerts...")
+    telegram_ok = send_telegram(full_message)
+    discord_ok = send_discord(full_message)
+
+    if telegram_ok or discord_ok:
+        results = []
+        if has_telegram:
+            results.append(f"Telegram: {'✅' if telegram_ok else '❌'}")
+        if has_discord:
+            results.append(f"Discord: {'✅' if discord_ok else '❌'}")
+        print(f"\n✅ Done! {' | '.join(results)}")
     else:
-        print("\n❌ Telegram failed.")
+        print("\n❌ All delivery channels failed.")
         sys.exit(1)
 
 
