@@ -1,1 +1,77 @@
-[]
+[
+  {
+    "id": "6d6970d0",
+    "ticker": "RTX",
+    "action": "BUY",
+    "entry_price": 193.92,
+    "confidence": "HIGH",
+    "reasoning": "Missiles struck Aden airport and Saudi coalition intercepted a missile near Yanbu (Reuters) — classic geopolitical catalyst for defense. RTX leads the sector up 3.7% on strong volume. Multiple Middle East flashpoints remain active, sustaining demand for air defense and missile systems. VIX above 22 ",
+    "opened_at": "2026-10-17T13:14:52+00:00",
+    "status": "open",
+    "reaffirmed": 0,
+    "last_price": 193.92,
+    "return_pct": 0.0,
+    "closed_at": null,
+    "outcome": null
+  },
+  {
+    "id": "4d1f1124",
+    "ticker": "LMT",
+    "action": "BUY",
+    "entry_price": 552.09,
+    "confidence": "HIGH",
+    "reasoning": "Corroborates RTX thesis — same geopolitical driver (Yemen/Middle East escalation per Reuters) pushing the entire defense sector. LMT up 3.6% in tandem. Defense rally is broad-based and backed by two major news sources; risk-off environment further supports the sector.",
+    "opened_at": "2026-10-17T13:14:52+00:00",
+    "status": "open",
+    "reaffirmed": 0,
+    "last_price": 552.09,
+    "return_pct": 0.0,
+    "closed_at": null,
+    "outcome": null
+  },
+  {
+    "id": "7bb535b0",
+    "ticker": "AAPL",
+    "action": "BUY",
+    "entry_price": 343.46,
+    "confidence": "MEDIUM",
+    "reasoning": "AAPL is the only core tech name in positive territory today (+0.43%), holding up while peers collapse. Three separate bullish catalysts: Evercore ISI confirms iPhone Duo demand is solidly out of the gate, China's $37B consumer subsidy program boosts gadget demand, and a Berkshire/Greg Abel-related a",
+    "opened_at": "2026-10-17T13:14:52+00:00",
+    "status": "open",
+    "reaffirmed": 0,
+    "last_price": 343.46,
+    "return_pct": 0.0,
+    "closed_at": null,
+    "outcome": null
+  },
+  {
+    "id": "09c1c187",
+    "ticker": "PLTR",
+    "action": "SELL",
+    "entry_price": 186.03,
+    "confidence": "HIGH",
+    "reasoning": "PLTR down 7.2% and is a direct casualty of the BofA AI bubble warning (fiber optic analogy) confirmed by multiple sources. CoreWeave credit stress signals contagion into high-multiple AI software names. VIX above 22 and Nasdaq weekly loss headline from WSJ add macro pressure. High-beta AI software w",
+    "opened_at": "2026-10-17T13:14:52+00:00",
+    "status": "open",
+    "reaffirmed": 0,
+    "last_price": 186.03,
+    "return_pct": 0.0,
+    "closed_at": null,
+    "outcome": null
+  },
+  {
+    "id": "a13b377b",
+    "ticker": "MSTR",
+    "action": "SELL",
+    "entry_price": 136.83,
+    "confidence": "HIGH",
+    "reasoning": "MSTR is down 9.6% — dual headwind of crypto risk-off and AI/speculative unwind. VIX spike above 22 per CNBC is historically devastating for leveraged, high-beta crypto-treasury vehicles. No positive news catalyst present. Broad risk-off rotation confirmed by multiple sources makes further downside l",
+    "opened_at": "2026-10-17T13:14:52+00:00",
+    "status": "open",
+    "reaffirmed": 0,
+    "last_price": 136.83,
+    "return_pct": 0.0,
+    "closed_at": null,
+    "outcome": null
+  }
+]

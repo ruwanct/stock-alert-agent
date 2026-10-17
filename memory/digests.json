@@ -1,1 +1,17 @@
-{"recent": [], "weekly": []}
+{
+  "recent": [
+    {
+      "at": "2026-10-17T13:14:52+00:00",
+      "session": "🔔 MARKET OPEN",
+      "summary": "A sharp BofA warning comparing AI stocks to the 1990s fiber optic bubble triggered a broad Tech/AI selloff, sending QQQ down ~2.5% and crushing high-beta names like MARA (-9.6%), MSTR (-9.6%), PLTR (-7.2%), and SNOW (-8.4%) as VIX spiked above 22. Capital rotated aggressively into Defense (RTX +3.7%, LMT +3.6%) and Energy (CVX +2.6%) on geopolitical risk from Yemen/Middle East missile strikes and Saudi coalition intercepts. CoreWeave credit stress added contagion fears across AI/cloud names, while AAPL showed rare relative strength on iPhone Duo demand and China's $37B consumer subsidy program.",
+      "themes": [
+        "defense rally",
+        "AI bubble warning",
+        "risk-off rotation",
+        "crypto unwind",
+        "geopolitical escalation"
+      ]
+    }
+  ],
+  "weekly": []
+}
