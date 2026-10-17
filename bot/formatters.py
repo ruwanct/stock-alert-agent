@@ -26,6 +26,12 @@ def session_label(utc_hour: int) -> str:
     return "🌙 AFTER-HOURS"
 
 
+def schedule_text() -> str:
+    if config.ALERTS_PER_DAY == 1:
+        return "Daily alert · Mon–Fri"
+    return f"{config.ALERTS_PER_DAY} alerts per weekday · Mon–Fri"
+
+
 def berlin_time(now: datetime) -> str:
     try:
         tz = ZoneInfo("Europe/Berlin")
@@ -101,7 +107,7 @@ def build_telegram(alert: MarketAlert, ledger: list, session: str, now: datetime
     sections.append("⚡ BOTTOM LINE\n" + _clean(alert.bottom_line))
 
     footer = (
-        f"\n{BOX}\n  🔄 Next alert in ~4 hours\n"
+        f"\n{BOX}\n  🔄 {schedule_text()}\n"
         f"  📡 Finnhub + Google News + Claude AI (LangChain + LangGraph)\n{BOX}"
     )
     text = header + "\n" + f"\n\n{LINE}\n\n".join(sections) + "\n" + footer

@@ -5,7 +5,7 @@ AI-powered stock alerts delivered to your Telegram and Discord, running entirely
 ## How It Works
 
 ```
-GitHub Actions (cron: 3x daily Mon-Fri)
+GitHub Actions (cron: daily Mon-Fri after the US close)
     │
     ├── Finnhub API → stock prices + news (free)
     │
@@ -88,13 +88,13 @@ your-repo/
 
 ## Schedule
 
-The bot runs automatically 3 times a day, Monday through Friday:
+The bot runs automatically once a day, Monday through Friday, after the US market closes:
 
 | Berlin Time | UTC | Alert |
 |------------|-----|-------|
-| ~08:00 | 06:00 | Morning market overview |
-| ~12:00 | 10:00 | Midday update |
-| ~17:00 | 15:00 | End of day summary |
+| 23:30 (summer) / 22:30 (winter) | 21:30 | Daily close summary |
+
+Running after the close means every quote is a closing price, so signals are opened and scored on the same basis.
 
 *Note: GitHub Actions cron can have delays of 5-15 minutes. This is normal.*
 
@@ -112,10 +112,10 @@ CORE_WATCHLIST = ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN"]
 Edit `.github/workflows/stock-alert.yml`:
 ```yaml
 schedule:
-  - cron: '0 6 * * 1-5'   # Change these times (UTC)
-  - cron: '0 10 * * 1-5'
-  - cron: '0 15 * * 1-5'
+  - cron: '30 21 * * 1-5'  # Change this time (UTC); add lines for more runs
 ```
+
+If you add more cron lines, also set the repository variable `ALERTS_PER_DAY` (Settings → Secrets and variables → Actions → **Variables**) to the number of runs per day. GitHub can't read cron times from a variable, so the schedule itself stays in the YAML; `ALERTS_PER_DAY` makes the bot keep the right amount of digest history (`max(7, 5 × runs)`) and show the right footer. Claude cost scales with the number of runs.
 
 ### Add more stocks
 Add symbols to `CORE_WATCHLIST` or the `SECTORS` dict in `bot/config.py`. Finnhub supports all major US stocks.
@@ -167,7 +167,7 @@ graph TD;
 | File | Contents |
 |------|----------|
 | `signals.json` | Signal ledger: every BUY/SELL/WATCH with entry price, status, reaffirm count, return and win/loss/flat outcome. Same open ticker+action is reaffirmed, not duplicated; a BUY/SELL reversal closes the old call. Signals close after 5 calendar days. |
-| `digests.json` | Last 15 alert digests plus up to 8 weekly summaries (older digests are compressed by an LLM chain, with a no-LLM fallback). |
+| `digests.json` | Last 7 alert digests (more if `ALERTS_PER_DAY` > 1) plus up to 8 weekly summaries (older digests are compressed by an LLM chain, with a no-LLM fallback). |
 | `tickers.json` | Per-ticker notes (signal history, mention count, last note) held in a LangGraph `InMemoryStore` while running. |
 
 Missing files start empty. Invalid JSON logs a warning and starts empty. Memory never crashes a run.
@@ -220,11 +220,11 @@ No network or API key needed.
 
 | Service | Monthly Cost |
 |---------|-------------|
-| GitHub Actions | **$0** (uses ~45 of 2,000 free minutes) |
+| GitHub Actions | **$0** (uses ~15 of 2,000 free minutes) |
 | Finnhub API | **$0** (free tier: 60 calls/min) |
 | Telegram Bot | **$0** |
-| Claude API (Sonnet) | **~$1** (~90 runs × 2 calls: analysis + digest) |
-| **Total** | **~$1/month** |
+| Claude API (Sonnet) | **~⅓ of the old 3×/day cost** (~22 runs × 2 calls: analysis + digest) |
+| **Total** | **Claude API only; scales with `ALERTS_PER_DAY`** |
 
 ---
 

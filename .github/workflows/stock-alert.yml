@@ -1,15 +1,15 @@
 name: Stock Alert Bot
 
 on:
-  # Runs 3x daily on weekdays (Mon-Fri)
+  # Runs once daily on weekdays (Mon-Fri), after the US close.
+  # To run more often, add cron lines here AND set the repo variable
+  # ALERTS_PER_DAY (Settings → Secrets and variables → Actions → Variables)
+  # to the number of lines, so memory retention matches.
   # Times in UTC → Berlin is UTC+1 (winter) / UTC+2 (summer)
-  # 06:00 UTC = 08:00 Berlin (summer) / 07:00 Berlin (winter)
-  # 10:00 UTC = 12:00 Berlin (summer) / 11:00 Berlin (winter)
-  # 15:00 UTC = 17:00 Berlin (summer) / 16:00 Berlin (winter)
+  # 21:30 UTC = 23:30 Berlin (summer) / 22:30 Berlin (winter)
+  # US close is 20:00 UTC (summer) / 21:00 UTC (winter), so quotes are closing prices
   schedule:
-    - cron: '0 6 * * 1-5'   # Morning alert
-    - cron: '0 10 * * 1-5'  # Midday alert
-    - cron: '0 15 * * 1-5'  # Evening alert
+    - cron: '30 21 * * 1-5'  # Daily close alert
 
   # Manual trigger — click "Run workflow" in GitHub to test anytime
   workflow_dispatch:
@@ -48,6 +48,8 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          # Number of cron runs per weekday above (repo variable, default 1)
+          ALERTS_PER_DAY: ${{ vars.ALERTS_PER_DAY || '1' }}
           # Optional LangSmith tracing (leave the secret unset to disable)
           LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
           LANGSMITH_TRACING: ${{ secrets.LANGSMITH_API_KEY != '' && 'true' || 'false' }}

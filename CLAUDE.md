@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-A serverless stock alert bot that runs on GitHub Actions (3x daily, Mon-Fri). It fetches stock prices and news, sends them to Claude AI for analysis, then delivers buy/sell signals to Telegram and Discord. v6 adds persistent memory (signal track record, digests, ticker notes) built with LangChain + LangGraph.
+A serverless stock alert bot that runs on GitHub Actions (once daily after the US close, Mon-Fri). It fetches stock prices and news, sends them to Claude AI for analysis, then delivers buy/sell signals to Telegram and Discord. v6 adds persistent memory (signal track record, digests, ticker notes) built with LangChain + LangGraph.
 
-**Cost:** ~$1/month (Claude API only). Everything else is free tier.
+**Cost:** Claude API only (2 calls per run); everything else is free tier.
 
 ## Running Locally
 
@@ -56,7 +56,7 @@ All customization is in `bot/config.py`:
 
 - `CORE_WATCHLIST`, `SECTORS` — stock universe
 - `BIG_MOVER_THRESHOLD` (2.0), `MAX_DYNAMIC_STOCKS` (10), watchlist capped at 30
-- `SIGNAL_HORIZON_DAYS` (5), `WIN_THRESHOLD_PCT` (0.5), `MAX_RECENT_DIGESTS` (15), `MAX_WEEKLY_DIGESTS` (8)
+- `SIGNAL_HORIZON_DAYS` (5), `WIN_THRESHOLD_PCT` (0.5), `MAX_RECENT_DIGESTS` (`max(7, 5 × ALERTS_PER_DAY)`), `MAX_WEEKLY_DIGESTS` (8)
 - `PRICE_TOLERANCE_PCT` (1.5) — max distance between a signal's entry price and the live quote
 
 ## Required GitHub Secrets
@@ -73,5 +73,6 @@ All customization is in `bot/config.py`:
 ## GitHub Actions Notes
 
 - Scheduled workflows get disabled by GitHub after 60 days of repo inactivity. Re-activate by making any commit.
-- Cron times are UTC. Berlin = UTC+1 (winter) / UTC+2 (summer). Current schedule: 06:00, 10:00, 15:00 UTC.
+- Cron times are UTC. Berlin = UTC+1 (winter) / UTC+2 (summer). Current schedule: 21:30 UTC (after the US close).
+- `ALERTS_PER_DAY` (repo variable, default 1) must match the number of cron lines; it tunes digest retention and the footer. GitHub can't read cron times from a variable.
 - The job has an 8-minute timeout, pip is cached, and runs are serialized via `concurrency` (memory commits). Finnhub rate limit is 60 calls/min; the script uses `time.sleep(0.12)` between calls to stay safe.

@@ -18,6 +18,14 @@ DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL", "")
 # and do NOT write memory files.
 DRY_RUN = os.environ.get("DRY_RUN", "").strip().lower() in ("1", "true", "yes")
 
+# How many times the workflow cron runs per weekday. The cron times themselves
+# live in .github/workflows/stock-alert.yml (GitHub can't read them from a
+# variable); this only tunes memory retention and the footer to match.
+try:
+    ALERTS_PER_DAY = max(1, int(os.environ.get("ALERTS_PER_DAY") or 1))
+except ValueError:
+    ALERTS_PER_DAY = 1
+
 # ──────────────────────────────────────────────
 # Model
 # ──────────────────────────────────────────────
@@ -63,7 +71,7 @@ TICKERS_PATH = MEMORY_DIR / "tickers.json"
 SIGNAL_HORIZON_DAYS = 5      # calendar days before a signal is closed
 WIN_THRESHOLD_PCT = 0.5      # return > +0.5% = win, < -0.5% = loss, else flat
 TRACK_RECORD_CLOSED = 30     # closed signals used for stats
-MAX_RECENT_DIGESTS = 15
+MAX_RECENT_DIGESTS = max(7, 5 * ALERTS_PER_DAY)  # roughly 1–1.5 trading weeks of alerts
 MAX_WEEKLY_DIGESTS = 8
 MAX_TICKER_HISTORY = 10
 MAX_TICKER_NOTE_CHARS = 200
