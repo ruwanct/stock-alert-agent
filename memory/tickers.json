@@ -5,17 +5,22 @@
         "date": "2026-10-17",
         "action": "BUY",
         "price": 343.46
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 343.46
       }
     ],
-    "mention_count": 1,
+    "mention_count": 2,
     "last_mentioned": "2026-10-17",
-    "last_note": "AAPL is the only core tech name in positive territory today (+0.43%), holding up while peers collapse. Three separate bullish catalysts: Evercore ISI confirms iPhone Duo demand is solidly out of the g"
+    "last_note": "REAFFIRMED from Sat open. Only core tech name in the green today (+0.43%) while peers sell off hard. Three independent bullish catalysts confirmed: Evercore ISI iPhone Duo demand solidly out of gate, "
   },
   "CVX": {
     "signal_history": [],
-    "mention_count": 1,
+    "mention_count": 2,
     "last_mentioned": "2026-10-17",
-    "last_note": "Middle East conflict escalation and SPR solicitation news support crude; Energy outperforms broadly today"
+    "last_note": "Middle East escalation and US SPR solicitation (Reuters) boost crude; Energy outperforms"
   },
   "LMT": {
     "signal_history": [
@@ -23,17 +28,22 @@
         "date": "2026-10-17",
         "action": "BUY",
         "price": 552.09
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 552.09
       }
     ],
-    "mention_count": 1,
+    "mention_count": 2,
     "last_mentioned": "2026-10-17",
-    "last_note": "Corroborates RTX thesis — same geopolitical driver (Yemen/Middle East escalation per Reuters) pushing the entire defense sector. LMT up 3.6% in tandem. Defense rally is broad-based and backed by two m"
+    "last_note": "REAFFIRMED from Sat open. Same geopolitical driver as RTX — dual Reuters reports on Yemen/Saudi escalation power the entire defense complex. LMT +3.65% confirms the rally is broad-based, not single-na"
   },
   "MARA": {
     "signal_history": [],
-    "mention_count": 1,
+    "mention_count": 2,
     "last_mentioned": "2026-10-17",
-    "last_note": "Crypto-adjacent name crushed in risk-off; Bitcoin pressure and high-beta selloff amplified by VIX surge above 22"
+    "last_note": "Crypto risk-off plus speculative unwind; VIX spike above 22 devastating for high-beta crypto names"
   },
   "MSTR": {
     "signal_history": [
@@ -41,11 +51,16 @@
         "date": "2026-10-17",
         "action": "SELL",
         "price": 136.83
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 136.83
       }
     ],
-    "mention_count": 1,
+    "mention_count": 2,
     "last_mentioned": "2026-10-17",
-    "last_note": "MSTR is down 9.6% — dual headwind of crypto risk-off and AI/speculative unwind. VIX spike above 22 per CNBC is historically devastating for leveraged, high-beta crypto-treasury vehicles. No positive n"
+    "last_note": "REAFFIRMED from Sat open. Down 9.56% with dual headwinds: crypto risk-off and AI/speculative unwind. VIX above 22 historically crushing for leveraged high-beta crypto-treasury vehicles. BofA warning r"
   },
   "PLTR": {
     "signal_history": [
@@ -53,11 +68,16 @@
         "date": "2026-10-17",
         "action": "SELL",
         "price": 186.03
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 186.03
       }
     ],
-    "mention_count": 1,
+    "mention_count": 2,
     "last_mentioned": "2026-10-17",
-    "last_note": "PLTR down 7.2% and is a direct casualty of the BofA AI bubble warning (fiber optic analogy) confirmed by multiple sources. CoreWeave credit stress signals contagion into high-multiple AI software name"
+    "last_note": "REAFFIRMED from Sat open. PLTR down 7.2% and a direct casualty of BofA AI bubble warning (fiber optic analogy) confirmed by multiple sources. CoreWeave CDS/bond yield surge adds contagion risk to high"
   },
   "RTX": {
     "signal_history": [
@@ -65,16 +85,21 @@
         "date": "2026-10-17",
         "action": "BUY",
         "price": 193.92
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 193.92
       }
     ],
-    "mention_count": 1,
+    "mention_count": 2,
     "last_mentioned": "2026-10-17",
-    "last_note": "Missiles struck Aden airport and Saudi coalition intercepted a missile near Yanbu (Reuters) — classic geopolitical catalyst for defense. RTX leads the sector up 3.7% on strong volume. Multiple Middle "
+    "last_note": "REAFFIRMED from Sat open. Yemen missile strikes and Saudi coalition intercepts (Reuters x2) are live geopolitical catalysts. Defense sector rallying broad-based with LMT confirming the move. RTX leads"
   },
   "SNOW": {
     "signal_history": [],
-    "mention_count": 1,
+    "mention_count": 2,
     "last_mentioned": "2026-10-17",
-    "last_note": "CoreWeave debt market stress signals contagion; high-multiple cloud names dumped as BofA AI warning resonates"
+    "last_note": "CoreWeave credit stress (CNBC) signals contagion into high-multiple cloud names; BofA warning amplifies"
   }
 }
