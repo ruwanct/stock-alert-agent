@@ -1,6 +1,6 @@
 # 🤖 Stock Alert Telegram Bot (GitHub Actions — 100% Free)
 
-AI-powered stock alerts delivered to your Telegram and Discord, running entirely on GitHub Actions for **$0/month** (except ~$0.50 for Claude API).
+AI-powered stock alerts delivered to your Telegram and Discord, running entirely on GitHub Actions for **$0/month** (except ~$1 for Claude API). v6 adds **memory across runs** built with LangChain + LangGraph.
 
 ## How It Works
 
@@ -9,7 +9,9 @@ GitHub Actions (cron: 3x daily Mon-Fri)
     │
     ├── Finnhub API → stock prices + news (free)
     │
-    ├── Claude AI → sentiment analysis + buy/sell signals (~$0.50/mo)
+    ├── LangGraph + Claude → analysis with memory of past calls (~$1/mo)
+    │
+    ├── memory/ → signal track record + digests, committed back each run
     │
     ├── Telegram Bot → sends alert to your chat (free)
     │
@@ -27,7 +29,7 @@ No servers. No hosting. No sign-ups beyond what you already have.
 | What | Where | Cost |
 |------|-------|------|
 | Finnhub API key | [finnhub.io/register](https://finnhub.io/register) | Free |
-| Anthropic API key | [console.anthropic.com](https://console.anthropic.com) | ~$0.50/mo |
+| Anthropic API key | [console.anthropic.com](https://console.anthropic.com) | ~$1/mo |
 | Telegram Bot token | Message [@BotFather](https://t.me/BotFather) → send `/newbot` | Free |
 | Telegram Chat ID | Message [@userinfobot](https://t.me/userinfobot) → send `/start` | Free |
 | Discord Webhook URL | Server Settings → Integrations → Webhooks → New Webhook | Free |
@@ -50,14 +52,15 @@ your-repo/
 ├── .github/
 │   └── workflows/
 │       └── stock-alert.yml    ← GitHub Actions workflow
-├── stock_alert_bot.py         ← The bot script
+├── stock_alert_bot.py         ← Entry point
+├── requirements.txt           ← Pinned dependencies
+├── bot/                       ← LangChain + LangGraph package
+├── memory/                    ← Persistent memory (committed by the workflow)
+├── tests/                     ← Unit tests
 └── README.md                  ← This file
 ```
 
-**Easiest way:** Use GitHub's web UI:
-1. Click **"Add file"** → **"Upload files"** for `stock_alert_bot.py` and `README.md`
-2. Click **"Create new file"**, type `.github/workflows/stock-alert.yml` as the filename
-3. Paste the contents of `stock-alert.yml` into the editor
+**Easiest way:** fork or clone this repo, or push it with `git push`. The bot is now a multi-file package, so uploading files one by one through the web UI is error-prone.
 
 ### Step 4: Add your secrets (2 min)
 
@@ -71,6 +74,7 @@ your-repo/
 | `TELEGRAM_BOT_TOKEN` | Your bot token from BotFather |
 | `TELEGRAM_CHAT_ID` | Your numeric chat ID |
 | `DISCORD_WEBHOOK_URL` | Your Discord webhook URL (optional) |
+| `LANGSMITH_API_KEY` | LangSmith tracing key (optional) |
 
 ### Step 5: Test it! (1 min)
 
@@ -99,9 +103,9 @@ The bot runs automatically 3 times a day, Monday through Friday:
 ## Customizing
 
 ### Change your watchlist
-Edit `stock_alert_bot.py`, line 18:
+Edit `bot/config.py`:
 ```python
-WATCHLIST = ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN", "TSLA", "META"]
+CORE_WATCHLIST = ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN"]
 ```
 
 ### Change alert schedule
@@ -114,7 +118,101 @@ schedule:
 ```
 
 ### Add more stocks
-Just add symbols to the `WATCHLIST` array. Finnhub supports all major US stocks.
+Add symbols to `CORE_WATCHLIST` or the `SECTORS` dict in `bot/config.py`. Finnhub supports all major US stocks.
+
+---
+
+## 🧠 Memory & LangChain architecture
+
+v6 remembers what it said. Each run scores its earlier signals against live prices and feeds the track record, recent digests and per-ticker notes back into Claude, so alerts can say things like *"NVDA BUY @ $182 Mon → +3.8% ✅"* or *"defense rally, day 4"*.
+
+The pipeline is a LangGraph `StateGraph`:
+
+```
+ START
+   │
+   ▼
+ load_memory ──► gather_data ──► score_past_signals ──► analyze ◄─────────┐
+ (JSON files)   (watchlist,      (live price for open    (ChatAnthropic   │ errors and
+                 prices, news)    BUY/SELL, close >5d)    structured out) │ retries < 1
+                                                              │           │
+                                                              ▼           │
+                                                          validate ───────┘
+                                                              │ ok / out of retries
+                                                              ▼
+                                                        update_memory ──► deliver ──► END
+                                                        (ledger, digest,   (Telegram text +
+                                                         ticker store,      Discord embed)
+                                                         save JSON)
+```
+
+Mermaid, generated with `build_graph().get_graph().draw_mermaid()`:
+
+```mermaid
+graph TD;
+	__start__([__start__])
+	__start__ --> load_memory;
+	load_memory --> gather_data;
+	gather_data --> score_past_signals;
+	score_past_signals --> analyze;
+	analyze --> validate;
+	validate -.->|errors, retry once| analyze;
+	validate -.->|ok| update_memory;
+	update_memory --> deliver;
+	deliver --> __end__([__end__]);
+```
+
+### Memory files (`memory/`, committed back to `main` by the workflow)
+
+| File | Contents |
+|------|----------|
+| `signals.json` | Signal ledger: every BUY/SELL/WATCH with entry price, status, reaffirm count, return and win/loss/flat outcome. Same open ticker+action is reaffirmed, not duplicated; a BUY/SELL reversal closes the old call. Signals close after 5 calendar days. |
+| `digests.json` | Last 15 alert digests plus up to 8 weekly summaries (older digests are compressed by an LLM chain, with a no-LLM fallback). |
+| `tickers.json` | Per-ticker notes (signal history, mention count, last note) held in a LangGraph `InMemoryStore` while running. |
+
+Missing files start empty. Invalid JSON logs a warning and starts empty. Memory never crashes a run.
+
+### Where LangChain / LangGraph features are used
+
+| Feature | Where |
+|---------|-------|
+| `ChatAnthropic` | `bot/chains.py` `get_llm()` (model `claude-sonnet-4-6`, retries and timeout built in) |
+| `ChatPromptTemplate` | `bot/chains.py` analysis, digest and weekly prompts |
+| `with_structured_output(MarketAlert)` | `bot/chains.py` analysis chain, Pydantic models in `bot/schemas.py` |
+| LCEL `prompt \| llm \| StrOutputParser()` | `bot/chains.py` weekly summary chain |
+| `StateGraph`, conditional edges | `bot/graph.py` (validate then retry loop) |
+| `InMemoryStore` | `bot/memory.py` per-ticker notes |
+| LangSmith tracing | automatic via env vars, see below |
+
+### Validation
+
+Every signal ticker must exist in the fetched quotes and BUY/SELL entry prices must be within 1.5% of the live quote. Failures trigger one retry with the problems fed back to Claude. After that, invalid signals are dropped and mover prices are overwritten with the real quotes. If the Claude call fails completely, a plain fallback message with prices is delivered.
+
+### Dry run
+
+```bash
+export FINNHUB_API_KEY=... ANTHROPIC_API_KEY=...
+DRY_RUN=1 python stock_alert_bot.py
+```
+
+Runs everything including Claude, prints the Telegram text and Discord embed JSON, sends nothing and writes no memory files. No delivery channel is needed in dry-run mode.
+
+### Optional: LangSmith tracing
+
+Add a `LANGSMITH_API_KEY` repository secret. The workflow then sets `LANGSMITH_TRACING=true` and `LANGSMITH_PROJECT=stock-alert-bot`, and every chain and graph node shows up in LangSmith. Locally:
+
+```bash
+export LANGSMITH_API_KEY=... LANGSMITH_TRACING=true LANGSMITH_PROJECT=stock-alert-bot
+```
+
+### Tests
+
+```bash
+pip install -r requirements.txt
+python -m unittest discover -s tests -v
+```
+
+No network or API key needed.
 
 ---
 
@@ -125,8 +223,8 @@ Just add symbols to the `WATCHLIST` array. Finnhub supports all major US stocks.
 | GitHub Actions | **$0** (uses ~45 of 2,000 free minutes) |
 | Finnhub API | **$0** (free tier: 60 calls/min) |
 | Telegram Bot | **$0** |
-| Claude API (Sonnet) | **~$0.50** (~90 calls × $0.005 each) |
-| **Total** | **~$0.50/month** |
+| Claude API (Sonnet) | **~$1** (~90 runs × 2 calls: analysis + digest) |
+| **Total** | **~$1/month** |
 
 ---
 

@@ -1,0 +1,5 @@
+requests==2.34.2
+langchain-core==1.6.12
+langchain-anthropic==1.7.6
+langgraph==1.2.16
+pydantic==2.14.1
