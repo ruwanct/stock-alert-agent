@@ -96,6 +96,23 @@ class SelectionTests(PatchedConfig):
         self.assertIsInstance(loaded.backend, storage.JsonBackend)
         self.assertFalse(loaded.writable)
 
+    def test_fallback_is_degraded_with_warning(self):
+        self.patch_config(MONGODB_URI="mongodb+srv://x")
+        with mock.patch.object(storage, "MongoClient", side_effect=RuntimeError("no route to host 10.0.0.1")):
+            loaded = storage.open_memory()
+        self.assertFalse(loaded.writable)
+        self.assertEqual(loaded.warning, storage.MEMORY_OFFLINE_WARNING)
+        self.assertIn("Memory offline", loaded.warning)
+        self.assertNotIn("10.0.0.1", loaded.warning)
+
+    def test_json_by_choice_has_no_warning(self):
+        self.patch_config()
+        self.assertEqual(storage.open_memory().warning, "")
+        self.patch_config(MONGODB_URI="mongodb+srv://x", MEMORY_BACKEND="json")
+        self.assertEqual(storage.open_memory().warning, "")
+        config.DRY_RUN = True
+        self.assertEqual(storage.open_memory().warning, "")
+
     def test_unknown_value_is_auto(self):
         self.patch_config(MEMORY_BACKEND="banana", MONGODB_URI="mongodb+srv://x")
         self.assertEqual(storage.backend_mode(), "mongo")
@@ -250,12 +267,14 @@ class GraphWithMongoTests(PatchedConfig):
         self.assertTrue(result["delivered"]["telegram"])
         self.assertEqual(client["testdb"].signals.count_documents({}), 0)
         self.assertEqual(client["testdb"].digests.count_documents({}), 1)  # other saves still attempted
+        self.assertEqual(result["memory_warning"], "⚠️ Memory partially saved: signals failed")
 
     def test_connection_failure_falls_back_to_read_only_json(self):
         tmp = self.patch_config(MONGODB_URI="mongodb+srv://x")
         snapshot = [signal(1)]
         (tmp / "signals.json").write_text(json.dumps(snapshot))
         before = {p.name: p.read_text() for p in tmp.iterdir()}
+        sent_tg, sent_dc = [], []
         data.QUOTE_CACHE.clear()
         data.QUOTE_CACHE["NVDA"] = quote("NVDA", 100.0)
         patches = [
@@ -265,14 +284,18 @@ class GraphWithMongoTests(PatchedConfig):
             mock.patch.object(graph.chains, "build_analysis_chain", lambda: FakeChain([good()])),
             mock.patch.object(graph.chains, "build_digest_chain",
                               lambda: FakeChain([DailyDigest(summary="s", themes=[])])),
-            mock.patch.object(graph.delivery, "send_telegram", lambda t: True),
-            mock.patch.object(graph.delivery, "send_discord", lambda e: True),
+            mock.patch.object(graph.delivery, "send_telegram", lambda t: sent_tg.append(t) or True),
+            mock.patch.object(graph.delivery, "send_discord", lambda e: sent_dc.append(e) or True),
         ]
         for p in patches:
             p.start()
             self.addCleanup(p.stop)
         result = graph.build_graph().invoke({})
         self.assertTrue(result["delivered"]["telegram"])
+        self.assertEqual(result["memory_warning"], storage.MEMORY_OFFLINE_WARNING)
+        self.assertIn(storage.MEMORY_OFFLINE_WARNING, sent_tg[0])
+        self.assertNotIn("no route to host", sent_tg[0])
+        self.assertEqual(sent_dc[0]["fields"][0]["name"], "⚠️ Memory")
         self.assertFalse(result["writable"])
         self.assertEqual(result["ledger"][0]["id"], "id1")  # read the JSON snapshot
         self.assertEqual({p.name: p.read_text() for p in tmp.iterdir()}, before)  # nothing written

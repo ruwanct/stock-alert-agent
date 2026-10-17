@@ -1,5 +1,7 @@
 # 🤖 Stock Alert Telegram Bot (GitHub Actions — 100% Free)
 
+![Tests](https://github.com/ruwanct/predictor/actions/workflows/tests.yml/badge.svg)
+
 AI-powered stock alerts delivered to your Telegram and Discord, running entirely on GitHub Actions for **$0/month** (except ~$1 for Claude API). v6 adds **memory across runs** built with LangChain + LangGraph.
 
 ## How It Works
@@ -212,6 +214,8 @@ memory/
 
 The backup is bounded and complete: the three main files stay small however long the bot runs, while the archive holds the full history. Past-year archive files are written deterministically and only when their content changed, so once a year is over its file never shows up in a git diff. Archive years that have no data in MongoDB are never deleted. `BACKUP_RECENT_DAYS` lives in `bot/config.py`.
 
+When MongoDB is unreachable the alert still goes out, with a visible line (`⚠️ Memory offline: using last backup, nothing saved this run`) below the header in Telegram and a `⚠️ Memory` field in Discord. If some saves fail during a run, it says `⚠️ Memory partially saved: <parts> failed`. Choosing JSON on purpose (no `MONGODB_URI`) or `DRY_RUN` shows no warning; error details stay in the logs.
+
 The JSON fallback (MongoDB unreachable) reads only the three main files, never the archive. The track-record prompt uses the open signals plus the last 30 closed ones; signals close after 5 days, so 30 closed signals are usually a few weeks of calls and 90 days of closed signals is more than enough.
 
 **Full restore** from the backup (main files and archive, safe to run twice): `python scripts/migrate_json_to_mongo.py`. If a signal is in both `signals.json` and an archive file, `signals.json` wins; digests keep the `compressed` flag from the archive.
@@ -274,7 +278,7 @@ pip install -r requirements-dev.txt
 python -m unittest discover -s tests -v
 ```
 
-No network or API key needed. MongoDB tests use `mongomock` (from `requirements-dev.txt`) and are skipped if it is not installed.
+The same tests run in CI on every push and pull request (`.github/workflows/tests.yml`; pushes that only touch `memory/**` are skipped). No network or API key needed. MongoDB tests use `mongomock` (from `requirements-dev.txt`) and are skipped if it is not installed.
 
 ---
 

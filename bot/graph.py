@@ -37,6 +37,7 @@ class BotState(TypedDict, total=False):
     retries: int
     validation_feedback: str
     delivered: dict
+    memory_warning: str        # "" when memory is fine; shown in the alert otherwise
 
 
 # ──────────────────────────────────────────────
@@ -116,6 +117,7 @@ def load_memory(state: BotState) -> dict:
         "session": formatters.session_label(now.hour),
         "backend": loaded.backend,
         "writable": loaded.writable,
+        "memory_warning": loaded.warning,
         "ledger": loaded.ledger,
         "digests": loaded.digests,
         "store": loaded.store,
@@ -234,6 +236,7 @@ def update_memory(state: BotState) -> dict:
     else:
         print("  ⏭ No analysis — skipping signal/digest/ticker updates (scoring still saved)")
 
+    warning = state.get("memory_warning", "")
     try:
         if config.DRY_RUN:
             print("  🧪 DRY_RUN: memory NOT written")
@@ -251,11 +254,13 @@ def update_memory(state: BotState) -> dict:
                 except Exception as e:  # a failed save must never block delivery
                     failed.append(label)
                     print(f"  ⚠ Saving {label} to {backend.name} failed ({type(e).__name__}: {str(e)[:200]})")
+            if failed:
+                warning = f"⚠️ Memory partially saved: {', '.join(failed)} failed"
             print(f"  💾 Memory saved ({backend.name})" if not failed
                   else f"  ⚠ Memory partially saved ({backend.name}); failed: {', '.join(failed)}")
     finally:
         backend.close()
-    return {"ledger": ledger, "digests": digests}
+    return {"ledger": ledger, "digests": digests, "memory_warning": warning}
 
 
 def deliver(state: BotState) -> dict:
@@ -264,15 +269,16 @@ def deliver(state: BotState) -> dict:
     num_up = len([p for p in valid if p.get("change_pct", 0) >= 0])
     num_down = len(valid) - num_up
 
+    warning = state.get("memory_warning", "")
     if alert:
         args = (alert, state["ledger"], session, now, len(valid), num_up, num_down, news)
-        text = formatters.build_telegram(*args)
-        embed = formatters.build_discord_embed(*args)
+        text = formatters.build_telegram(*args, memory_warning=warning)
+        embed = formatters.build_discord_embed(*args, memory_warning=warning)
     else:
         price_lines, _ = _price_lines(state["prices"])
         err = state.get("analysis_error", "unknown error")
-        text = formatters.build_fallback_text(err, price_lines, session, now)
-        embed = formatters.build_discord_fallback(err, price_lines, session, now)
+        text = formatters.build_fallback_text(err, price_lines, session, now, warning)
+        embed = formatters.build_discord_fallback(err, price_lines, session, now, warning)
 
     print("\n📱 Sending alerts...")
     if config.DRY_RUN:

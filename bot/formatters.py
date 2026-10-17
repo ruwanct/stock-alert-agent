@@ -75,7 +75,8 @@ def _sector_text(alert: MarketAlert) -> str:
 
 
 def build_telegram(alert: MarketAlert, ledger: list, session: str, now: datetime,
-                   num_valid: int, num_up: int, num_down: int, news: list) -> str:
+                   num_valid: int, num_up: int, num_down: int, news: list,
+                   memory_warning: str = "") -> str:
     sources = sorted(set(n.get("source", "").split("/")[0] for n in news if n.get("source")))
     header = (
         f"{BOX}\n   🤖 STOCK ALERT BOT {VERSION}\n   {session}\n{BOX}\n"
@@ -84,6 +85,9 @@ def build_telegram(alert: MarketAlert, ledger: list, session: str, now: datetime
         f"🟢 {num_up} up | 🔴 {num_down} down\n"
         f"📰 {len(news)} news from {', '.join(sources)}\n{BOX}\n"
     )
+
+    if memory_warning:
+        header += f"{memory_warning}\n{BOX}\n"
 
     sections = [f"🌡 MARKET PULSE: {_clean(alert.pulse)}"]
 
@@ -116,10 +120,12 @@ def build_telegram(alert: MarketAlert, ledger: list, session: str, now: datetime
     return text
 
 
-def build_fallback_text(error: str, price_lines: list, session: str, now: datetime) -> str:
+def build_fallback_text(error: str, price_lines: list, session: str, now: datetime,
+                        memory_warning: str = "") -> str:
     text = (
         f"{BOX}\n   🤖 STOCK ALERT BOT {VERSION}\n   {session}\n{BOX}\n"
         f"🕐 {berlin_time(now)} Berlin | {now.strftime('%Y-%m-%d %H:%M UTC')}\n\n"
+        + (f"{memory_warning}\n\n" if memory_warning else "") +
         f"⚠️ Analysis unavailable: {error}\n\n📊 Prices:\n" + "\n".join(price_lines[:10])
     )
     return text[:TELEGRAM_LIMIT]
@@ -134,7 +140,8 @@ def _embed_size(embed: dict) -> int:
 
 
 def build_discord_embed(alert: MarketAlert, ledger: list, session: str, now: datetime,
-                        num_valid: int, num_up: int, num_down: int, news: list) -> dict:
+                        num_valid: int, num_up: int, num_down: int, news: list,
+                        memory_warning: str = "") -> dict:
     sources = sorted(set(n.get("source", "").split("/")[0] for n in news if n.get("source")))
 
     if num_up > num_down:
@@ -152,6 +159,8 @@ def build_discord_embed(alert: MarketAlert, ledger: list, session: str, now: dat
     description = f"```\n{_trunc(chr(10).join(body), inner_limit)}\n```"
 
     fields = []
+    if memory_warning:
+        fields.append({"name": "⚠️ Memory", "value": _trunc(memory_warning, DISCORD_FIELD_LIMIT), "inline": False})
     record = memory.track_record_alert_lines(ledger, exclude_opened_at=memory.iso(now))
     if record:
         fields.append({"name": "📈 Track Record", "value": _trunc("\n".join(record), DISCORD_FIELD_LIMIT), "inline": False})
@@ -187,13 +196,15 @@ def build_discord_embed(alert: MarketAlert, ledger: list, session: str, now: dat
     if excess > 0:
         keep = max(200, inner_limit - excess - 50)
         embed["description"] = f"```\n{_trunc(chr(10).join(body), keep)}\n```"
-    while _embed_size(embed) > DISCORD_TOTAL_LIMIT and len(embed["fields"]) > 1:
-        embed["fields"].pop(-2)  # drop lowest-priority field, keep the snapshot
+    protected = 2 if memory_warning else 1  # the warning (first) and the snapshot (last) are kept
+    while _embed_size(embed) > DISCORD_TOTAL_LIMIT and len(embed["fields"]) > protected:
+        embed["fields"].pop(-2)  # drop lowest-priority field
     return embed
 
 
-def build_discord_fallback(error: str, price_lines: list, session: str, now: datetime) -> dict:
-    text = f"⚠️ Analysis unavailable: {error}\n\n📊 Prices:\n" + "\n".join(price_lines[:10])
+def build_discord_fallback(error: str, price_lines: list, session: str, now: datetime,
+                           memory_warning: str = "") -> dict:
+    text = (f"{memory_warning}\n\n" if memory_warning else "") + f"⚠️ Analysis unavailable: {error}\n\n📊 Prices:\n" + "\n".join(price_lines[:10])
     return {
         "title": f"🤖 Stock Alert Bot {VERSION}  |  {session}",
         "description": f"```\n{_trunc(text, DISCORD_DESC_LIMIT - 8)}\n```",

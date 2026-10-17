@@ -195,6 +195,10 @@ class Loaded(NamedTuple):
     ledger: list
     digests: dict
     store: object
+    warning: str = ""  # short, secret-free text for the alert when Mongo was expected but unavailable
+
+
+MEMORY_OFFLINE_WARNING = "⚠️ Memory offline: using last backup, nothing saved this run"
 
 
 def open_memory() -> Loaded:
@@ -218,7 +222,8 @@ def open_memory() -> Loaded:
                 backend.close()
         json_backend = JsonBackend()
         return Loaded(json_backend, False, json_backend.load_signals(),
-                      json_backend.load_digests(), json_backend.load_tickers())
+                      json_backend.load_digests(), json_backend.load_tickers(),
+                      MEMORY_OFFLINE_WARNING)
     backend = JsonBackend()
     print("  📁 Memory backend: JSON files")
     return Loaded(backend, not config.DRY_RUN, backend.load_signals(),

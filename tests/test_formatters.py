@@ -5,7 +5,8 @@ from datetime import datetime, timedelta, timezone
 
 from bot import memory
 from bot.formatters import (DISCORD_DESC_LIMIT, DISCORD_FIELD_LIMIT, DISCORD_TOTAL_LIMIT,
-                            build_discord_embed, build_telegram, berlin_time)
+                            build_discord_embed, build_discord_fallback,
+                            build_fallback_text, build_telegram, berlin_time)
 from bot.schemas import MarketAlert, Mover, SectorHeat, Signal
 
 NOW = datetime(2026, 10, 14, 10, 0, tzinfo=timezone.utc)
@@ -39,6 +40,21 @@ def ledger_with_history():
 class TelegramTests(unittest.TestCase):
     def tg(self, alert, ledger=None):
         return build_telegram(alert, ledger or [], "🌅 PRE-MARKET", NOW, 30, 20, 10, NEWS)
+
+    def test_memory_warning_line(self):
+        w = "⚠️ Memory offline: using last backup, nothing saved this run"
+        t = build_telegram(minimal(), [], "s", NOW, 30, 20, 10, NEWS, memory_warning=w)
+        self.assertIn(w, t)
+        self.assertLess(t.index("📰 "), t.index(w))
+        self.assertLess(t.index(w), t.index("MARKET PULSE"))
+        self.assertNotIn("Memory", self.tg(minimal()))
+
+    def test_fallback_includes_warning(self):
+        w = "⚠️ Memory offline: using last backup, nothing saved this run"
+        self.assertIn(w, build_fallback_text("boom", ["l"], "s", NOW, w))
+        self.assertNotIn("Memory", build_fallback_text("boom", ["l"], "s", NOW))
+        self.assertIn(w, build_discord_fallback("boom", ["l"], "s", NOW, w)["description"])
+        self.assertNotIn("Memory", build_discord_fallback("boom", ["l"], "s", NOW)["description"])
 
     def test_empty_sections_omitted(self):
         t = self.tg(minimal())
@@ -96,6 +112,18 @@ class DiscordTests(unittest.TestCase):
         e = build_discord_embed(full(n=6, text="word " * 200), ledger_with_history(), "s", NOW, 30, 20, 10, NEWS)
         self.check_limits(e)
         self.assertTrue(any(f["name"].startswith("📊") for f in e["fields"]))
+
+    def test_memory_warning_first_field_and_limits(self):
+        w = "⚠️ Memory partially saved: signals failed"
+        e = build_discord_embed(minimal(), [], "s", NOW, 30, 20, 10, NEWS, memory_warning=w)
+        self.assertEqual(e["fields"][0], {"name": "⚠️ Memory", "value": w, "inline": False})
+        e = build_discord_embed(minimal(), [], "s", NOW, 30, 20, 10, NEWS)
+        self.assertFalse(any("Memory" in f["name"] for f in e["fields"]))
+        e = build_discord_embed(full(n=6, text="word " * 200), ledger_with_history(), "s", NOW, 30, 20, 10, NEWS,
+                                memory_warning=w)
+        self.check_limits(e)
+        self.assertEqual(e["fields"][0]["name"], "⚠️ Memory")
+        self.assertTrue(e["fields"][-1]["name"].startswith("📊"))
 
     def test_small_alert_and_color(self):
         e = build_discord_embed(minimal(), [], "s", NOW, 30, 20, 10, NEWS)

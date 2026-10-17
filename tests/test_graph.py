@@ -35,6 +35,7 @@ def good(price=100.0, ticker="NVDA"):
 
 class GraphTests(unittest.TestCase):
     def run_graph(self, analysis_results, dry_run=False):
+        self.sent = []
         tmp = Path(tempfile.mkdtemp())
         data.QUOTE_CACHE.clear()
         data.QUOTE_CACHE["NVDA"] = quote("NVDA", 100.0)
@@ -49,7 +50,7 @@ class GraphTests(unittest.TestCase):
             mock.patch.object(graph.data, "aggregate_news", lambda c: []),
             mock.patch.object(graph.chains, "build_analysis_chain", lambda: analysis),
             mock.patch.object(graph.chains, "build_digest_chain", lambda: digest),
-            mock.patch.object(graph.delivery, "send_telegram", lambda t: True),
+            mock.patch.object(graph.delivery, "send_telegram", lambda t: self.sent.append(t) or True),
             mock.patch.object(graph.delivery, "send_discord", lambda e: True),
         ]
         for p in patches:
@@ -83,6 +84,26 @@ class GraphTests(unittest.TestCase):
         self.assertEqual(result["ledger"], [])
         self.assertTrue(result["delivered"]["telegram"])
         self.assertTrue((tmp / "signals.json").exists())  # scoring still saved
+
+    def test_save_failure_sets_warning_and_still_delivers(self):
+        with mock.patch.object(graph.storage.JsonBackend, "save_signals",
+                               side_effect=RuntimeError("secret-host:27017 refused")):
+            result, _, _ = self.run_graph([good()])
+        sent = self.sent
+        self.assertEqual(result["memory_warning"], "⚠️ Memory partially saved: signals failed")
+        self.assertTrue(result["delivered"]["telegram"])
+        self.assertIn("Memory partially saved: signals failed", sent[0])
+        self.assertNotIn("secret-host", sent[0])
+
+    def test_healthy_run_has_no_warning(self):
+        result, _, _ = self.run_graph([good()])
+        sent = self.sent
+        self.assertEqual(result["memory_warning"], "")
+        self.assertNotIn("Memory", sent[0])
+
+    def test_dry_run_has_no_warning(self):
+        result, _, _ = self.run_graph([good()], dry_run=True)
+        self.assertEqual(result["memory_warning"], "")
 
     def test_dry_run_writes_nothing(self):
         result, _, tmp = self.run_graph([good()], dry_run=True)

@@ -80,3 +80,8 @@ All customization is in `bot/config.py`:
 - Cron times are UTC. Berlin = UTC+1 (winter) / UTC+2 (summer). Current schedule: 21:30 UTC (after the US close).
 - `ALERTS_PER_DAY` (repo variable, default 1) must match the number of cron lines; it tunes digest retention and the footer. GitHub can't read cron times from a variable.
 - The job has an 8-minute timeout, pip is cached, and runs are serialized via `concurrency` (memory commits). Finnhub rate limit is 60 calls/min; the script uses `time.sleep(0.12)` between calls to stay safe.
+
+## Tests and Memory Warning
+
+- Tests (`python -m unittest discover -s tests -v`) run in CI on every push and PR via `.github/workflows/tests.yml` (no secrets; `MONGODB_URI` and `DRY_RUN` forced empty). Pushes touching only `memory/**` are ignored.
+- `memory_warning` (graph state, "" when fine) is shown in the alert: `storage.open_memory()` sets `Loaded.warning` when Mongo was expected but fell back to read-only JSON; `update_memory` sets "Memory partially saved: <labels> failed" when saves fail. JSON by choice and DRY_RUN never warn. Exception text stays in logs only.
