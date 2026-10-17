@@ -203,25 +203,31 @@ def fetch_finnhub_news() -> list:
 # ──────────────────────────────────────────────
 # NEWS SOURCE 2: Finnhub Company News
 # ──────────────────────────────────────────────
+def fetch_company_news(symbol: str, days: int = 2) -> list:
+    """Raw Finnhub company-news items for one ticker (raises on HTTP errors; paces calls)."""
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    past = (datetime.now(timezone.utc) - timedelta(days=days)).strftime("%Y-%m-%d")
+    r = requests.get(
+        "https://finnhub.io/api/v1/company-news",
+        params={"symbol": symbol, "from": past, "to": today, "token": config.FINNHUB_API_KEY},
+        timeout=10,
+    )
+    r.raise_for_status()
+    items = r.json()
+    time.sleep(0.12)
+    return items if isinstance(items, list) else []
+
+
 def fetch_finnhub_company_news(symbols: list) -> list:
     articles = []
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    past = (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d")
     for symbol in symbols:
         try:
-            r = requests.get(
-                "https://finnhub.io/api/v1/company-news",
-                params={"symbol": symbol, "from": past, "to": today, "token": config.FINNHUB_API_KEY},
-                timeout=10,
-            )
-            r.raise_for_status()
-            for item in r.json()[:3]:
+            for item in fetch_company_news(symbol)[:3]:
                 articles.append({
                     "source": f"Finnhub/{item.get('source', 'Unknown')}",
                     "headline": f"[{symbol}] {item.get('headline', '')}",
                     "summary": item.get("summary", "")[:200],
                 })
-            time.sleep(0.12)
         except Exception:
             pass
     print(f"  [Finnhub Company] {len(articles)} articles for {len(symbols)} tickers")

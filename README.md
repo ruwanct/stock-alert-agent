@@ -136,10 +136,14 @@ The pipeline is a LangGraph `StateGraph`:
  START
    │
    ▼
- load_memory ──► gather_data ──► score_past_signals ──► analyze ◄─────────┐
- (JSON/MongoDB)  (watchlist,      (live price for open    (ChatAnthropic   │ errors and
-                 prices, news)    BUY/SELL, close >5d)    structured out) │ retries < 1
-                                                              │           │
+ load_memory ──► gather_data ──► score_past_signals ──► research ⇄ research_tools
+ (JSON/MongoDB)  (watchlist,      (live price for open    (tool-calling   (runs tools)
+                 prices, news)    BUY/SELL, close >5d)     agent, capped)
+                                                              │
+                                                              ▼
+                                                          analyze ◄───────┐
+                                                        (structured out)  │ errors and
+                                                              │           │ retries < 1
                                                               ▼           │
                                                           validate ───────┘
                                                               │ ok / out of retries
@@ -158,13 +162,31 @@ graph TD;
 	__start__ --> load_memory;
 	load_memory --> gather_data;
 	gather_data --> score_past_signals;
-	score_past_signals --> analyze;
+	score_past_signals --> research;
+	research -.->|tool calls| research_tools;
+	research_tools -.-> research;
+	research -.->|notes| analyze;
 	analyze --> validate;
 	validate -.->|errors, retry once| analyze;
 	validate -.->|ok| update_memory;
 	update_memory --> deliver;
 	deliver --> __end__([__end__]);
 ```
+
+### 🔎 Research agent
+
+Before the main analysis, a small tool-calling agent (the `research` node) looks at the day's biggest movers and your open signals and checks at most two tickers. Its 2-4 plain-text notes are passed to the analysis prompt as `research_notes`.
+
+| Tool (`bot/tools.py`) | What it does |
+|------|------|
+| `get_company_news(ticker)` | Last 2 days of Finnhub company news, max 5 items, `headline — summary` |
+| `recall_ticker_history(ticker)` | The bot's own memory for the ticker: ledger signals (action, entry, return, outcome, date) and the ticker note. Reads the current run's in-state memory; "No history" when empty |
+
+- **Caps:** `MAX_TOOL_CALLS = 2` tool executions and `MAX_RESEARCH_ROUNDS = 3` model calls per run (`bot/config.py`). Extra tool calls the model asks for are never executed, and the last model call gets no tools so it must write the notes.
+- **Short prompt:** only the top ~6 movers, open signals and a track-record line, not the full news list.
+- **Fail-safe:** any research error is logged as a warning and the alert goes out without notes. `DRY_RUN=1` still runs research (it is read-only).
+- **Cost:** roughly $0.02-0.04 extra per run.
+- **Switch off:** set the repo variable `RESEARCH_ENABLED=false` (Settings → Secrets and variables → Actions → Variables); no code change needed. Log line: `🔎 Research: looked up NVDA (news), TSLA (history) — 3 notes`.
 
 ### Memory files (`memory/`, JSON backend)
 
@@ -245,7 +267,11 @@ python scripts/migrate_json_to_mongo.py             # upsert into MongoDB
 | `ChatPromptTemplate` | `bot/chains.py` analysis, digest and weekly prompts |
 | `with_structured_output(MarketAlert)` | `bot/chains.py` analysis chain, Pydantic models in `bot/schemas.py` |
 | LCEL `prompt \| llm \| StrOutputParser()` | `bot/chains.py` weekly summary chain |
-| `StateGraph`, conditional edges | `bot/graph.py` (validate then retry loop) |
+| `@tool` | `bot/tools.py` research tools (docstrings become the tool descriptions) |
+| `bind_tools()` | `bot/chains.py` `build_research_model()` (auto tool choice, never forced) |
+| `@tool` calls + tool loop (`tool.invoke(tool_call)` → `ToolMessage`) | `bot/graph.py` `research` ⇄ `research_tools`, capped by `MAX_TOOL_CALLS` / `MAX_RESEARCH_ROUNDS` |
+| Prompt caching (`cache_control`) | `bot/chains.py` research system prompt (only takes effect above the model's minimum cacheable length) |
+| `StateGraph`, conditional edges | `bot/graph.py` (research loop, validate then retry loop) |
 | `InMemoryStore` | `bot/memory.py` per-ticker notes (working copy during a run; the JSON backend's store) |
 | `MongoDBStore` (`langgraph-store-mongodb`) | `bot/storage.py` persistent per-ticker notes in MongoDB Atlas |
 | LangSmith tracing | automatic via env vars, see below |
@@ -253,6 +279,21 @@ python scripts/migrate_json_to_mongo.py             # upsert into MongoDB
 ### Validation
 
 Every signal ticker must exist in the fetched quotes and BUY/SELL entry prices must be within 1.5% of the live quote. Failures trigger one retry with the problems fed back to Claude. After that, invalid signals are dropped and mover prices are overwritten with the real quotes. If the Claude call fails completely, a plain fallback message with prices is delivered.
+
+### Errors
+
+Claude API failures are shown as short messages instead of raw exception text (details stay in the Actions log):
+
+| Problem | Message in the alert |
+|---------|---------|
+| Credits ran out | ⚠️ Claude API credits ran out. Top up at console.anthropic.com → Billing (tip: turn on auto-reload). Prices below, no AI analysis this run. |
+| Key rejected (401/403) | ⚠️ Claude API key was rejected. Check the ANTHROPIC_API_KEY secret in GitHub. |
+| Rate limit (429) | ⚠️ Claude API rate limit hit. The next run should work. |
+| Overloaded / 5xx | ⚠️ Claude is temporarily overloaded or down. The next run should work. |
+| Network / timeout | ⚠️ Couldn't reach the Claude API (network/timeout). The next run should work. |
+| Anything else | ⚠️ AI analysis failed unexpectedly. Details are in the GitHub Actions log. |
+
+For **credits** and **key rejected**, the fallback alert is still delivered, then the job exits with code 1 so the GitHub Actions run is marked failed and GitHub emails you. Transient errors do not fail the run. Memory backup/commit steps run either way (`if: always()`). To avoid running dry, enable auto-reload and set a monthly spend limit in the Anthropic Console (Billing).
 
 ### Dry run
 
@@ -312,8 +353,9 @@ The same tests run in CI on every push and pull request (`.github/workflows/test
 - Long alerts are automatically split into multiple messages — this is normal
 
 **Claude API error?**
+- The alert says what happened (see "Errors" above). Out of credits: top up at console.anthropic.com → Billing
 - Check your API key starts with `sk-ant-`
-- Verify you have billing set up at console.anthropic.com
+- Research agent misbehaving? Set the repo variable `RESEARCH_ENABLED=false`
 
 ---
 

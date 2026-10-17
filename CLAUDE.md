@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A serverless stock alert bot that runs on GitHub Actions (once daily after the US close, Mon-Fri). It fetches stock prices and news, sends them to Claude AI for analysis, then delivers buy/sell signals to Telegram and Discord. v6 adds persistent memory (signal track record, digests, ticker notes) built with LangChain + LangGraph.
 
-**Cost:** Claude API only (2 calls per run); everything else is free tier.
+**Cost:** Claude API only (2 analysis calls + 1-3 small research calls per run); everything else is free tier.
 
 ## Running Locally
 
@@ -42,7 +42,9 @@ To trigger via GitHub Actions without waiting for the cron schedule: go to the r
 - `memory.py` — pure memory logic + JSON helpers (signal ledger + scoring, digests, per-ticker `InMemoryStore`)
 - `storage.py` — backend interface (`JsonBackend`, `MongoBackend`) and fail-safe `open_memory()`; ticker notes persist via the official `MongoDBStore` (`langgraph-store-mongodb`)
 - `scripts/export_memory.py` (Mongo -> `memory/*.json` + `memory/archive/*.json` backup) and `scripts/migrate_json_to_mongo.py` (idempotent, `--dry-run`; reads main files and archive, so it is also the full restore)
-- `graph.py` — LangGraph `StateGraph`: `load_memory` -> `gather_data` -> `score_past_signals` -> `analyze` -> `validate` (retry once to `analyze`) -> `update_memory` -> `deliver`
+- `graph.py` — LangGraph `StateGraph`: `load_memory` -> `gather_data` -> `score_past_signals` -> `research` (loops with `research_tools`, which executes the tool calls) -> `analyze` -> `validate` (retry once to `analyze`) -> `update_memory` -> `deliver`
+- `tools.py` — research agent tools via `build_tools(ledger, store)` (a closure over the run's in-state memory): `get_company_news(ticker)`, `recall_ticker_history(ticker)`. Tools never raise.
+- `errors.py` — `classify_llm_error(exc) -> (code, friendly_message)`; codes `credits`, `auth`, `rate_limit`, `overloaded`, `network`, `unknown`
 - `formatters.py` — Telegram text and Discord embed from a `MarketAlert`
 - `delivery.py` — `send_telegram()` / `send_discord()`
 
@@ -61,6 +63,12 @@ All customization is in `bot/config.py`:
 - `BIG_MOVER_THRESHOLD` (2.0), `MAX_DYNAMIC_STOCKS` (10), watchlist capped at 30
 - `SIGNAL_HORIZON_DAYS` (5), `WIN_THRESHOLD_PCT` (0.5), `MAX_RECENT_DIGESTS` (`max(7, 5 × ALERTS_PER_DAY)`), `MAX_WEEKLY_DIGESTS` (8)
 - `PRICE_TOLERANCE_PCT` (1.5) — max distance between a signal's entry price and the live quote
+- `RESEARCH_ENABLED` (env, default true; workflow passes repo variable `RESEARCH_ENABLED`), `MAX_TOOL_CALLS` (2 tool executions per run), `MAX_RESEARCH_ROUNDS` (3 model calls; the last never gets tools)
+
+## Research agent and error handling
+
+- `research` gets a short prompt (top ~6 movers, open signals, track-record line; no news list), binds the tools with auto tool_choice, and the notes go into the analysis prompt slot `research_notes` ("None" when empty). Calls beyond `MAX_TOOL_CALLS` are dropped before execution. Any research failure only logs a warning (`research_notes = ""`); it never blocks the alert. DRY_RUN still researches (read-only). The stable system prompt carries `cache_control` (no-op below the model's minimum cacheable length).
+- Claude failures are classified by `errors.classify_llm_error` (walks `__cause__`/`__context__`; credits = status 400 message "credit balance" / `billing_error` type / 402). `analyze` stores `analysis_error_code` + a friendly `analysis_error`; the fallback alert shows only the friendly text, raw details go to the log. `credits` and `auth` make `stock_alert_bot.py` exit 1 after delivery so the Actions run fails and GitHub emails the owner (the backup/commit steps use `if: always()` and still run); other codes exit 0. A first-call failure is never retried.
 
 ## Required GitHub Secrets
 

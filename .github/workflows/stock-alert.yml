@@ -54,6 +54,8 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           # Number of cron runs per weekday above (repo variable, default 1)
           ALERTS_PER_DAY: ${{ vars.ALERTS_PER_DAY || '1' }}
+          # Research agent (tool calling) — set repo variable RESEARCH_ENABLED=false to switch off
+          RESEARCH_ENABLED: ${{ vars.RESEARCH_ENABLED || 'true' }}
           # Optional LangSmith tracing (leave the secret unset to disable)
           LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
           LANGSMITH_TRACING: ${{ secrets.LANGSMITH_API_KEY != '' && 'true' || 'false' }}

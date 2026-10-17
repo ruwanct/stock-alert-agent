@@ -8,7 +8,7 @@ Thin entry point: validates env, builds and invokes the graph.
 
 import sys
 
-from bot import config
+from bot import config, errors
 from bot.graph import build_graph
 
 
@@ -54,6 +54,12 @@ def main():
         results.append(f"Discord: {'✅' if delivered.get('discord') else '❌'}")
     if delivered.get("telegram") or delivered.get("discord"):
         print(f"\n✅ Done! {' | '.join(results)}")
+        # Credits/auth problems will not fix themselves: fail the run so GitHub emails the owner.
+        # Transient errors (rate limit, overloaded, network) exit 0.
+        code = result.get("analysis_error_code", "")
+        if code in errors.FATAL_CODES:
+            print(f"\n❌ Claude API problem ({code}): {errors.MESSAGES[code]}")
+            sys.exit(1)
     else:
         print("\n❌ All delivery channels failed.")
         sys.exit(1)

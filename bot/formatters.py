@@ -126,7 +126,7 @@ def build_fallback_text(error: str, price_lines: list, session: str, now: dateti
         f"{BOX}\n   🤖 STOCK ALERT BOT {VERSION}\n   {session}\n{BOX}\n"
         f"🕐 {berlin_time(now)} Berlin | {now.strftime('%Y-%m-%d %H:%M UTC')}\n\n"
         + (f"{memory_warning}\n\n" if memory_warning else "") +
-        f"⚠️ Analysis unavailable: {error}\n\n📊 Prices:\n" + "\n".join(price_lines[:10])
+        f"{error}\n\n📊 Prices:\n" + "\n".join(price_lines[:10])
     )
     return text[:TELEGRAM_LIMIT]
 
@@ -204,7 +204,7 @@ def build_discord_embed(alert: MarketAlert, ledger: list, session: str, now: dat
 
 def build_discord_fallback(error: str, price_lines: list, session: str, now: datetime,
                            memory_warning: str = "") -> dict:
-    text = (f"{memory_warning}\n\n" if memory_warning else "") + f"⚠️ Analysis unavailable: {error}\n\n📊 Prices:\n" + "\n".join(price_lines[:10])
+    text = (f"{memory_warning}\n\n" if memory_warning else "") + f"{error}\n\n📊 Prices:\n" + "\n".join(price_lines[:10])
     return {
         "title": f"🤖 Stock Alert Bot {VERSION}  |  {session}",
         "description": f"```\n{_trunc(text, DISCORD_DESC_LIMIT - 8)}\n```",

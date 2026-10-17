@@ -31,6 +31,14 @@ except ValueError:
 # ──────────────────────────────────────────────
 MODEL = "claude-sonnet-4-6"  # the only model this API key supports
 
+# ──────────────────────────────────────────────
+# Research agent (tool-calling step before analyze)
+# ──────────────────────────────────────────────
+# Switch off without code changes: repo variable RESEARCH_ENABLED=false
+RESEARCH_ENABLED = os.environ.get("RESEARCH_ENABLED", "").strip().lower() not in ("0", "false", "no", "off")
+MAX_TOOL_CALLS = 2          # tool executions per run (hard cap)
+MAX_RESEARCH_ROUNDS = 3     # model calls per run (the last one never gets tools)
+
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # YOUR STOCK UNIVERSE
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,19 +1,22 @@
 """
 LangGraph pipeline:
 
-  load_memory → gather_data → score_past_signals → analyze → validate
-        ↑                                              │   (errors & retries < 1)
-        └──────────────────────────────────────────────┘
-                              validate → update_memory → deliver → END
+  load_memory → gather_data → score_past_signals → research ⇄ research_tools
+                                                       │ (tool loop, capped)
+                                                       ▼
+                                  analyze → validate → update_memory → deliver → END
+                                     ↑          │   (errors & retries < 1)
+                                     └──────────┘
 """
 
 import json
 from datetime import datetime, timezone
 from typing import Any, TypedDict
 
+from langchain_core.messages import AIMessage, ToolMessage
 from langgraph.graph import END, START, StateGraph
 
-from bot import chains, config, data, delivery, formatters, memory, storage
+from bot import chains, config, data, delivery, errors as llm_errors, formatters, memory, storage, tools as research_tools_mod
 from bot.schemas import DailyDigest, MarketAlert
 
 
@@ -32,7 +35,15 @@ class BotState(TypedDict, total=False):
     news: list
     coverage: str
     alert: MarketAlert
-    analysis_error: str
+    analysis_error: str        # friendly message (never raw exception text)
+    analysis_error_code: str   # credits / auth / rate_limit / overloaded / network / unknown / ""
+    research_notes: str        # "" when research is off, failed or found nothing
+    research_messages: list    # the research loop's chat history
+    research_rounds: int
+    research_tool_calls: int
+    research_lookups: list     # e.g. ["NVDA (news)", "TSLA (history)"]
+    research_pending: bool     # True → the last model message asked for tools
+    research_failed: bool
     errors: list
     retries: int
     validation_feedback: str
@@ -148,6 +159,100 @@ def score_past_signals(state: BotState) -> dict:
     return {"ledger": ledger}
 
 
+def _research_context(state: BotState) -> str:
+    """Short prompt: top movers, open signals, 1-2 line track record (no news list)."""
+    movers = sorted(state["valid"], key=lambda p: abs(p.get("change_pct", 0)), reverse=True)[:6]
+    mover_lines = [f"{p['symbol']} {p['change_pct']:+.1f}% ${p['current']:.2f}" for p in movers]
+    st = memory.track_record_stats(state["ledger"])
+    open_lines = [f"{s['ticker']} {s['action']} {s['return_pct']:+.1f}%" if s.get("return_pct") is not None
+                  else f"{s['ticker']} {s['action']}" for s in st["open"][:8]]
+    record = memory._stats_line(st) or "No closed signals yet."
+    return ("Top movers today: " + (", ".join(mover_lines) or "none") + "\n"
+            "Open signals: " + (", ".join(open_lines) or "none") + "\n"
+            "Track record: " + record)
+
+
+def _tool_label(call: dict) -> str:
+    kind = "news" if call["name"] == "get_company_news" else "history"
+    return f"{str(call['args'].get('ticker', '?')).upper()} ({kind})"
+
+
+def _research_step(state: BotState) -> dict:
+    tools = research_tools_mod.build_tools(state["ledger"], state["store"])
+    messages = list(state.get("research_messages") or chains.research_messages(_research_context(state)))
+    rounds = state.get("research_rounds", 0)
+    used = state.get("research_tool_calls", 0)
+    remaining = config.MAX_TOOL_CALLS - used
+    # the last allowed model call never gets tools, so it must produce the notes
+    use_tools = remaining > 0 and rounds < config.MAX_RESEARCH_ROUNDS - 1
+
+    resp = chains.build_research_model(tools if use_tools else None).invoke(messages)
+    calls = list(getattr(resp, "tool_calls", None) or []) if use_tools else []
+    if calls:
+        kept = calls[:remaining]  # hard cap: calls beyond the budget are never executed
+        if len(kept) < len(calls):
+            print(f"  🔎 Research: tool cap reached, ignoring {len(calls) - len(kept)} extra call(s)")
+        resp = AIMessage(content=resp.text, tool_calls=kept, id=getattr(resp, "id", None))
+        return {"research_messages": messages + [resp], "research_rounds": rounds + 1,
+                "research_tool_calls": used + len(kept), "research_pending": True}
+
+    notes = (resp.text or "").strip()[:800]
+    lookups = state.get("research_lookups", [])
+    n = len([l for l in notes.splitlines() if l.strip()])
+    print(f"  🔎 Research: looked up {', '.join(lookups) or 'nothing'} — {n} notes")
+    return {"research_messages": messages + [resp], "research_rounds": rounds + 1,
+            "research_notes": notes, "research_pending": False}
+
+
+def research(state: BotState) -> dict:
+    print("\n🔎 Research agent...")
+    if not config.RESEARCH_ENABLED:
+        print("  ⏭ RESEARCH_ENABLED is off — skipping")
+        return {"research_notes": "", "research_pending": False}
+    try:
+        return _research_step(state)
+    except Exception as e:  # research must never block the alert
+        code, _ = llm_errors.classify_llm_error(e)
+        print(f"  ⚠ Research failed [{code}] ({type(e).__name__}: {str(e)[:200]}) — continuing without notes")
+        return {"research_notes": "", "research_pending": False, "research_failed": True}
+
+
+def research_tools(state: BotState) -> dict:
+    """Run the requested tool calls (tools bound to this run's memory).
+
+    Each call is executed with `tool.invoke(tool_call)`, which returns a ToolMessage
+    linked to the call id. (langgraph's ToolNode can't be invoked by hand inside
+    another node: it needs graph runtime config, and the tools only exist per run.)
+    """
+    try:
+        by_name = {t.name: t for t in research_tools_mod.build_tools(state["ledger"], state["store"])}
+        last = state["research_messages"][-1]
+        results = []
+        for call in last.tool_calls:
+            t = by_name.get(call["name"])
+            if t is None:
+                results.append(ToolMessage(content=f"Unknown tool {call['name']}.", tool_call_id=call["id"]))
+            else:
+                results.append(t.invoke({**call, "type": "tool_call"}))
+        labels = [_tool_label(c) for c in last.tool_calls]
+        print(f"  🔧 Tools run: {', '.join(labels)}")
+        return {"research_messages": state["research_messages"] + results,
+                "research_lookups": state.get("research_lookups", []) + labels}
+    except Exception as e:
+        print(f"  ⚠ Research tools failed ({type(e).__name__}: {str(e)[:200]}) — continuing without notes")
+        return {"research_notes": "", "research_pending": False, "research_failed": True}
+
+
+def route_after_research(state: BotState) -> str:
+    if state.get("research_failed") or not state.get("research_pending"):
+        return "analyze"
+    return "research_tools"
+
+
+def route_after_tools(state: BotState) -> str:
+    return "analyze" if state.get("research_failed") else "research"
+
+
 def analyze(state: BotState) -> dict:
     print("\n🧠 Claude analysis (LangChain, structured output)...")
     price_lines, errors = _price_lines(state["prices"])
@@ -167,6 +272,7 @@ def analyze(state: BotState) -> dict:
         "recent_digests": memory.recent_digests_text(state["digests"]),
         "weekly_digests": memory.weekly_digests_text(state["digests"]),
         "ticker_notes": memory.ticker_notes_text(state["store"], state["watchlist"]),
+        "research_notes": state.get("research_notes") or "None",
         "validation_feedback": state.get("validation_feedback", "None — first attempt."),
     }
     try:
@@ -175,12 +281,14 @@ def analyze(state: BotState) -> dict:
             raise ValueError("model did not return a structured MarketAlert")
         print(f"  Generated alert: {len(alert.signals)} signals, "
               f"{len(alert.top_gainers)}+{len(alert.top_losers)} movers")
-        return {"alert": alert, "analysis_error": ""}
+        return {"alert": alert, "analysis_error": "", "analysis_error_code": ""}
     except Exception as e:
-        print(f"  ⚠ Claude error: {e}")
-        # On a retry failure keep the previous (flawed) alert; validate will sanitize it
+        code, friendly = llm_errors.classify_llm_error(e)
+        print(f"  ⚠ Claude error [{code}] ({type(e).__name__}): {str(e)[:500]}")
+        # On a retry failure keep the previous (flawed) alert; validate will sanitize it.
+        # A first-call failure leaves no alert, so validate never loops back (no retry on credits/auth).
         keep = state.get("alert") if state.get("retries") else None
-        return {"alert": keep, "analysis_error": str(e)[:300]}
+        return {"alert": keep, "analysis_error": friendly, "analysis_error_code": code}
 
 
 def validate(state: BotState) -> dict:
@@ -220,11 +328,17 @@ def update_memory(state: BotState) -> dict:
         try:
             digest = chains.build_digest_chain().invoke({"alert": alert.model_dump_json()})
         except Exception as e:
-            print(f"  ⚠ Digest chain failed ({e}), using pulse as summary")
+            code, _ = llm_errors.classify_llm_error(e)
+            print(f"  ⚠ Digest chain failed [{code}] ({type(e).__name__}: {str(e)[:200]}), using pulse as summary")
             digest = DailyDigest(summary=alert.pulse, themes=alert.continuing_stories[:5])
 
         def summarize(text: str) -> str:
-            return chains.build_weekly_chain().invoke({"text": text})
+            try:
+                return chains.build_weekly_chain().invoke({"text": text})
+            except Exception as e:
+                code, _ = llm_errors.classify_llm_error(e)
+                print(f"  ⚠ Weekly summary failed [{code}] ({type(e).__name__}: {str(e)[:200]})")
+                raise
 
         memory.add_digest(
             digests,
@@ -276,7 +390,7 @@ def deliver(state: BotState) -> dict:
         embed = formatters.build_discord_embed(*args, memory_warning=warning)
     else:
         price_lines, _ = _price_lines(state["prices"])
-        err = state.get("analysis_error", "unknown error")
+        err = state.get("analysis_error") or llm_errors.MESSAGES[llm_errors.UNKNOWN]
         text = formatters.build_fallback_text(err, price_lines, session, now, warning)
         embed = formatters.build_discord_fallback(err, price_lines, session, now, warning)
 
@@ -303,6 +417,8 @@ def build_graph():
     g.add_node("load_memory", load_memory)
     g.add_node("gather_data", gather_data)
     g.add_node("score_past_signals", score_past_signals)
+    g.add_node("research", research)
+    g.add_node("research_tools", research_tools)
     g.add_node("analyze", analyze)
     g.add_node("validate", validate)
     g.add_node("update_memory", update_memory)
@@ -311,7 +427,9 @@ def build_graph():
     g.add_edge(START, "load_memory")
     g.add_edge("load_memory", "gather_data")
     g.add_edge("gather_data", "score_past_signals")
-    g.add_edge("score_past_signals", "analyze")
+    g.add_edge("score_past_signals", "research")
+    g.add_conditional_edges("research", route_after_research, {"research_tools": "research_tools", "analyze": "analyze"})
+    g.add_conditional_edges("research_tools", route_after_tools, {"research": "research", "analyze": "analyze"})
     g.add_edge("analyze", "validate")
     g.add_conditional_edges("validate", route_after_validate, {"analyze": "analyze", "update_memory": "update_memory"})
     g.add_edge("update_memory", "deliver")

@@ -3,6 +3,7 @@ LangChain pieces — LLM, prompts (LCEL chains), structured output.
 """
 
 from langchain_anthropic import ChatAnthropic
+from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 
@@ -10,8 +11,8 @@ from bot import config
 from bot.schemas import DailyDigest, MarketAlert
 
 
-def get_llm() -> ChatAnthropic:
-    return ChatAnthropic(model=config.MODEL, max_tokens=4000, timeout=90, max_retries=2)
+def get_llm(max_tokens: int = 4000) -> ChatAnthropic:
+    return ChatAnthropic(model=config.MODEL, max_tokens=max_tokens, timeout=90, max_retries=2)
 
 
 # NOTE: ChatPromptTemplate uses {slot} syntax — any literal brace must be
@@ -56,8 +57,32 @@ ANALYSIS_HUMAN = """## Coverage
 ## Ticker notes
 {ticker_notes}
 
+## Research notes (your own tool lookups today)
+{research_notes}
+
 ## Validation feedback from your previous attempt
 {validation_feedback}"""
+
+RESEARCH_SYSTEM = """You are the research step of a stock alert bot. Below you get today's biggest movers, your open signals and a short track record.
+Pick AT MOST 2 tickers that matter most (big movers or open signals) and look them up with the tools:
+get_company_news (why is it moving?) or recall_ticker_history (what did I say before?).
+Then reply with 2-4 short research notes: plain text, no markdown, one note per line, each line starting with the ticker (e.g. "NVDA: ...").
+Only report what the tools returned. If nothing looks worth a lookup, just write the notes from what you were given."""
+
+
+def research_messages(context: str) -> list:
+    """System prompt (marked cacheable) + the short per-run context."""
+    system = SystemMessage(content=[
+        {"type": "text", "text": RESEARCH_SYSTEM, "cache_control": {"type": "ephemeral"}},
+    ])
+    return [system, HumanMessage(content=context)]
+
+
+def build_research_model(tools=None, llm=None):
+    """Chat model for the research loop; tools bound with default (auto) tool_choice, or none."""
+    llm = llm or get_llm(max_tokens=600)
+    return llm.bind_tools(tools) if tools else llm
+
 
 DIGEST_SYSTEM = "You compress stock alerts into a compact memory digest for future runs."
 DIGEST_HUMAN = "Summarize this alert in 2-3 sentences and 3-5 short theme tags (e.g. 'defense rally', 'AI capex').\n\n{alert}"
