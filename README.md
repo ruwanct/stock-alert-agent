@@ -265,7 +265,7 @@ Runs everything including Claude, prints the Telegram text and Discord embed JSO
 
 ### Optional: LangSmith tracing
 
-Add a `LANGSMITH_API_KEY` repository secret. The workflow then sets `LANGSMITH_TRACING=true` and `LANGSMITH_PROJECT=stock-alert-bot`, and every chain and graph node shows up in LangSmith. Locally:
+Add a `LANGSMITH_API_KEY` repository secret. The workflow then sets `LANGSMITH_TRACING=true` and `LANGSMITH_PROJECT=stock-alert-bot`, and every chain and graph node shows up in LangSmith. The workflow also sets `LANGSMITH_ENDPOINT=https://eu.api.smith.langchain.com` because this project's LangSmith account is in the EU region; for a US account, remove that line (uploads to the wrong region fail with 403 Forbidden). Locally:
 
 ```bash
 export LANGSMITH_API_KEY=... LANGSMITH_TRACING=true LANGSMITH_PROJECT=stock-alert-bot

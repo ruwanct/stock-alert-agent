@@ -58,6 +58,8 @@ jobs:
           LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
           LANGSMITH_TRACING: ${{ secrets.LANGSMITH_API_KEY != '' && 'true' || 'false' }}
           LANGSMITH_PROJECT: stock-alert-bot
+          # The LangSmith account is in the EU region
+          LANGSMITH_ENDPOINT: https://eu.api.smith.langchain.com
         run: python stock_alert_bot.py
 
       - name: Export weekly JSON backup from MongoDB
