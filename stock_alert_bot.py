@@ -623,7 +623,7 @@ def main():
     # 6. Send to all channels
     print("\n📱 Sending alerts...")
     telegram_ok = send_telegram(full_message)
-    discord_ok = send_discord(full_message)
+    discord_ok = send_discord_embed(analysis, valid, news, session, now)
 
     if telegram_ok or discord_ok:
         results = []
