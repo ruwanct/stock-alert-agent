@@ -13,7 +13,7 @@ from typing import Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from bot import chains, config, data, delivery, formatters, memory
+from bot import chains, config, data, delivery, formatters, memory, storage
 from bot.schemas import DailyDigest, MarketAlert
 
 
@@ -22,7 +22,10 @@ class BotState(TypedDict, total=False):
     session: str
     ledger: list
     digests: dict
-    store: Any                 # langgraph InMemoryStore of ticker notes
+    store: Any                 # langgraph InMemoryStore of ticker notes (working copy)
+    backend: Any               # storage.JsonBackend / MongoBackend
+    writable: bool             # False → memory writes are skipped this run
+    compressed: list           # digests folded into weekly summaries this run
     watchlist: list
     prices: list
     valid: list
@@ -107,12 +110,16 @@ def _price_lines(prices: list) -> tuple:
 def load_memory(state: BotState) -> dict:
     print("\n🧠 Loading memory...")
     now = datetime.now(timezone.utc)
+    loaded = storage.open_memory()  # never raises: Mongo trouble → read-only JSON snapshot
     return {
         "now": now,
         "session": formatters.session_label(now.hour),
-        "ledger": memory.load_signals(),
-        "digests": memory.load_digests(),
-        "store": memory.load_tickers(),
+        "backend": loaded.backend,
+        "writable": loaded.writable,
+        "ledger": loaded.ledger,
+        "digests": loaded.digests,
+        "store": loaded.store,
+        "compressed": [],
         "retries": 0,
         "errors": [],
         "validation_feedback": "None — first attempt.",
@@ -201,6 +208,7 @@ def update_memory(state: BotState) -> dict:
     print("\n🧠 Updating memory...")
     alert, now = state.get("alert"), state["now"]
     ledger, digests, store = state["ledger"], state["digests"], state["store"]
+    backend, compressed = state["backend"], state.get("compressed", [])
 
     if alert:
         quotes = data.valid_quotes()
@@ -220,19 +228,33 @@ def update_memory(state: BotState) -> dict:
             digests,
             {"at": now.isoformat(timespec="seconds"), "session": state["session"],
              "summary": digest.summary, "themes": digest.themes},
-            summarize, now,
+            summarize, now, compressed_out=compressed,
         )
         memory.update_tickers(store, alert, now)
     else:
         print("  ⏭ No analysis — skipping signal/digest/ticker updates (scoring still saved)")
 
-    if config.DRY_RUN:
-        print("  🧪 DRY_RUN: memory files NOT written")
-    else:
-        memory.save_signals(ledger)
-        memory.save_digests(digests)
-        memory.save_tickers(store)
-        print("  💾 Memory saved")
+    try:
+        if config.DRY_RUN:
+            print("  🧪 DRY_RUN: memory NOT written")
+        elif not state.get("writable", True):
+            print("  ⏭ Memory is read-only this run (backend fallback) — nothing written")
+        else:
+            failed = []
+            for label, save in (
+                ("signals", lambda: backend.save_signals(ledger)),
+                ("digests", lambda: backend.save_digests(digests, compressed)),
+                ("tickers", lambda: backend.save_tickers(store)),
+            ):
+                try:
+                    save()
+                except Exception as e:  # a failed save must never block delivery
+                    failed.append(label)
+                    print(f"  ⚠ Saving {label} to {backend.name} failed ({type(e).__name__}: {str(e)[:200]})")
+            print(f"  💾 Memory saved ({backend.name})" if not failed
+                  else f"  ⚠ Memory partially saved ({backend.name}); failed: {', '.join(failed)}")
+    finally:
+        backend.close()
     return {"ledger": ledger, "digests": digests}
 
 

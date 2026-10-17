@@ -48,6 +48,8 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          # Memory lives in MongoDB Atlas when set; otherwise JSON files in memory/
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
           # Number of cron runs per weekday above (repo variable, default 1)
           ALERTS_PER_DAY: ${{ vars.ALERTS_PER_DAY || '1' }}
           # Optional LangSmith tracing (leave the secret unset to disable)
@@ -56,10 +58,32 @@ jobs:
           LANGSMITH_PROJECT: stock-alert-bot
         run: python stock_alert_bot.py
 
+      - name: Export weekly JSON backup from MongoDB
+        # Fridays only (UTC), and only when MongoDB is the memory backend
+        if: always()
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: |
+          if [ -n "$MONGODB_URI" ] && [ "$(date -u +%u)" = "5" ]; then
+            python scripts/export_memory.py || echo "::warning::MongoDB export failed, no backup this week"
+          fi
+
       - name: Commit memory
         if: always()
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898708+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$MONGODB_URI" ]; then
+            # MongoDB is the source of truth: commit a JSON backup on Fridays only
+            if [ "$(date -u +%u)" != "5" ]; then
+              echo "MongoDB backend: weekly backup runs on Fridays only, skipping commit"
+              exit 0
+            fi
+            MSG="chore(memory): weekly backup from MongoDB [skip ci]"
+          else
+            MSG="chore(memory): update bot memory [skip ci]"
+          fi
           git add memory/
-          git diff --cached --quiet || (git commit -m "chore(memory): update bot memory [skip ci]" && git pull --rebase && git push)
+          git diff --cached --quiet || (git commit -m "$MSG" && git pull --rebase && git push)

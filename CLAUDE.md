@@ -11,7 +11,7 @@ A serverless stock alert bot that runs on GitHub Actions (once daily after the U
 ## Running Locally
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-dev.txt   # runtime deps + mongomock for tests
 ```
 
 Set environment variables, then run:
@@ -22,9 +22,10 @@ export ANTHROPIC_API_KEY=...
 export TELEGRAM_BOT_TOKEN=...
 export TELEGRAM_CHAT_ID=...
 export DISCORD_WEBHOOK_URL=...   # optional
+export MONGODB_URI=...           # optional; unset = JSON files in memory/
 
 python stock_alert_bot.py
-DRY_RUN=1 python stock_alert_bot.py   # run incl. Claude, print output, send nothing, write no memory
+DRY_RUN=1 python stock_alert_bot.py   # run incl. Claude, print output, send nothing, write no memory (JSON or Mongo)
 python -m unittest discover -s tests -v   # no network/API needed
 ```
 
@@ -34,16 +35,18 @@ To trigger via GitHub Actions without waiting for the cron schedule: go to the r
 
 `stock_alert_bot.py` is a thin entry point (validates env, invokes the graph). The logic lives in `bot/`:
 
-- `config.py` — env vars, `CORE_WATCHLIST`, `SECTORS`, thresholds, `MODEL`, memory paths, retention constants
+- `config.py` — env vars, `CORE_WATCHLIST`, `SECTORS`, thresholds, `MODEL`, memory paths, backend selection (`MONGODB_URI`, `MONGODB_DB`, `MEMORY_BACKEND`), retention constants
 - `data.py` — Finnhub quotes/news, Google News RSS, `build_watchlist()`, `aggregate_news()`. `QUOTE_CACHE` holds every quote fetched (incl. the ~55-stock mover scan) so nothing is fetched twice.
 - `schemas.py` — Pydantic models (`MarketAlert`, `Signal`, `Mover`, ...) used for structured output
 - `chains.py` — `ChatAnthropic` (`claude-sonnet-4-6`), analysis/digest/weekly chains
-- `memory.py` — JSON memory (signal ledger + scoring, digests, per-ticker `InMemoryStore`)
+- `memory.py` — pure memory logic + JSON helpers (signal ledger + scoring, digests, per-ticker `InMemoryStore`)
+- `storage.py` — backend interface (`JsonBackend`, `MongoBackend`) and fail-safe `open_memory()`; ticker notes persist via the official `MongoDBStore` (`langgraph-store-mongodb`)
+- `scripts/export_memory.py` (Mongo -> `memory/*.json` backup) and `scripts/migrate_json_to_mongo.py` (one-time, idempotent, `--dry-run`)
 - `graph.py` — LangGraph `StateGraph`: `load_memory` -> `gather_data` -> `score_past_signals` -> `analyze` -> `validate` (retry once to `analyze`) -> `update_memory` -> `deliver`
 - `formatters.py` — Telegram text and Discord embed from a `MarketAlert`
 - `delivery.py` — `send_telegram()` / `send_discord()`
 
-Memory lives in `memory/*.json` and is committed back to `main` by the workflow (`if: always()` step, `[skip ci]`). Missing/corrupt files must never crash a run (log + start empty). With `DRY_RUN=1` no memory is written. Optional LangSmith tracing via `LANGSMITH_API_KEY` secret.
+Memory backend: `MEMORY_BACKEND=auto` uses MongoDB Atlas (database `stock_alert_bot`; collections `signals`, `digests`, `weekly_digests`, `tickers`) when `MONGODB_URI` is set, else JSON in `memory/*.json`. Digests are never deleted in Mongo (`compressed: true` flag instead). Fail-safe: if Mongo connect/load fails, the run reads the JSON snapshot read-only and skips all memory writes; failed saves only warn; the alert is always delivered. With Mongo the workflow commits a JSON backup only on Fridays (`chore(memory): weekly backup from MongoDB [skip ci]`); with JSON it commits after every run (`if: always()`, `[skip ci]`). Missing/corrupt JSON files must never crash a run (log + start empty). With `DRY_RUN=1` no memory is written. Optional LangSmith tracing via `LANGSMITH_API_KEY` secret.
 
 ## File Versions
 
@@ -68,6 +71,7 @@ All customization is in `bot/config.py`:
 | `TELEGRAM_BOT_TOKEN` | Telegram delivery |
 | `TELEGRAM_CHAT_ID` | Telegram recipient |
 | `DISCORD_WEBHOOK_URL` | Discord delivery (optional) |
+| `MONGODB_URI` | MongoDB Atlas memory backend (optional; unset = JSON files) |
 | `LANGSMITH_API_KEY` | LangSmith tracing (optional) |
 
 ## GitHub Actions Notes

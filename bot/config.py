@@ -63,6 +63,14 @@ MAX_VALIDATION_RETRIES = 1
 # ──────────────────────────────────────────────
 # Memory
 # ──────────────────────────────────────────────
+# Backend: "auto" → MongoDB if MONGODB_URI is set, else JSON files in memory/.
+# "json" or "mongo" force one. JSON stays the dev/test backend and the weekly backup.
+MONGODB_URI = os.environ.get("MONGODB_URI", "").strip()
+MONGODB_DB = os.environ.get("MONGODB_DB", "").strip() or "stock_alert_bot"
+MEMORY_BACKEND = (os.environ.get("MEMORY_BACKEND", "").strip().lower() or "auto")
+MONGO_TIMEOUT_MS = 8000
+MONGO_APP_NAME = "stock-alert-bot"
+
 MEMORY_DIR = Path(__file__).resolve().parent.parent / "memory"
 SIGNALS_PATH = MEMORY_DIR / "signals.json"
 DIGESTS_PATH = MEMORY_DIR / "digests.json"

@@ -11,7 +11,7 @@ GitHub Actions (cron: daily Mon-Fri after the US close)
     │
     ├── LangGraph + Claude → analysis with memory of past calls (~$1/mo)
     │
-    ├── memory/ → signal track record + digests, committed back each run
+    ├── MongoDB Atlas (or memory/ JSON) → signal track record + digests, weekly JSON backup
     │
     ├── Telegram Bot → sends alert to your chat (free)
     │
@@ -55,7 +55,8 @@ your-repo/
 ├── stock_alert_bot.py         ← Entry point
 ├── requirements.txt           ← Pinned dependencies
 ├── bot/                       ← LangChain + LangGraph package
-├── memory/                    ← Persistent memory (committed by the workflow)
+├── memory/                    ← JSON memory (local/dev backend, weekly backup from MongoDB)
+├── scripts/                   ← export_memory.py, migrate_json_to_mongo.py
 ├── tests/                     ← Unit tests
 └── README.md                  ← This file
 ```
@@ -74,6 +75,7 @@ your-repo/
 | `TELEGRAM_BOT_TOKEN` | Your bot token from BotFather |
 | `TELEGRAM_CHAT_ID` | Your numeric chat ID |
 | `DISCORD_WEBHOOK_URL` | Your Discord webhook URL (optional) |
+| `MONGODB_URI` | MongoDB Atlas connection string (optional, see [MongoDB Atlas backend](#mongodb-atlas-backend)) |
 | `LANGSMITH_API_KEY` | LangSmith tracing key (optional) |
 
 ### Step 5: Test it! (1 min)
@@ -133,7 +135,7 @@ The pipeline is a LangGraph `StateGraph`:
    │
    ▼
  load_memory ──► gather_data ──► score_past_signals ──► analyze ◄─────────┐
- (JSON files)   (watchlist,      (live price for open    (ChatAnthropic   │ errors and
+ (JSON/MongoDB)  (watchlist,      (live price for open    (ChatAnthropic   │ errors and
                  prices, news)    BUY/SELL, close >5d)    structured out) │ retries < 1
                                                               │           │
                                                               ▼           │
@@ -143,7 +145,7 @@ The pipeline is a LangGraph `StateGraph`:
                                                         update_memory ──► deliver ──► END
                                                         (ledger, digest,   (Telegram text +
                                                          ticker store,      Discord embed)
-                                                         save JSON)
+                                                         save to backend)
 ```
 
 Mermaid, generated with `build_graph().get_graph().draw_mermaid()`:
@@ -162,7 +164,9 @@ graph TD;
 	deliver --> __end__([__end__]);
 ```
 
-### Memory files (`memory/`, committed back to `main` by the workflow)
+### Memory files (`memory/`, JSON backend)
+
+With no `MONGODB_URI` the bot keeps memory in JSON files committed back to `main` by the workflow after every run. With MongoDB these files are only a weekly backup (see below).
 
 | File | Contents |
 |------|----------|
@@ -171,6 +175,46 @@ graph TD;
 | `tickers.json` | Per-ticker notes (signal history, mention count, last note) held in a LangGraph `InMemoryStore` while running. |
 
 Missing files start empty. Invalid JSON logs a warning and starts empty. Memory never crashes a run.
+
+### MongoDB Atlas backend
+
+Production memory lives in a free MongoDB Atlas M0 cluster, database `stock_alert_bot`. The pipeline and the pure memory logic are unchanged; `bot/storage.py` provides the backend (`JsonBackend` or `MongoBackend`) that the graph nodes load from and save to.
+
+| Collection | One document per | Notes |
+|------------|------------------|-------|
+| `signals` | signal | Same fields as the JSON ledger. Unique index on `id`, index on (`ticker`, `status`). Saved with a bulk upsert by `id`. |
+| `digests` | bot run | Unique index on `at`. Digests are never deleted: when weekly compression folds one into a summary it gets `compressed: true` and no longer appears in the "recent" list sent to Claude. |
+| `weekly_digests` | ISO week | Unique index on `week`, upserted. |
+| `tickers` | ticker | The official LangGraph store (`langgraph-store-mongodb`, `MongoDBStore`), namespace `("tickers",)`. |
+
+Settings (environment variables):
+
+| Variable | Default | Meaning |
+|----------|---------|---------|
+| `MONGODB_URI` | unset | Atlas connection string (`mongodb+srv://...`). In GitHub it is the `MONGODB_URI` secret. |
+| `MONGODB_DB` | `stock_alert_bot` | Database name. |
+| `MEMORY_BACKEND` | `auto` | `auto` uses MongoDB if `MONGODB_URI` is set, otherwise JSON. `json` or `mongo` force one. |
+
+**Fail-safe.** MongoDB problems never stop the alert. If the connection, ping or load fails, the run logs a loud warning, reads the JSON snapshot in `memory/` (read-only) and skips every memory write, so JSON and MongoDB cannot diverge. If a single save fails, it logs a warning and the alert is still delivered. `DRY_RUN=1` never writes to MongoDB or JSON. Ticker notes are read into an in-memory working copy at the start of the run, so no step of the analysis depends on the network after loading.
+
+**Weekly JSON backup.** When `MONGODB_URI` is set, the workflow only exports and commits on Fridays (UTC): `scripts/export_memory.py` writes `memory/signals.json`, `digests.json` and `tickers.json` from MongoDB, in the same format the JSON backend reads, and commits them as `chore(memory): weekly backup from MongoDB [skip ci]`. Without the secret the workflow keeps committing after every run.
+
+**One-time migration** of the existing JSON memory (safe to run twice, only reads the JSON files):
+
+```bash
+pip install -r requirements.txt
+export MONGODB_URI='mongodb+srv://user:password@cluster0.xxxxx.mongodb.net/'
+python scripts/migrate_json_to_mongo.py --dry-run   # counts only, no connection
+python scripts/migrate_json_to_mongo.py             # upsert into MongoDB
+```
+
+**Viewing data:** Atlas → your cluster → **Browse Collections** (Data Explorer) → database `stock_alert_bot`.
+
+**Atlas setup (5 minutes):**
+1. Create a free **M0** cluster at [mongodb.com/atlas](https://www.mongodb.com/atlas).
+2. **Database Access** → add a database user with a password (read and write to any database is fine).
+3. **Network Access** → add IP `0.0.0.0/0`. GitHub runners have no fixed IP, so this is required; the database user's password is the protection.
+4. **Connect** → Drivers → copy the `mongodb+srv://...` string, put in your password, and save it as the `MONGODB_URI` repository secret. Paste it without quotes.
 
 ### Where LangChain / LangGraph features are used
 
@@ -181,7 +225,8 @@ Missing files start empty. Invalid JSON logs a warning and starts empty. Memory 
 | `with_structured_output(MarketAlert)` | `bot/chains.py` analysis chain, Pydantic models in `bot/schemas.py` |
 | LCEL `prompt \| llm \| StrOutputParser()` | `bot/chains.py` weekly summary chain |
 | `StateGraph`, conditional edges | `bot/graph.py` (validate then retry loop) |
-| `InMemoryStore` | `bot/memory.py` per-ticker notes |
+| `InMemoryStore` | `bot/memory.py` per-ticker notes (working copy during a run; the JSON backend's store) |
+| `MongoDBStore` (`langgraph-store-mongodb`) | `bot/storage.py` persistent per-ticker notes in MongoDB Atlas |
 | LangSmith tracing | automatic via env vars, see below |
 
 ### Validation
@@ -195,7 +240,7 @@ export FINNHUB_API_KEY=... ANTHROPIC_API_KEY=...
 DRY_RUN=1 python stock_alert_bot.py
 ```
 
-Runs everything including Claude, prints the Telegram text and Discord embed JSON, sends nothing and writes no memory files. No delivery channel is needed in dry-run mode.
+Runs everything including Claude, prints the Telegram text and Discord embed JSON, sends nothing and writes no memory (neither JSON nor MongoDB). No delivery channel is needed in dry-run mode.
 
 ### Optional: LangSmith tracing
 
@@ -208,11 +253,11 @@ export LANGSMITH_API_KEY=... LANGSMITH_TRACING=true LANGSMITH_PROJECT=stock-aler
 ### Tests
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 python -m unittest discover -s tests -v
 ```
 
-No network or API key needed.
+No network or API key needed. MongoDB tests use `mongomock` (from `requirements-dev.txt`) and are skipped if it is not installed.
 
 ---
 

@@ -279,16 +279,21 @@ def fallback_week_summary(text: str) -> str:
     return text[:400]
 
 
-def add_digest(digests: dict, digest: dict, summarize: Callable, now: datetime) -> dict:
+def add_digest(digests: dict, digest: dict, summarize: Callable, now: datetime,
+               compressed_out: Optional[list] = None) -> dict:
     """
     Append a digest {at, session, summary, themes}. Beyond MAX_RECENT_DIGESTS the
     oldest are compressed (grouped by ISO week) into weekly summaries via
     `summarize(text) -> str`; if that fails, themes are concatenated instead.
+    Digests removed from "recent" are also appended to `compressed_out` (if given)
+    so a database backend can flag them instead of deleting them.
     """
     digests["recent"].append(digest)
     overflow = len(digests["recent"]) - config.MAX_RECENT_DIGESTS
     if overflow > 0:
         old, digests["recent"] = digests["recent"][:overflow], digests["recent"][overflow:]
+        if compressed_out is not None:
+            compressed_out.extend(old)
         by_week = defaultdict(list)
         for d in old:
             by_week[_iso_week(d.get("at"), now)].append(d)

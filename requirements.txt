@@ -3,3 +3,5 @@ langchain-core==1.6.12
 langchain-anthropic==1.7.6
 langgraph==1.2.16
 pydantic==2.14.1
+pymongo==4.19.0
+langgraph-store-mongodb==0.4.0
