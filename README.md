@@ -1,6 +1,6 @@
 # 🤖 Stock Alert Bot: a LangChain + LangGraph agent with memory
 
-![Tests](https://github.com/ruwanct/predictor/actions/workflows/tests.yml/badge.svg)
+![Tests](https://github.com/ruwanct/stock-alert-agent/actions/workflows/tests.yml/badge.svg)
 
 A daily AI stock alert bot that runs on GitHub Actions and posts to Discord (Telegram optional). It's built as a showcase of **LangChain and LangGraph**: a graph pipeline, structured output, a small tool-calling research agent, and **memory across runs** in MongoDB Atlas, so each alert can grade and learn from the bot's earlier calls. Traced with LangSmith. Running cost is about $2/month in Claude API usage; everything else is on free tiers.
 
