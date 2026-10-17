@@ -67,7 +67,7 @@ class PatchedConfig(unittest.TestCase):
     def patch_config(self, **kw):
         tmp = Path(tempfile.mkdtemp())
         values = dict(SIGNALS_PATH=tmp / "signals.json", DIGESTS_PATH=tmp / "digests.json",
-                      TICKERS_PATH=tmp / "tickers.json", MONGODB_URI="", MEMORY_BACKEND="auto", DRY_RUN=False)
+                      TICKERS_PATH=tmp / "tickers.json", ARCHIVE_DIR=tmp / "archive", MONGODB_URI="", MEMORY_BACKEND="auto", DRY_RUN=False)
         values.update(kw)
         for k, v in values.items():
             p = mock.patch.object(config, k, v)
@@ -335,6 +335,137 @@ class ScriptTests(PatchedConfig):
         self.assertEqual(jb.load_digests(), before["digests"])
         self.assertEqual(memory.dump_tickers(jb.load_tickers()), {"NVDA": {"mention_count": 3}})
         self.assertTrue((tmp / "tickers.json").exists())
+
+
+def closed_sig(i, opened, closed, status="closed"):
+    s = signal(1, status=status)
+    s.update(id=f"c{i}", opened_at=opened, closed_at=closed)
+    return s
+
+
+@unittest.skipIf(mongomock is None, "mongomock not installed (pip install -r requirements-dev.txt)")
+class ArchiveBackupTests(PatchedConfig):
+    def setUp(self):
+        self.shared_store = InMemoryStore()
+        self.export = load_script("export_memory")
+        self.migrate = load_script("migrate_json_to_mongo")
+        self.tmp = self.patch_config()
+        self.client = mongomock.MongoClient()
+        self.b = self.backend()
+        self.b.save_signals([
+            signal(1),                                                              # open, always main
+            closed_sig(1, "2026-09-20T10:00:00+00:00", "2026-09-25T10:00:00+00:00"),  # inside 90d
+            closed_sig(2, "2026-03-01T10:00:00+00:00", "2026-03-06T10:00:00+00:00"),  # old, 2026
+            closed_sig(3, "2025-12-29T10:00:00+00:00", "2026-01-03T10:00:00+00:00"),  # old, year of closed_at
+            closed_sig(4, "2025-05-01T10:00:00+00:00", "2025-05-06T10:00:00+00:00"),  # old, 2025
+            {**closed_sig(5, "2025-06-01T10:00:00+00:00", None)},                     # no closed_at -> opened_at
+        ])
+        d = {"recent": [digest(3), digest(4)], "weekly": [{"week": "2025-W52", "summary": "a"},
+                                                          {"week": "2026-W40", "summary": "b"}]}
+        self.b.save_digests(d, compressed=[{"at": "2025-12-30T10:00:00+00:00", "session": "x", "summary": "old"},
+                                           digest(1)])
+        store = InMemoryStore()
+        store.put(memory.TICKER_NS, "NVDA", {"mention_count": 3})
+        self.b._store = self.shared_store
+        self.b.save_tickers(store)
+
+    def backend(self, client=None):
+        b = storage.MongoBackend(client=client or self.client, db_name="testdb")
+        b._store = self.shared_store
+        return b
+
+    def read(self, name):
+        return json.loads((self.tmp / name).read_text(encoding="utf-8"))
+
+    def do_export(self):
+        return self.export.export(self.b, now=NOW)
+
+    def test_signal_window_split(self):
+        self.do_export()
+        self.assertEqual({s["id"] for s in self.read("signals.json")}, {"id1", "c1"})
+        self.assertEqual([s["id"] for s in self.read("archive/signals-2026.json")], ["c3", "c2"])
+        self.assertEqual([s["id"] for s in self.read("archive/signals-2025.json")], ["c4", "c5"])
+        self.assertFalse((self.tmp / "archive/signals-2024.json").exists())
+
+    def test_main_files_keep_bot_shape_and_digest_archives_are_complete(self):
+        self.do_export()
+        main = self.read("digests.json")
+        self.assertEqual([d["at"] for d in main["recent"]], [digest(3)["at"], digest(4)["at"]])
+        self.assertTrue(all("compressed" not in d for d in main["recent"]))
+        self.assertEqual(len(main["weekly"]), 2)
+        d2026 = self.read("archive/digests-2026.json")
+        self.assertEqual([(d["at"][:10], d["compressed"]) for d in d2026],
+                         [("2026-10-01", True), ("2026-10-03", False), ("2026-10-04", False)])
+        d2025 = self.read("archive/digests-2025.json")
+        self.assertEqual([(d["summary"], d["compressed"]) for d in d2025], [("old", True)])
+        self.assertEqual([w["week"] for w in self.read("archive/weekly-2025.json")], ["2025-W52"])
+        self.assertEqual([w["week"] for w in self.read("archive/weekly-2026.json")], ["2026-W40"])
+
+    def test_digests_main_not_changed_for_bot(self):
+        self.assertEqual(set(self.b.load_digests()), {"recent", "weekly"})
+        self.assertEqual(len(self.b.load_all_digests()), 4)
+        self.assertEqual(len(self.b.load_digests()["recent"]), 2)
+
+    def test_reexport_is_byte_identical_and_unwritten(self):
+        self.do_export()
+        files = sorted((self.tmp / "archive").glob("*.json"))
+        before = {f.name: (f.read_bytes(), f.stat().st_mtime_ns) for f in files}
+        counts = self.do_export()
+        self.assertEqual(counts["files_written"], 0)
+        for f in files:
+            self.assertEqual((f.read_bytes(), f.stat().st_mtime_ns), before[f.name])
+        self.assertTrue(before["signals-2025.json"][0].endswith(b"\n"))
+
+    def test_changed_year_is_overwritten_and_empty_years_are_kept(self):
+        self.do_export()
+        stale = self.tmp / "archive" / "signals-2019.json"
+        stale.write_text("[]\n", encoding="utf-8")
+        self.b.save_signals([closed_sig(9, "2025-07-01T10:00:00+00:00", "2025-07-06T10:00:00+00:00")])
+        self.do_export()
+        self.assertTrue(stale.exists())
+        self.assertEqual([s["id"] for s in self.read("archive/signals-2025.json")], ["c4", "c5", "c9"])
+
+    def test_full_restore_from_backup_is_idempotent(self):
+        before = {
+            "signals": sorted(self.b.load_signals(), key=lambda s: s["id"]),
+            "digests": self.b.load_all_digests(),
+            "weekly": self.b.load_all_weekly(),
+        }
+        self.do_export()
+        for _ in range(2):  # wipe, restore, restore again
+            fresh = mongomock.MongoClient()
+            self.shared_store = InMemoryStore()
+            nb = self.backend(fresh)
+            counts = self.migrate.migrate(nb, False)
+            self.assertEqual(counts["signals"], 6)
+            self.assertEqual(counts["digests"], 4)
+            self.assertEqual(counts["weekly_digests"], 2)
+            self.assertEqual(counts["archive_files"], 6)
+            self.migrate.migrate(nb, False)
+            self.assertEqual(sorted(nb.load_signals(), key=lambda s: s["id"]), before["signals"])
+            self.assertEqual(nb.load_all_digests(), before["digests"])
+            self.assertEqual(nb.load_all_weekly(), before["weekly"])
+            self.assertEqual(self.shared_store.get(memory.TICKER_NS, "NVDA").value, {"mention_count": 3})
+        dry = self.migrate.migrate(None, dry_run=True)
+        self.assertEqual((dry["signals"], dry["digests"], dry["archive_files"]), (6, 4, 6))
+
+    def test_signals_json_wins_on_overlap(self):
+        self.do_export()
+        newer = closed_sig(4, "2025-05-01T10:00:00+00:00", "2025-05-06T10:00:00+00:00")
+        newer["return_pct"] = 7.5
+        memory.save_signals(self.read("signals.json") + [newer])
+        nb = self.backend(mongomock.MongoClient())
+        self.migrate.migrate(nb, False)
+        by_id = {s["id"]: s for s in nb.load_signals()}
+        self.assertEqual(by_id["c4"]["return_pct"], 7.5)
+        self.assertEqual(len(by_id), 6)
+
+    def test_json_fallback_loads_only_main_files(self):
+        self.do_export()
+        jb = storage.JsonBackend()
+        self.assertEqual({s["id"] for s in jb.load_signals()}, {"id1", "c1"})
+        self.assertEqual(len(jb.load_digests()["recent"]), 2)
+        self.assertEqual(memory.dump_tickers(jb.load_tickers()), {"NVDA": {"mention_count": 3}})
 
 
 if __name__ == "__main__":

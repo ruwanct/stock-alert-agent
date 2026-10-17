@@ -75,11 +75,13 @@ MEMORY_DIR = Path(__file__).resolve().parent.parent / "memory"
 SIGNALS_PATH = MEMORY_DIR / "signals.json"
 DIGESTS_PATH = MEMORY_DIR / "digests.json"
 TICKERS_PATH = MEMORY_DIR / "tickers.json"
+ARCHIVE_DIR = MEMORY_DIR / "archive"   # yearly backup files (signals-YYYY.json, digests-YYYY.json, weekly-YYYY.json)
 
 SIGNAL_HORIZON_DAYS = 5      # calendar days before a signal is closed
 WIN_THRESHOLD_PCT = 0.5      # return > +0.5% = win, < -0.5% = loss, else flat
 TRACK_RECORD_CLOSED = 30     # closed signals used for stats
 MAX_RECENT_DIGESTS = max(7, 5 * ALERTS_PER_DAY)  # roughly 1–1.5 trading weeks of alerts
 MAX_WEEKLY_DIGESTS = 8
+BACKUP_RECENT_DAYS = 90      # closed signals newer than this stay in memory/signals.json; older go to archive/
 MAX_TICKER_HISTORY = 10
 MAX_TICKER_NOTE_CHARS = 200

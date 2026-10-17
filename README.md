@@ -166,7 +166,7 @@ graph TD;
 
 ### Memory files (`memory/`, JSON backend)
 
-With no `MONGODB_URI` the bot keeps memory in JSON files committed back to `main` by the workflow after every run. With MongoDB these files are only a weekly backup (see below).
+With no `MONGODB_URI` the bot keeps memory in JSON files committed back to `main` by the workflow after every run. With MongoDB these files are only a weekly backup, with older history in `memory/archive/` (see below).
 
 | File | Contents |
 |------|----------|
@@ -197,14 +197,31 @@ Settings (environment variables):
 
 **Fail-safe.** MongoDB problems never stop the alert. If the connection, ping or load fails, the run logs a loud warning, reads the JSON snapshot in `memory/` (read-only) and skips every memory write, so JSON and MongoDB cannot diverge. If a single save fails, it logs a warning and the alert is still delivered. `DRY_RUN=1` never writes to MongoDB or JSON. Ticker notes are read into an in-memory working copy at the start of the run, so no step of the analysis depends on the network after loading.
 
-**Weekly JSON backup.** When `MONGODB_URI` is set, the workflow only exports and commits on Fridays (UTC): `scripts/export_memory.py` writes `memory/signals.json`, `digests.json` and `tickers.json` from MongoDB, in the same format the JSON backend reads, and commits them as `chore(memory): weekly backup from MongoDB [skip ci]`. Without the secret the workflow keeps committing after every run.
+**Weekly JSON backup.** When `MONGODB_URI` is set, the workflow only exports and commits on Fridays (UTC): `scripts/export_memory.py` writes the files below from MongoDB and commits `memory/` (including `memory/archive/`) as `chore(memory): weekly backup from MongoDB [skip ci]`. Without the secret the workflow keeps committing after every run.
+
+```
+memory/
+├── signals.json            open signals + closed ones from the last BACKUP_RECENT_DAYS (90) days
+├── digests.json            recent + weekly digests, the format the bot loads
+├── tickers.json            per-ticker notes
+└── archive/
+    ├── signals-YYYY.json   older closed signals, by year of closed_at
+    ├── digests-YYYY.json   every digest incl. compressed ones (with the `compressed` flag), by year
+    └── weekly-YYYY.json    every weekly summary, by the year of its ISO week
+```
+
+The backup is bounded and complete: the three main files stay small however long the bot runs, while the archive holds the full history. Past-year archive files are written deterministically and only when their content changed, so once a year is over its file never shows up in a git diff. Archive years that have no data in MongoDB are never deleted. `BACKUP_RECENT_DAYS` lives in `bot/config.py`.
+
+The JSON fallback (MongoDB unreachable) reads only the three main files, never the archive. The track-record prompt uses the open signals plus the last 30 closed ones; signals close after 5 days, so 30 closed signals are usually a few weeks of calls and 90 days of closed signals is more than enough.
+
+**Full restore** from the backup (main files and archive, safe to run twice): `python scripts/migrate_json_to_mongo.py`. If a signal is in both `signals.json` and an archive file, `signals.json` wins; digests keep the `compressed` flag from the archive.
 
 **One-time migration** of the existing JSON memory (safe to run twice, only reads the JSON files):
 
 ```bash
 pip install -r requirements.txt
 export MONGODB_URI='mongodb+srv://user:password@cluster0.xxxxx.mongodb.net/'
-python scripts/migrate_json_to_mongo.py --dry-run   # counts only, no connection
+python scripts/migrate_json_to_mongo.py --dry-run   # counts only (incl. archive), no connection
 python scripts/migrate_json_to_mongo.py             # upsert into MongoDB
 ```
 

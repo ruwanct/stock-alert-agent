@@ -119,6 +119,18 @@ class MongoBackend:
         return {"recent": recent[-config.MAX_RECENT_DIGESTS:],
                 "weekly": weekly[-config.MAX_WEEKLY_DIGESTS:]}
 
+    def load_all_digests(self) -> list:
+        """Full digest history incl. compressed ones (with their `compressed` flag), sorted by `at`. Backup only."""
+        docs = [{**_clean(d), "compressed": bool(d.get("compressed"))} for d in self.db.digests.find({})]
+        docs.sort(key=lambda d: d.get("at") or "")
+        return docs
+
+    def load_all_weekly(self) -> list:
+        """Every weekly summary ever written, sorted by `week`. Backup only."""
+        docs = [_clean(w) for w in self.db.weekly_digests.find({})]
+        docs.sort(key=lambda w: w.get("week") or "")
+        return docs
+
     def save_digests(self, digests: dict, compressed: Optional[list] = None) -> None:
         ops = [ReplaceOne({"at": d["at"]}, {**d, "compressed": False}, upsert=True)
                for d in digests.get("recent", []) if d.get("at")]
