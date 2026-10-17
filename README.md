@@ -1,6 +1,6 @@
 # 🤖 Stock Alert Telegram Bot (GitHub Actions — 100% Free)
 
-AI-powered stock alerts delivered to your Telegram, running entirely on GitHub Actions for **$0/month** (except ~$0.50 for Claude API).
+AI-powered stock alerts delivered to your Telegram and Discord, running entirely on GitHub Actions for **$0/month** (except ~$0.50 for Claude API).
 
 ## How It Works
 
@@ -11,7 +11,9 @@ GitHub Actions (cron: 3x daily Mon-Fri)
     │
     ├── Claude AI → sentiment analysis + buy/sell signals (~$0.50/mo)
     │
-    └── Telegram Bot → sends alert to your chat (free)
+    ├── Telegram Bot → sends alert to your chat (free)
+    │
+    └── Discord Webhook → sends alert to your server (free, optional)
 ```
 
 No servers. No hosting. No sign-ups beyond what you already have.
@@ -28,6 +30,7 @@ No servers. No hosting. No sign-ups beyond what you already have.
 | Anthropic API key | [console.anthropic.com](https://console.anthropic.com) | ~$0.50/mo |
 | Telegram Bot token | Message [@BotFather](https://t.me/BotFather) → send `/newbot` | Free |
 | Telegram Chat ID | Message [@userinfobot](https://t.me/userinfobot) → send `/start` | Free |
+| Discord Webhook URL | Server Settings → Integrations → Webhooks → New Webhook | Free |
 
 ⚠️ **Important:** After creating your Telegram bot, open it and send any message (e.g., "hi"). Bots can't message you until you message them first!
 
@@ -67,6 +70,7 @@ your-repo/
 | `ANTHROPIC_API_KEY` | Your Anthropic API key (starts with `sk-ant-`) |
 | `TELEGRAM_BOT_TOKEN` | Your bot token from BotFather |
 | `TELEGRAM_CHAT_ID` | Your numeric chat ID |
+| `DISCORD_WEBHOOK_URL` | Your Discord webhook URL (optional) |
 
 ### Step 5: Test it! (1 min)
 
@@ -137,6 +141,11 @@ Just add symbols to the `WATCHLIST` array. Finnhub supports all major US stocks.
 - GitHub disables scheduled workflows on inactive repos after 60 days
 - Fix: Make any commit (even editing README) to re-activate
 - Or manually trigger it from the Actions tab
+
+**No Discord message received?**
+- Make sure `DISCORD_WEBHOOK_URL` is set in repository secrets
+- Verify the webhook URL is from the correct channel (Server Settings → Integrations → Webhooks)
+- Long alerts are automatically split into multiple messages — this is normal
 
 **Claude API error?**
 - Check your API key starts with `sk-ant-`

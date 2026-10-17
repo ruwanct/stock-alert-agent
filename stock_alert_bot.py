@@ -458,48 +458,64 @@ def send_telegram(text: str) -> bool:
 # ──────────────────────────────────────────────
 # Discord
 # ──────────────────────────────────────────────
-def send_discord(text: str) -> bool:
+def send_discord_embed(analysis: str, valid_prices: list, news: list, session: str, now: str) -> bool:
     if not DISCORD_WEBHOOK_URL:
         print("  ⏭ Discord not configured, skipping")
         return False
 
-    # Discord has 2000 char limit per message — split if needed
-    chunks = []
-    if len(text) <= 2000:
-        chunks = [text]
+    num_up = len([p for p in valid_prices if p.get("change_pct", 0) >= 0])
+    num_down = len(valid_prices) - num_up
+    sources = sorted(set(n.get("source", "").split("/")[0] for n in news if n.get("source")))
+
+    # Embed color: green if more up, red if more down, yellow if equal
+    if num_up > num_down:
+        color = 0x2ECC71   # green
+    elif num_down > num_up:
+        color = 0xE74C3C   # red
     else:
-        # Split at section separators
-        sections = text.split("━━━━━━━━━━━━━━━━━━━━")
-        current = ""
-        for section in sections:
-            test = current + "━━━━━━━━━━━━━━━━━━━━" + section if current else section
-            if len(test) > 1950:
-                if current:
-                    chunks.append(current)
-                current = section
-            else:
-                current = test
-        if current:
-            chunks.append(current)
+        color = 0xF1C40F   # yellow
 
-    success = True
-    for i, chunk in enumerate(chunks):
-        try:
-            r = requests.post(
-                DISCORD_WEBHOOK_URL,
-                json={"content": chunk},
-                timeout=10,
-            )
-            r.raise_for_status()
-            if i < len(chunks) - 1:
-                time.sleep(0.5)  # Avoid rate limiting
-        except Exception as e:
-            print(f"  ❌ Discord failed (chunk {i+1}): {e}")
-            success = False
+    # Truncate analysis to Discord embed description limit
+    description = analysis[:4000] if len(analysis) > 4000 else analysis
 
-    if success:
-        print(f"  ✅ Discord sent! ({len(chunks)} message{'s' if len(chunks) > 1 else ''})")
-    return success
+    embed = {
+        "title": f"🤖 Stock Alert Bot  |  {session}",
+        "description": f"```\n{description}\n```",
+        "color": color,
+        "fields": [
+            {
+                "name": "📊 Market Snapshot",
+                "value": f"**{len(valid_prices)}** stocks tracked  •  🟢 **{num_up}** up  •  🔴 **{num_down}** down",
+                "inline": False,
+            },
+            {
+                "name": "📰 News Sources",
+                "value": ", ".join(sources) if sources else "N/A",
+                "inline": True,
+            },
+            {
+                "name": "🔄 Next Alert",
+                "value": "~4 hours",
+                "inline": True,
+            },
+        ],
+        "footer": {
+            "text": f"Finnhub + Google News + Claude AI  •  {now}",
+        },
+    }
+
+    try:
+        r = requests.post(
+            DISCORD_WEBHOOK_URL,
+            json={"embeds": [embed]},
+            timeout=10,
+        )
+        r.raise_for_status()
+        print("  ✅ Discord sent!")
+        return True
+    except Exception as e:
+        print(f"  ❌ Discord failed: {e}")
+        return False
 
 
 # ──────────────────────────────────────────────
