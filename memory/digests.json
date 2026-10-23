@@ -1,29 +1,94 @@
 {
   "recent": [
     {
-      "at": "2026-10-17T13:14:52+00:00",
+      "at": "2026-10-17T15:04:38+00:00",
       "session": "🔔 MARKET OPEN",
-      "summary": "A sharp BofA warning comparing AI stocks to the 1990s fiber optic bubble triggered a broad Tech/AI selloff, sending QQQ down ~2.5% and crushing high-beta names like MARA (-9.6%), MSTR (-9.6%), PLTR (-7.2%), and SNOW (-8.4%) as VIX spiked above 22. Capital rotated aggressively into Defense (RTX +3.7%, LMT +3.6%) and Energy (CVX +2.6%) on geopolitical risk from Yemen/Middle East missile strikes and Saudi coalition intercepts. CoreWeave credit stress added contagion fears across AI/cloud names, while AAPL showed rare relative strength on iPhone Duo demand and China's $37B consumer subsidy program.",
+      "summary": "A deepening risk-off rotation is crushing AI, cloud, and crypto-adjacent names (PLTR -led $260B+ software unwind, MARA/MSTR -9.6%/-9.56%) as BofA's AI bubble warning and CoreWeave credit contagion push VIX above 22 for the first time in weeks. Capital is fleeing into Defense (RTX +3.73%, LMT +3.65%) and Energy (CVX +2.59%) on live Middle East escalation — Yemen missile strikes and a Saudi Yanbu intercept — plus a US SPR 17M-barrel solicitation. All five open signals remain reaffirmed: BUY RTX, LMT, AAPL; SELL PLTR, MSTR — now entering day 4 with thesis fully intact.",
       "themes": [
         "defense rally",
-        "AI bubble warning",
+        "AI bubble unwind",
         "risk-off rotation",
-        "crypto unwind",
-        "geopolitical escalation"
+        "crypto selloff",
+        "energy geopolitical bid"
       ]
     },
     {
-      "at": "2026-10-17T13:25:25+00:00",
+      "at": "2026-10-17T15:07:13+00:00",
       "session": "🔔 MARKET OPEN",
-      "summary": "A sharp risk-off rotation hit markets as BofA's AI bubble warning (invoking the 1990s fiber-optic collapse) triggered broad tech/AI selling, with high-beta names like MARA, MSTR, and PLTR down 7–10% and QQQ off 2.5%. Capital fled into Defense (RTX +3.7%, LMT +3.7%) and Energy (CVX +2.6%) on Yemen/Saudi missile strikes and a US SPR solicitation. AAPL bucked the tech selloff, holding gains on three independent bullish catalysts including Evercore iPhone Duo demand and China's $37B consumer subsidy program.",
+      "summary": "A deepening risk-off environment (VIX >22) is driving a $260B+ AI/software selloff now in its fourth consecutive day, fueled by BofA's AI bubble warning and CoreWeave credit contagion crushing high-multiple names like PLTR, SNOW, MSTR, and MARA. Simultaneously, live Middle East escalation (Yemen strikes, Saudi Yanbu intercept) and a US SPR solicitation are sustaining strong safe-haven rotation into Defense (RTX +3.73%, LMT +3.65%) and Energy (CVX +2.59%). All five open signals — BUY RTX, LMT, AAPL and SELL PLTR, MSTR — remain fully reaffirmed with intact theses across four consecutive sessions.",
       "themes": [
         "defense rally",
-        "AI bubble warning",
+        "AI bubble selloff",
         "crypto risk-off",
-        "Middle East escalation",
-        "AAPL relative strength"
+        "energy geopolitical bid",
+        "risk-off rotation"
+      ]
+    },
+    {
+      "at": "2026-10-17T15:30:17+00:00",
+      "session": "🔔 MARKET OPEN",
+      "summary": "A deep risk-off rotation is now in its fourth consecutive session, with a $260B+ AI/software unwind (led by PLTR, SNOW, MSTR, MARA) driven by BofA's AI bubble warning, CoreWeave credit contagion, and VIX spiking above 22. Capital is decisively fleeing into Defense (RTX +3.73%, LMT +3.65%) and Energy (CVX +2.59%) on live Middle East escalation via Yemen missile strikes and a US SPR solicitation. MSTR faces added structural headwind from confirmed MSCI index removal forcing passive fund outflows, while AAPL stands as the lone resilient core-tech name amid the broader selloff.",
+      "themes": [
+        "defense rally",
+        "AI bubble unwind",
+        "crypto risk-off",
+        "geopolitical bid",
+        "VIX spike"
+      ]
+    },
+    {
+      "at": "2026-10-20T00:30:17+00:00",
+      "session": "🌅 PRE-MARKET",
+      "summary": "Tech staged a broad oversold bounce led by AI/cloud names — DDOG (+5.4%) and AMZN (+4.98%) surged on high-conviction analyst upgrades (Bernstein and Morgan Stanley respectively), while semis and cloud broadly recovered as the BofA AI bubble panic faded. Defense (RTX, LMT) and financials (JPM) lagged as geopolitical risk premiums eased on Putin-Trump-Xi diplomatic signals and rate expectations shifted. Open signals show DDOG and AMZN as high-confidence BUYs, MSTR SELL holding with crypto-adjacent names still lagging, and PLTR SELL under painful pressure (-4.4%) as Knox Federal deal and AI rebound momentum clash with extreme valuation thesis.",
+      "themes": [
+        "AI rebound",
+        "analyst upgrades",
+        "defense rotation fade",
+        "crypto lag",
+        "growth over value"
+      ]
+    },
+    {
+      "at": "2026-10-21T00:00:40+00:00",
+      "session": "🌅 PRE-MARKET",
+      "summary": "A mixed session saw the Dow rally ~500 points on US-Iran diplomacy hopes while the Nasdaq slipped, with defense (NOC +4.6% on record $110B backlog) and healthcare leading and Big Tech (META, GOOGL, AAPL) dragging as the rally broadened to small caps. NOC's blowout Q3 earnings provide strong fundamental read-across for open RTX and LMT BUY positions, while the MSTR SELL faces mounting pressure as Bitcoin sentiment (Saylor's six-figure BTC call) extends the rally despite intact MSCI outflow headwinds. AAPL's foldable iPhone launch failed to lift shares (-1% on a green Dow day), prompting a downgrade of the open BUY to WATCH pending post-launch demand confirmation or a hold of $335 support.",
+      "themes": [
+        "defense rally",
+        "Big Tech rotation out",
+        "geopolitical risk easing",
+        "crypto sentiment vs fundamentals",
+        "product launch sell-the-news"
+      ]
+    },
+    {
+      "at": "2026-10-22T00:05:59+00:00",
+      "session": "🌅 PRE-MARKET",
+      "summary": "A broad risk-on reversal drove the Nasdaq +1%, led by AI/cloud and crypto-adjacent names surging on two key catalysts: SpaceX confirming no slowdown in AI compute demand and the OCC finalizing GENIUS Act stablecoin rules. Cybersecurity names DDOG (+6.5%) and NET (+5.3%) also spiked on a critical PHP flaw affecting ~70% of websites, while defense (RTX) and healthcare (JNJ) rotated out as geopolitical risk premiums faded on Ukraine peace talk resumption. Open SELL signals on MSTR and PLTR turned deeply painful at -12.2% and -8.4% respectively, with confidence downgraded to LOW as the structural bull catalysts overwhelmed the original theses.",
+      "themes": [
+        "risk-on reversal",
+        "AI demand rebound",
+        "crypto regulatory clarity",
+        "cybersecurity bid",
+        "defense fade"
+      ]
+    },
+    {
+      "at": "2026-10-23T00:04:22+00:00",
+      "session": "🌅 PRE-MARKET",
+      "summary": "Nasdaq suffered its worst session since June as a chipmaking equipment supply warning crushed semis (AMD -8.1%, INTC -8.0%) and META's AI spending concerns from earnings dragged the broader growth/AI complex below the 50-day moving average. Capital rotated hard into defense and defensives, with LMT surging nearly 7% on a Q3 earnings blowout and an 850-jet F-35 Pentagon deal, while JNJ caught a safe-haven bid as healthcare outperformed. Active signals favor selling AMD and META on multi-source fundamental headwinds, while reaffirming LMT and JNJ buys; AMZN BUY from Tuesday is -4.6% but held as no stock-specific catalyst has emerged.",
+      "themes": [
+        "risk-off rotation",
+        "semi supply warning",
+        "AI capex fears",
+        "defense rally",
+        "safe-haven bid"
       ]
     }
   ],
-  "weekly": []
+  "weekly": [
+    {
+      "week": "2026-W42",
+      "summary": "**Summary:** BofA's AI bubble warning (citing 1990s fiber-optic parallels) triggered a $260B+ risk-off selloff, crushing high-multiple and crypto-adjacent names including PLTR, MSTR (-9.6%), MARA (-9.6%), and SNOW (-8.4%), with CoreWeave credit stress amplifying contagion fears and dragging QQQ ~2.5% lower. Middle East escalation (Yemen strikes, Saudi intercepts) and a 17M-barrel US SPR solicitation drove decisive safe-haven rotation into Defense (RTX +3.7%, LMT +3.6%) and Energy (CVX +2.6%), while AAPL held green on iPhone demand, China's $37B subsidy tailwind, and Berkshire support. All five signals remain intact — BUY on RTX, LMT, and AAPL; SELL on PLTR and MSTR."
+    }
+  ]
 }

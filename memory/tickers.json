@@ -10,17 +10,150 @@
         "date": "2026-10-17",
         "action": "BUY",
         "price": 343.46
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 343.46
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 343.46
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 343.46
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 343.46
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 343.46
+      },
+      {
+        "date": "2026-10-20",
+        "action": "BUY",
+        "price": 342.94
+      },
+      {
+        "date": "2026-10-21",
+        "action": "WATCH",
+        "price": null
       }
     ],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-17",
-    "last_note": "REAFFIRMED from Sat open. Only core tech name in the green today (+0.43%) while peers sell off hard. Three independent bullish catalysts confirmed: Evercore ISI iPhone Duo demand solidly out of gate, "
+    "mention_count": 9,
+    "last_mentioned": "2026-10-21",
+    "last_note": "Open BUY from Sat @ $343.46 is now -1.1% and losing ground. Foldable iPhone launch is live but failed to lift stock today — three sources report the decline on a green Dow day. Downgrading from BUY re"
+  },
+  "AI": {
+    "signal_history": [],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-21",
+    "last_note": "AI name rebounds on broader oversold bounce; CNBC highlights value outside CoreWeave trade"
+  },
+  "AMD": {
+    "signal_history": [
+      {
+        "date": "2026-10-23",
+        "action": "SELL",
+        "price": 507.93
+      }
+    ],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Chipmaking equipment supply warning is a sector-level fundamental headwind, not noise. AMD down 8.1% with INTC -8.0% and TSM -4.5% confirming systemic semi pressure. AI spending concerns from META add"
+  },
+  "AMZN": {
+    "signal_history": [
+      {
+        "date": "2026-10-20",
+        "action": "BUY",
+        "price": 262.45
+      },
+      {
+        "date": "2026-10-21",
+        "action": "BUY",
+        "price": 262.63
+      },
+      {
+        "date": "2026-10-22",
+        "action": "BUY",
+        "price": 262.37
+      },
+      {
+        "date": "2026-10-23",
+        "action": "BUY",
+        "price": 250.38
+      }
+    ],
+    "mention_count": 4,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Open BUY from $262.45 (Tue) is now -4.6% — painful but no AMZN-specific negative catalyst. Selloff is macro/AI sector driven. Morgan Stanley Top Pick with $350 PT and AWS dominance intact. CNBC Invest"
+  },
+  "COIN": {
+    "signal_history": [],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-20",
+    "last_note": "Crypto-adjacent names lag as BTC fails to catch growth rebound; risk rotation favors productive assets"
   },
   "CVX": {
     "signal_history": [],
-    "mention_count": 2,
+    "mention_count": 7,
     "last_mentioned": "2026-10-17",
-    "last_note": "Middle East escalation and US SPR solicitation (Reuters) boost crude; Energy outperforms"
+    "last_note": "Crude tailwinds from Yemen geopolitical risk premium + US SPR 17M-barrel solicitation (Reuters)."
+  },
+  "DDOG": {
+    "signal_history": [
+      {
+        "date": "2026-10-20",
+        "action": "BUY",
+        "price": 260.36
+      },
+      {
+        "date": "2026-10-22",
+        "action": "BUY",
+        "price": 273.09
+      }
+    ],
+    "mention_count": 2,
+    "last_mentioned": "2026-10-22",
+    "last_note": "Open BUY from Tue at $260.36 now +4.9%. PHP critical flaw drives broad cybersecurity/monitoring bid (multi-source). Stock up ~100% in 6 months with strong trend. SpaceX AI demand confirmation adds clo"
+  },
+  "GOOGL": {
+    "signal_history": [],
+    "mention_count": 2,
+    "last_mentioned": "2026-10-22",
+    "last_note": "Lags despite AI optimism; tokenized stock objection story and no specific near-term catalyst weigh"
+  },
+  "INTC": {
+    "signal_history": [],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Same semi supply warning as AMD; INTC structurally weaker — compounding fundamental and macro pressure"
+  },
+  "JNJ": {
+    "signal_history": [
+      {
+        "date": "2026-10-23",
+        "action": "BUY",
+        "price": 267.61
+      }
+    ],
+    "mention_count": 2,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Defensive rotation is broadening beyond defense into healthcare as growth/AI names crater. JNJ up 3.8% in a -2.8% tape confirms safe-haven bid. No negative catalysts; Nasdaq below 50-day suggests rota"
+  },
+  "JPM": {
+    "signal_history": [],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-20",
+    "last_note": "Financials under pressure as rate expectations shift; capital rotates back into growth tech"
   },
   "LMT": {
     "signal_history": [
@@ -33,17 +166,59 @@
         "date": "2026-10-17",
         "action": "BUY",
         "price": 552.09
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 552.09
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 552.09
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 552.09
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 552.09
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 552.09
+      },
+      {
+        "date": "2026-10-23",
+        "action": "BUY",
+        "price": 589.91
       }
     ],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-17",
-    "last_note": "REAFFIRMED from Sat open. Same geopolitical driver as RTX — dual Reuters reports on Yemen/Saudi escalation power the entire defense complex. LMT +3.65% confirms the rally is broad-based, not single-na"
+    "mention_count": 8,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Original BUY at $552.09 is up +6.8% (closed win). Reaffirming as new entry: Q3 beat, 850-jet F-35 deal, raised guidance, and record backlog are all fresh fundamental catalysts — not just geopolitical."
   },
   "MARA": {
     "signal_history": [],
-    "mention_count": 2,
+    "mention_count": 7,
     "last_mentioned": "2026-10-17",
-    "last_note": "Crypto risk-off plus speculative unwind; VIX spike above 22 devastating for high-beta crypto names"
+    "last_note": "Crypto risk-off + VIX above 22 devastates high-beta crypto-adjacent; Bitcoin down ~4% in October; zero positive catalysts."
+  },
+  "META": {
+    "signal_history": [
+      {
+        "date": "2026-10-23",
+        "action": "SELL",
+        "price": 648.85
+      }
+    ],
+    "mention_count": 2,
+    "last_mentioned": "2026-10-23",
+    "last_note": "META led the Nasdaq rout on AI spending concern. Despite CNBC poker lesson note suggesting no fold, the stock broke the 50-day line in heavy volume — a technical and fundamental red flag. AI spending "
   },
   "MSTR": {
     "signal_history": [
@@ -56,11 +231,75 @@
         "date": "2026-10-17",
         "action": "SELL",
         "price": 136.83
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 136.83
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 136.83
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 136.83
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 136.83
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 136.83
+      },
+      {
+        "date": "2026-10-20",
+        "action": "SELL",
+        "price": 136.02
+      },
+      {
+        "date": "2026-10-21",
+        "action": "SELL",
+        "price": 142.72
+      },
+      {
+        "date": "2026-10-22",
+        "action": "SELL",
+        "price": 153.48
       }
     ],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-17",
-    "last_note": "REAFFIRMED from Sat open. Down 9.56% with dual headwinds: crypto risk-off and AI/speculative unwind. VIX above 22 historically crushing for leveraged high-beta crypto-treasury vehicles. BofA warning r"
+    "mention_count": 10,
+    "last_mentioned": "2026-10-22",
+    "last_note": "Closing reaffirmation — open SELL from $136.83 is now -12.2% against us. OCC stablecoin regulatory clarity is a genuine new macro catalyst removing a key headwind. MSCI outflow thesis still structural"
+  },
+  "NET": {
+    "signal_history": [
+      {
+        "date": "2026-10-22",
+        "action": "BUY",
+        "price": 307.22
+      }
+    ],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-22",
+    "last_note": "New signal. Cloudflare surges +5.3% on critical PHP flaw affecting ~70% of websites, same catalyst lifting DDOG. Dual tailwind: cybersecurity bid and SpaceX AI compute demand confirmation for cloud ne"
+  },
+  "NOC": {
+    "signal_history": [
+      {
+        "date": "2026-10-21",
+        "action": "BUY",
+        "price": 534.0
+      }
+    ],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-21",
+    "last_note": "Blowout Q3 earnings with record $110B backlog and raised FY2026 guidance confirmed by multiple sources. Fundamentally driven move unlike RTX/LMT geopolitical plays. Diplomacy-driven defense pullback r"
   },
   "PLTR": {
     "signal_history": [
@@ -73,11 +312,46 @@
         "date": "2026-10-17",
         "action": "SELL",
         "price": 186.03
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 186.03
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 186.03
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 186.03
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 186.03
+      },
+      {
+        "date": "2026-10-17",
+        "action": "SELL",
+        "price": 186.03
+      },
+      {
+        "date": "2026-10-20",
+        "action": "SELL",
+        "price": 194.15
+      },
+      {
+        "date": "2026-10-22",
+        "action": "SELL",
+        "price": 201.72
       }
     ],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-17",
-    "last_note": "REAFFIRMED from Sat open. PLTR down 7.2% and a direct casualty of BofA AI bubble warning (fiber optic analogy) confirmed by multiple sources. CoreWeave CDS/bond yield surge adds contagion risk to high"
+    "mention_count": 9,
+    "last_mentioned": "2026-10-22",
+    "last_note": "Open SELL from $186.03 now -8.4% against us — deeply painful. SpaceX AI demand signal and broad AI rebound directly counter the valuation-compression thesis. Knox Federal deal momentum intact. Confide"
   },
   "RTX": {
     "signal_history": [
@@ -90,16 +364,52 @@
         "date": "2026-10-17",
         "action": "BUY",
         "price": 193.92
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 193.92
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 193.92
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 193.92
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 193.92
+      },
+      {
+        "date": "2026-10-17",
+        "action": "BUY",
+        "price": 193.92
+      },
+      {
+        "date": "2026-10-21",
+        "action": "BUY",
+        "price": 193.34
       }
     ],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-17",
-    "last_note": "REAFFIRMED from Sat open. Yemen missile strikes and Saudi coalition intercepts (Reuters x2) are live geopolitical catalysts. Defense sector rallying broad-based with LMT confirming the move. RTX leads"
+    "mention_count": 10,
+    "last_mentioned": "2026-10-22",
+    "last_note": "Defense risk premium fades as Putin resumes Ukraine peace talks; geopolitical bid unwinding"
+  },
+  "SAP": {
+    "signal_history": [],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-23",
+    "last_note": "EU enterprise software outperforms as US AI trade unwinds; German/EU names benefit from capital rotation"
   },
   "SNOW": {
     "signal_history": [],
-    "mention_count": 2,
+    "mention_count": 7,
     "last_mentioned": "2026-10-17",
-    "last_note": "CoreWeave credit stress (CNBC) signals contagion into high-multiple cloud names; BofA warning amplifies"
+    "last_note": "CoreWeave credit contagion + BofA AI bubble warning crushes high-multiple cloud names (CNBC)."
   }
 }
