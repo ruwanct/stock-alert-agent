@@ -62,7 +62,7 @@
       "crypto selloff",
       "energy geopolitical bid"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-17T15:07:13+00:00",
@@ -139,6 +139,19 @@
       "AI capex fears",
       "defense rally",
       "safe-haven bid"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-10-23T23:54:37+00:00",
+    "session": "🌙 AFTER-HOURS",
+    "summary": "A sharply bifurcated session saw Energy and Cybersecurity surge — NET +7.29%, SLB +7.08% — driven by Trump's Iran military threat, Gulf undersea cable sabotage risk, and a PHP vulnerability bid, while Big Tech, Financials, and Healthcare sold off on AI spending anxiety and a Dow -650pt macro risk-off move. Open BUY signals on NET (+6.0%), DDOG (+3.6%), and LMT (+2.4%) are all working, but AMZN BUY was closed at -5.5% and flipped to SELL ahead of earnings with Nasdaq below its 50-day. Capital is rotating defensively into infrastructure security and defense as geopolitical escalation enters day 2 and Big Tech earnings risk mounts.",
+    "themes": [
+      "Iran escalation",
+      "cybersecurity rally",
+      "AI capex concern",
+      "Big Tech earnings risk",
+      "defensive rotation"
     ],
     "compressed": false
   }

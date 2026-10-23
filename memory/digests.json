@@ -1,18 +1,6 @@
 {
   "recent": [
     {
-      "at": "2026-10-17T15:04:38+00:00",
-      "session": "🔔 MARKET OPEN",
-      "summary": "A deepening risk-off rotation is crushing AI, cloud, and crypto-adjacent names (PLTR -led $260B+ software unwind, MARA/MSTR -9.6%/-9.56%) as BofA's AI bubble warning and CoreWeave credit contagion push VIX above 22 for the first time in weeks. Capital is fleeing into Defense (RTX +3.73%, LMT +3.65%) and Energy (CVX +2.59%) on live Middle East escalation — Yemen missile strikes and a Saudi Yanbu intercept — plus a US SPR 17M-barrel solicitation. All five open signals remain reaffirmed: BUY RTX, LMT, AAPL; SELL PLTR, MSTR — now entering day 4 with thesis fully intact.",
-      "themes": [
-        "defense rally",
-        "AI bubble unwind",
-        "risk-off rotation",
-        "crypto selloff",
-        "energy geopolitical bid"
-      ]
-    },
-    {
       "at": "2026-10-17T15:07:13+00:00",
       "session": "🔔 MARKET OPEN",
       "summary": "A deepening risk-off environment (VIX >22) is driving a $260B+ AI/software selloff now in its fourth consecutive day, fueled by BofA's AI bubble warning and CoreWeave credit contagion crushing high-multiple names like PLTR, SNOW, MSTR, and MARA. Simultaneously, live Middle East escalation (Yemen strikes, Saudi Yanbu intercept) and a US SPR solicitation are sustaining strong safe-haven rotation into Defense (RTX +3.73%, LMT +3.65%) and Energy (CVX +2.59%). All five open signals — BUY RTX, LMT, AAPL and SELL PLTR, MSTR — remain fully reaffirmed with intact theses across four consecutive sessions.",
@@ -83,12 +71,24 @@
         "defense rally",
         "safe-haven bid"
       ]
+    },
+    {
+      "at": "2026-10-23T23:54:37+00:00",
+      "session": "🌙 AFTER-HOURS",
+      "summary": "A sharply bifurcated session saw Energy and Cybersecurity surge — NET +7.29%, SLB +7.08% — driven by Trump's Iran military threat, Gulf undersea cable sabotage risk, and a PHP vulnerability bid, while Big Tech, Financials, and Healthcare sold off on AI spending anxiety and a Dow -650pt macro risk-off move. Open BUY signals on NET (+6.0%), DDOG (+3.6%), and LMT (+2.4%) are all working, but AMZN BUY was closed at -5.5% and flipped to SELL ahead of earnings with Nasdaq below its 50-day. Capital is rotating defensively into infrastructure security and defense as geopolitical escalation enters day 2 and Big Tech earnings risk mounts.",
+      "themes": [
+        "Iran escalation",
+        "cybersecurity rally",
+        "AI capex concern",
+        "Big Tech earnings risk",
+        "defensive rotation"
+      ]
     }
   ],
   "weekly": [
     {
       "week": "2026-W42",
-      "summary": "**Summary:** BofA's AI bubble warning (citing 1990s fiber-optic parallels) triggered a $260B+ risk-off selloff, crushing high-multiple and crypto-adjacent names including PLTR, MSTR (-9.6%), MARA (-9.6%), and SNOW (-8.4%), with CoreWeave credit stress amplifying contagion fears and dragging QQQ ~2.5% lower. Middle East escalation (Yemen strikes, Saudi intercepts) and a 17M-barrel US SPR solicitation drove decisive safe-haven rotation into Defense (RTX +3.7%, LMT +3.6%) and Energy (CVX +2.6%), while AAPL held green on iPhone demand, China's $37B subsidy tailwind, and Berkshire support. All five signals remain intact — BUY on RTX, LMT, and AAPL; SELL on PLTR and MSTR."
+      "summary": "**Weekly Digest Summary**\n\nA BofA AI bubble warning (drawing 1990s fiber-optic parallels) and CoreWeave credit stress triggered a $260B+ risk-off unwind, hammering high-multiple AI, cloud, and crypto-adjacent names including PLTR, MSTR (-9.6%), MARA (-9.6%), and SNOW (-8.4%), pushing VIX above 22. Simultaneous Middle East escalation (Yemen strikes, Saudi intercepts) and a 17M-barrel US SPR solicitation drove decisive safe-haven rotation into Defense (RTX +3.7%, LMT +3.6%) and Energy (CVX +2.6%), while AAPL bucked the selloff on iPhone demand, China's $37B subsidy tailwind, and Berkshire support. All five signals remain intact entering day 4 — **BUY RTX, LMT, AAPL; SELL PLTR, MSTR**."
     }
   ]
 }

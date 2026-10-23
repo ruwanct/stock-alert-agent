@@ -90,17 +90,22 @@
         "date": "2026-10-23",
         "action": "BUY",
         "price": 250.38
+      },
+      {
+        "date": "2026-10-23",
+        "action": "SELL",
+        "price": 248.0
       }
     ],
-    "mention_count": 4,
+    "mention_count": 5,
     "last_mentioned": "2026-10-23",
-    "last_note": "Open BUY from $262.45 (Tue) is now -4.6% — painful but no AMZN-specific negative catalyst. Selloff is macro/AI sector driven. Morgan Stanley Top Pick with $350 PT and AWS dominance intact. CNBC Invest"
+    "last_note": "Open BUY from Tue at $262.45 is now -5.5% — the most painful open signal. No stock-specific catalyst has emerged to justify holding, and AI spending concern (Neuberger, multi-source) directly pressure"
   },
   "COIN": {
     "signal_history": [],
-    "mention_count": 1,
-    "last_mentioned": "2026-10-20",
-    "last_note": "Crypto-adjacent names lag as BTC fails to catch growth rebound; risk rotation favors productive assets"
+    "mention_count": 2,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Crypto-adjacent risk-off; macro headwinds and broad growth selloff weigh on exchange volumes"
   },
   "CVX": {
     "signal_history": [],
@@ -119,17 +124,28 @@
         "date": "2026-10-22",
         "action": "BUY",
         "price": 273.09
+      },
+      {
+        "date": "2026-10-23",
+        "action": "BUY",
+        "price": 269.65
       }
     ],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-22",
-    "last_note": "Open BUY from Tue at $260.36 now +4.9%. PHP critical flaw drives broad cybersecurity/monitoring bid (multi-source). Stock up ~100% in 6 months with strong trend. SpaceX AI demand confirmation adds clo"
+    "mention_count": 3,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Open BUY from Tue at $260.36 is +3.6% and reaffirmed for the second time. BofA raised PT to $335 (from $305) today ahead of Q3 earnings — a fresh fundamental catalyst. AI capex spending by big tech di"
   },
   "GOOGL": {
     "signal_history": [],
     "mention_count": 2,
     "last_mentioned": "2026-10-22",
     "last_note": "Lags despite AI optimism; tokenized stock objection story and no specific near-term catalyst weigh"
+  },
+  "GS": {
+    "signal_history": [],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Financials rotate out as rate uncertainty rises; Dow -650pts drags broad financial sector"
   },
   "INTC": {
     "signal_history": [],
@@ -196,11 +212,16 @@
         "date": "2026-10-23",
         "action": "BUY",
         "price": 589.91
+      },
+      {
+        "date": "2026-10-23",
+        "action": "BUY",
+        "price": 604.18
       }
     ],
-    "mention_count": 8,
+    "mention_count": 9,
     "last_mentioned": "2026-10-23",
-    "last_note": "Original BUY at $552.09 is up +6.8% (closed win). Reaffirming as new entry: Q3 beat, 850-jet F-35 deal, raised guidance, and record backlog are all fresh fundamental catalysts — not just geopolitical."
+    "last_note": "Open BUY from Fri at $589.91 is +2.4%. Trump's Iran military threat (Reuters, multi-source) and Gulf escalation are new geopolitical catalysts layered on top of last session's Q3 blowout, 850-jet F-35"
   },
   "MARA": {
     "signal_history": [],
@@ -214,11 +235,16 @@
         "date": "2026-10-23",
         "action": "SELL",
         "price": 648.85
+      },
+      {
+        "date": "2026-10-23",
+        "action": "SELL",
+        "price": 642.62
       }
     ],
-    "mention_count": 2,
+    "mention_count": 3,
     "last_mentioned": "2026-10-23",
-    "last_note": "META led the Nasdaq rout on AI spending concern. Despite CNBC poker lesson note suggesting no fold, the stock broke the 50-day line in heavy volume — a technical and fundamental red flag. AI spending "
+    "last_note": "Open SELL from Fri at $648.85 is +1.0% in our favor. AI spending concern is multi-source confirmed (CNBC, Yahoo, Neuberger). Meta and Google plan to sell space inside their models (former Stability AI"
   },
   "MSTR": {
     "signal_history": [
@@ -283,11 +309,16 @@
         "date": "2026-10-22",
         "action": "BUY",
         "price": 307.22
+      },
+      {
+        "date": "2026-10-23",
+        "action": "BUY",
+        "price": 325.73
       }
     ],
-    "mention_count": 1,
-    "last_mentioned": "2026-10-22",
-    "last_note": "New signal. Cloudflare surges +5.3% on critical PHP flaw affecting ~70% of websites, same catalyst lifting DDOG. Dual tailwind: cybersecurity bid and SpaceX AI compute demand confirmation for cloud ne"
+    "mention_count": 2,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Open BUY from Thu at $307.22 is now +6.0% and accelerating. Cybersecurity sector bid confirmed by PHP vulnerability (multi-source) and Deutsche Bank AI-era peer upgrades. Iran threat to Gulf undersea "
   },
   "NOC": {
     "signal_history": [
@@ -396,15 +427,21 @@
         "price": 193.34
       }
     ],
-    "mention_count": 10,
-    "last_mentioned": "2026-10-22",
-    "last_note": "Defense risk premium fades as Putin resumes Ukraine peace talks; geopolitical bid unwinding"
+    "mention_count": 11,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Defense risk premium fading post Iran diplomacy; previously closed BUY at flat +0.4%"
   },
   "SAP": {
     "signal_history": [],
     "mention_count": 1,
     "last_mentioned": "2026-10-23",
     "last_note": "EU enterprise software outperforms as US AI trade unwinds; German/EU names benefit from capital rotation"
+  },
+  "SLB": {
+    "signal_history": [],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-23",
+    "last_note": "Oil services surge as Trump Iran military threat and Gulf cable sabotage plans send crude higher"
   },
   "SNOW": {
     "signal_history": [],
