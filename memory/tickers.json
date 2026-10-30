@@ -53,9 +53,9 @@
   },
   "AI": {
     "signal_history": [],
-    "mention_count": 1,
-    "last_mentioned": "2026-10-21",
-    "last_note": "AI name rebounds on broader oversold bounce; CNBC highlights value outside CoreWeave trade"
+    "mention_count": 2,
+    "last_mentioned": "2026-10-28",
+    "last_note": "C3.ai falling despite broader AI enthusiasm — valuation and revenue growth doubts weigh on the laggard name"
   },
   "AMD": {
     "signal_history": [
@@ -63,11 +63,16 @@
         "date": "2026-10-23",
         "action": "SELL",
         "price": 507.93
+      },
+      {
+        "date": "2026-10-28",
+        "action": "BUY",
+        "price": 560.26
       }
     ],
-    "mention_count": 1,
-    "last_mentioned": "2026-10-23",
-    "last_note": "Chipmaking equipment supply warning is a sector-level fundamental headwind, not noise. AMD down 8.1% with INTC -8.0% and TSM -4.5% confirming systemic semi pressure. AI spending concerns from META add"
+    "mention_count": 2,
+    "last_mentioned": "2026-10-28",
+    "last_note": "AMD SELL from Friday at $507.93 is closed at -10.3% loss — learned not to sell into oversold semis. Today AMD rebounds +5.45% on Anthropic IPO AI demand confirmation (CNBC) and US business equipment s"
   },
   "AMZN": {
     "signal_history": [
@@ -95,17 +100,56 @@
         "date": "2026-10-23",
         "action": "SELL",
         "price": 248.0
+      },
+      {
+        "date": "2026-10-27",
+        "action": "WATCH",
+        "price": null
+      },
+      {
+        "date": "2026-10-28",
+        "action": "WATCH",
+        "price": null
       }
     ],
-    "mention_count": 5,
-    "last_mentioned": "2026-10-23",
-    "last_note": "Open BUY from Tue at $262.45 is now -5.5% — the most painful open signal. No stock-specific catalyst has emerged to justify holding, and AI spending concern (Neuberger, multi-source) directly pressure"
+    "mention_count": 8,
+    "last_mentioned": "2026-10-30",
+    "last_note": "Profit miss on soaring AI capex and freight inflation +11%; AWS accelerated but EPS missed (Yahoo, Reuters, WSJ)"
+  },
+  "AVGO": {
+    "signal_history": [
+      {
+        "date": "2026-10-28",
+        "action": "BUY",
+        "price": 342.33
+      },
+      {
+        "date": "2026-10-29",
+        "action": "BUY",
+        "price": 351.81
+      }
+    ],
+    "mention_count": 2,
+    "last_mentioned": "2026-10-29",
+    "last_note": "AVGO BUY from Oct 28 at $342.33 is now +2.8% — reaffirming. Anthropic AI custom chip demand thesis intact; ORCL 2030 guidance and MSFT Azure beat both confirm AI infra spend cycle is durable. Broadcom"
+  },
+  "BA": {
+    "signal_history": [
+      {
+        "date": "2026-10-28",
+        "action": "SELL",
+        "price": 168.18
+      }
+    ],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-28",
+    "last_note": "New signal. Boeing -10.69% on confirmed Q3 miss: delivery targets failed, production rates slashed, $745B backlog is irrelevant without execution. Research notes confirm the move is fundamental, not s"
   },
   "COIN": {
     "signal_history": [],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-23",
-    "last_note": "Crypto-adjacent risk-off; macro headwinds and broad growth selloff weigh on exchange volumes"
+    "mention_count": 3,
+    "last_mentioned": "2026-10-27",
+    "last_note": "Crypto-adjacent selloff — COIN falling with MSTR as Bitcoin enthusiasm fades vs. AI IPO buzz"
   },
   "CVX": {
     "signal_history": [],
@@ -129,17 +173,28 @@
         "date": "2026-10-23",
         "action": "BUY",
         "price": 269.65
+      },
+      {
+        "date": "2026-10-27",
+        "action": "BUY",
+        "price": 280.24
+      }
+    ],
+    "mention_count": 4,
+    "last_mentioned": "2026-10-27",
+    "last_note": "Open BUY from Tue at $260.36 is now +7.6% — reaffirmed for the third time. BofA PT raised to $335; Anthropic IPO AI buzz is a direct tailwind for AI observability/cloud. Up 3.93% today, momentum intac"
+  },
+  "GOOGL": {
+    "signal_history": [
+      {
+        "date": "2026-10-30",
+        "action": "SELL",
+        "price": 283.82
       }
     ],
     "mention_count": 3,
-    "last_mentioned": "2026-10-23",
-    "last_note": "Open BUY from Tue at $260.36 is +3.6% and reaffirmed for the second time. BofA raised PT to $335 (from $305) today ahead of Q3 earnings — a fresh fundamental catalyst. AI capex spending by big tech di"
-  },
-  "GOOGL": {
-    "signal_history": [],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-22",
-    "last_note": "Lags despite AI optimism; tokenized stock objection story and no specific near-term catalyst weigh"
+    "last_mentioned": "2026-10-30",
+    "last_note": "Historic -12.6% selloff on structural search revenue threat — the market is pricing in existential risk to Google's core business, not a one-quarter miss. CNBC downgrade, SeekingAlpha debate, and WSJ "
   },
   "GS": {
     "signal_history": [],
@@ -149,9 +204,9 @@
   },
   "INTC": {
     "signal_history": [],
-    "mention_count": 1,
-    "last_mentioned": "2026-10-23",
-    "last_note": "Same semi supply warning as AMD; INTC structurally weaker — compounding fundamental and macro pressure"
+    "mention_count": 2,
+    "last_mentioned": "2026-10-27",
+    "last_note": "AI enthusiasm from Anthropic IPO filing lifts semis broadly; oversold bounce after last week's -8% rout"
   },
   "JNJ": {
     "signal_history": [
@@ -171,18 +226,32 @@
     "last_mentioned": "2026-10-20",
     "last_note": "Financials under pressure as rate expectations shift; capital rotates back into growth tech"
   },
-  "LMT": {
+  "LHX": {
     "signal_history": [
       {
-        "date": "2026-10-17",
+        "date": "2026-10-30",
         "action": "BUY",
-        "price": 552.09
-      },
+        "price": 278.43
+      }
+    ],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-30",
+    "last_note": "Blowout Q3: backlog +47% on $11B missile defense awards, FCF +195%. Defense sector tailwinds intact with Middle East escalation ongoing. LHX earnings directly confirm the same DoD spending cycle lifti"
+  },
+  "LLY": {
+    "signal_history": [
       {
-        "date": "2026-10-17",
+        "date": "2026-10-30",
         "action": "BUY",
-        "price": 552.09
-      },
+        "price": 1373.7
+      }
+    ],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-30",
+    "last_note": "Healthcare leading safe-haven rotation as GOOGL and AMZN earnings shocks accelerate capital flight from growth. JNJ open BUY confirms the rotation is real (+1.53% today). LLY adds GLP-1 secular growth"
+  },
+  "LMT": {
+    "signal_history": [
       {
         "date": "2026-10-17",
         "action": "BUY",
@@ -217,17 +286,32 @@
         "date": "2026-10-23",
         "action": "BUY",
         "price": 604.18
+      },
+      {
+        "date": "2026-10-27",
+        "action": "SELL",
+        "price": 635.2
+      },
+      {
+        "date": "2026-10-29",
+        "action": "SELL",
+        "price": 629.75
+      },
+      {
+        "date": "2026-10-30",
+        "action": "SELL",
+        "price": 643.59
       }
     ],
-    "mention_count": 9,
-    "last_mentioned": "2026-10-23",
-    "last_note": "Open BUY from Fri at $589.91 is +2.4%. Trump's Iran military threat (Reuters, multi-source) and Gulf escalation are new geopolitical catalysts layered on top of last session's Q3 blowout, 850-jet F-35"
+    "mention_count": 12,
+    "last_mentioned": "2026-10-30",
+    "last_note": "Reaffirming open SELL from Tue at $635.20, now -1.3% against us. LHX blowout is a double-edged sword: confirms sector strength but also confirms LMT is now richly priced after a 7.7% win from our earl"
   },
   "MARA": {
     "signal_history": [],
-    "mention_count": 7,
-    "last_mentioned": "2026-10-17",
-    "last_note": "Crypto risk-off + VIX above 22 devastates high-beta crypto-adjacent; Bitcoin down ~4% in October; zero positive catalysts."
+    "mention_count": 8,
+    "last_mentioned": "2026-10-29",
+    "last_note": "Crypto-adjacent bounce; Bitcoin buy thesis cited in multi-source coverage despite ongoing risk-off caution"
   },
   "META": {
     "signal_history": [
@@ -240,11 +324,26 @@
         "date": "2026-10-23",
         "action": "SELL",
         "price": 642.62
+      },
+      {
+        "date": "2026-10-27",
+        "action": "SELL",
+        "price": 630.56
+      },
+      {
+        "date": "2026-10-28",
+        "action": "SELL",
+        "price": 620.19
+      },
+      {
+        "date": "2026-10-29",
+        "action": "SELL",
+        "price": 612.49
       }
     ],
-    "mention_count": 3,
-    "last_mentioned": "2026-10-23",
-    "last_note": "Open SELL from Fri at $648.85 is +1.0% in our favor. AI spending concern is multi-source confirmed (CNBC, Yahoo, Neuberger). Meta and Google plan to sell space inside their models (former Stability AI"
+    "mention_count": 6,
+    "last_mentioned": "2026-10-29",
+    "last_note": "META SELL from Oct 28 at $620.19 is now +1.2% in our favor — reaffirming. Stock falls -1.24% on a broadly green tape with semis surging, confirming extreme relative weakness. AI capex anxiety is multi"
   },
   "MSTR": {
     "signal_history": [
@@ -299,9 +398,15 @@
         "price": 153.48
       }
     ],
-    "mention_count": 10,
-    "last_mentioned": "2026-10-22",
-    "last_note": "Closing reaffirmation — open SELL from $136.83 is now -12.2% against us. OCC stablecoin regulatory clarity is a genuine new macro catalyst removing a key headwind. MSCI outflow thesis still structural"
+    "mention_count": 11,
+    "last_mentioned": "2026-10-27",
+    "last_note": "Crypto risk-off bucking broader market; speculative names lagging as capital rotates into AI/defense"
+  },
+  "MU": {
+    "signal_history": [],
+    "mention_count": 2,
+    "last_mentioned": "2026-10-30",
+    "last_note": "AMZN/GOOGL earnings shock drags semis; AI capex anxiety reignites chipmaker demand concerns"
   },
   "NET": {
     "signal_history": [
@@ -331,6 +436,40 @@
     "mention_count": 1,
     "last_mentioned": "2026-10-21",
     "last_note": "Blowout Q3 earnings with record $110B backlog and raised FY2026 guidance confirmed by multiple sources. Fundamentally driven move unlike RTX/LMT geopolitical plays. Diplomacy-driven defense pullback r"
+  },
+  "NVDA": {
+    "signal_history": [
+      {
+        "date": "2026-10-27",
+        "action": "BUY",
+        "price": 216.0
+      },
+      {
+        "date": "2026-10-28",
+        "action": "BUY",
+        "price": 217.94
+      },
+      {
+        "date": "2026-10-29",
+        "action": "BUY",
+        "price": 215.38
+      }
+    ],
+    "mention_count": 3,
+    "last_mentioned": "2026-10-29",
+    "last_note": "NVDA BUY from Tue at $216.00 is -0.3% — reaffirming for second time. ORCL and MSFT beats confirm AI training and inference demand cycle; Anthropic IPO filing directly cites NVDA chip dependency. Today"
+  },
+  "ORCL": {
+    "signal_history": [
+      {
+        "date": "2026-10-29",
+        "action": "BUY",
+        "price": 144.54
+      }
+    ],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-29",
+    "last_note": "Blowout earnings with explicit 2030 cash flow guidance directly rebuts AI spending fears. Multi-source confirmation (Research notes, sector-wide relief rally). MSFT Azure beat is a second confirming c"
   },
   "PLTR": {
     "signal_history": [
@@ -380,9 +519,9 @@
         "price": 201.72
       }
     ],
-    "mention_count": 9,
-    "last_mentioned": "2026-10-22",
-    "last_note": "Open SELL from $186.03 now -8.4% against us — deeply painful. SpaceX AI demand signal and broad AI rebound directly counter the valuation-compression thesis. Knox Federal deal momentum intact. Confide"
+    "mention_count": 10,
+    "last_mentioned": "2026-10-29",
+    "last_note": "Valuation compression thesis reasserting — lagging as capital rotates toward hard infra and semis over software"
   },
   "RTX": {
     "signal_history": [
@@ -425,11 +564,21 @@
         "date": "2026-10-21",
         "action": "BUY",
         "price": 193.34
+      },
+      {
+        "date": "2026-10-27",
+        "action": "BUY",
+        "price": 197.48
+      },
+      {
+        "date": "2026-10-30",
+        "action": "BUY",
+        "price": 199.4
       }
     ],
-    "mention_count": 11,
-    "last_mentioned": "2026-10-23",
-    "last_note": "Defense risk premium fading post Iran diplomacy; previously closed BUY at flat +0.4%"
+    "mention_count": 13,
+    "last_mentioned": "2026-10-30",
+    "last_note": "Reaffirming open BUY from Tue at $197.48, now +1.0%. LHX blowout with $11B missile defense backlog surge is the strongest read-through for RTX: same DoD customer, same program types. Defense rally now"
   },
   "SAP": {
     "signal_history": [],
@@ -448,5 +597,17 @@
     "mention_count": 7,
     "last_mentioned": "2026-10-17",
     "last_note": "CoreWeave credit contagion + BofA AI bubble warning crushes high-multiple cloud names (CNBC)."
+  },
+  "TSLA": {
+    "signal_history": [],
+    "mention_count": 2,
+    "last_mentioned": "2026-10-28",
+    "last_note": "Clears buy point per IBD; multi-catalyst bull case — robotaxi thesis, ARK reaffirm, $10B solar deal"
+  },
+  "XOM": {
+    "signal_history": [],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-28",
+    "last_note": "Energy retreating as Iran diplomacy signals ease geopolitical risk premium; Houthi Ras Tanura strike partially offset"
   }
 }

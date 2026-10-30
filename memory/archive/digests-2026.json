@@ -75,7 +75,7 @@
       "energy geopolitical bid",
       "risk-off rotation"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-17T15:30:17+00:00",
@@ -88,7 +88,7 @@
       "geopolitical bid",
       "VIX spike"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-20T00:30:17+00:00",
@@ -101,7 +101,7 @@
       "crypto lag",
       "growth over value"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-21T00:00:40+00:00",
@@ -114,7 +114,7 @@
       "crypto sentiment vs fundamentals",
       "product launch sell-the-news"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-22T00:05:59+00:00",
@@ -152,6 +152,58 @@
       "AI capex concern",
       "Big Tech earnings risk",
       "defensive rotation"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-10-27T00:40:37+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "Anthropic's IPO filing rekindled broad AI enthusiasm, lifting semis (INTC +4%, NVDA BUY initiated), cloud, and defense simultaneously while crypto-adjacent names MSTR and META lagged in a risk-on tape. Defense entered day 7 of its rally with LMT +5.1% and RTX +3.4% on sustained Middle East escalation signals (Netanyahu/Iran, Egypt-Saudi/Houthi), prompting a disciplined LMT profit-take after a +7.7% gain from Friday's entry. Mega-cap earnings (MSFT, AMZN, GOOGL) loom as the week's binary risk, with META flagged as a live SELL on relative weakness and AMZN held on WATCH pending post-print confirmation.",
+    "themes": [
+      "AI IPO catalyst",
+      "defense rally day 7",
+      "semis recovery",
+      "crypto risk-off",
+      "mega-cap earnings binary"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-10-28T00:38:41+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "A broad risk-on rotation drove semiconductors and AI names sharply higher, led by AMD (+5.45%) and AVGO (+4.00%), fueled by Anthropic's IPO S-1 filing confirming massive AI chip demand and a macro tailwind from surging US business equipment spending. Boeing cratered -10.69% on a confirmed Q3 earnings disaster — missed deliveries, slashed production rates — while energy and defense names retreated on Iran diplomacy signals easing geopolitical risk premiums. The week's binary risk events center on MSFT and GOOGL earnings plus the Fed rate decision, with AMZN's AWS read also pivotal for the open SELL position.",
+    "themes": [
+      "semi / AI revival",
+      "Anthropic IPO capex read-through",
+      "Boeing production collapse",
+      "energy / defense retreat",
+      "Big Tech earnings binary risk"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-10-29T01:08:22+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "ORCL surged +10.7% on blowout earnings and explicit 2030 cash flow guidance, directly countering AI spending fears and sparking a broad risk-on rally in semis and cloud infrastructure (MU +5.86%, AVGO reaffirmed BUY). MSFT's Azure beat after hours provided a second confirming catalyst for AI infra demand, while GOOGL's negative free cash flow and capex blowout dragged Mega-cap Tech sentiment, leaving META as the session's standout laggard (-1.24% on a green tape). Capital rotation is firmly into AI infrastructure and semis, with META and PLTR facing valuation compression and the Fed holding rates at 3.75–4.0% with a hawkish lean adding pressure on rate-sensitive growth names.",
+    "themes": [
+      "AI infra demand confirmed",
+      "cloud earnings beat",
+      "semi surge",
+      "mega-cap divergence",
+      "Fed hawkish hold"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-10-30T01:13:46+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "Markets split sharply as GOOGL posted its worst single-day drop ever (-12.6%) on structural search revenue fears and AMZN missed profits on soaring AI capex, dragging Big Tech and semis lower. Defense stocks surged for an 8th+ consecutive day led by LHX (+6.84%) on a blowout Q3 with $11B in missile defense awards and FCF +195%, confirming robust DoD spending. Capital rotation out of growth and into defense, healthcare, and consumer staples is accelerating, with active BUY signals on LHX, RTX, and LLY and a high-conviction SELL on GOOGL.",
+    "themes": [
+      "defense rally",
+      "Big Tech earnings shock",
+      "AI capex overhang",
+      "growth-to-defensive rotation",
+      "search revenue threat"
     ],
     "compressed": false
   }
