@@ -127,7 +127,7 @@
       "cybersecurity bid",
       "defense fade"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-23T00:04:22+00:00",
@@ -140,7 +140,7 @@
       "defense rally",
       "safe-haven bid"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-23T23:54:37+00:00",
@@ -153,7 +153,7 @@
       "Big Tech earnings risk",
       "defensive rotation"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-27T00:40:37+00:00",
@@ -166,7 +166,7 @@
       "crypto risk-off",
       "mega-cap earnings binary"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-28T00:38:41+00:00",
@@ -179,7 +179,7 @@
       "energy / defense retreat",
       "Big Tech earnings binary risk"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-29T01:08:22+00:00",
@@ -204,6 +204,71 @@
       "AI capex overhang",
       "growth-to-defensive rotation",
       "search revenue threat"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-10-31T00:56:28+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "The Nasdaq is on pace for its worst month in over a year as an AI spending reckoning deepens — INTC cratered 28.6% post-earnings, dragging QCOM (-11.1%), NVDA (-5.3%), and DDOG (-11.5%) down in a sector-wide semiconductor breakdown, while Amazon's revenue and EPS miss on soaring AI capex compounded the selloff. Capital is rotating hard out of AI/growth into Energy (XOM +2.2%, CVX +1.8%) and Consumer Staples (WMT +1.9%), supported by Strait of Hormuz tanker fires and a US evacuation order from Saudi Arabia driving a geopolitical oil premium. Multiple open BUY signals across semis and AI names (NVDA, DDOG, AVGO, AMD) are deeply underwater, confirming the rotation thesis was not acted on fast enough and demanding tighter sell discipline.",
+    "themes": [
+      "AI reckoning",
+      "semiconductor breakdown",
+      "energy safe haven",
+      "defensive rotation",
+      "geopolitical oil premium"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-03T02:59:50+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "The Nasdaq dropped 1%+ to open November as AI/cloud names cratered — ORCL and INTC each fell ~8.8% on capex overhang and PC weakness — while consumer staples (WMT +3.4%, COST +2.8%) surged on a broad growth-to-defensive rotation. AMZN was a standout exception, rallying 2.2% on a strong post-earnings beat across both AWS and e-commerce, while GOOGL and DDOG continued multi-session downtrends with no fundamental reversal in sight. Energy sold off sharply as US-Iran deal hopes eroded the geopolitical premium, putting the open XOM BUY under pressure and reinforcing the need for tighter stops on geopolitical longs.",
+    "themes": [
+      "tech meltdown",
+      "defensive rotation",
+      "AI capex reckoning",
+      "post-earnings divergence",
+      "energy premium fade"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-04T01:34:05+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "A broad risk-on Election Day rebound is led by crypto-adjacent Bitcoin miners (MARA +11%, Riot +14%), AI semis (AMD blowout earnings), and cloud (ORCL +5.8% squeezing an open SELL), while consumer staples (WMT, COST) and energy sell off as Iran geopolitical premium fades. Key BUY signals are initiated on AMD (fresh earnings catalyst), COIN (Tether BTC reserve disclosure), and AMZN (reaffirmed on AWS dual beat), while AAPL and PLTR are flagged as SELLs on persistent relative weakness and Cramer warnings. Track record remains challenged at 47%/33% win rate with ORCL SELL now at max loss and NVDA SELL working against an active semi rebound.",
+    "themes": [
+      "crypto-adjacent rally",
+      "AI chip demand",
+      "risk-on rotation",
+      "defensive unwind",
+      "geopolitical premium fade"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-05T01:36:50+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "A Democratic congressional sweep triggered the biggest post-midterm Dow rally in 44 years (+3%), with mega-cap tech (MSFT +6.7%, AMZN +6.1%) and consumer names (MCD +6.5%) surging on election clarity and rotation into lower-risk sectors. Defense (LMT -6.9%) and energy (XOM -4.6%) cratered as Vance repudiated the Iran war and Democratic policy shifts erased geopolitical risk premiums. DDOG collapsed 14.4% on a beat-and-lower earnings reaction, reinforcing that AI/cloud remains treacherous even on strong fundamentals, while the open AMZN BUY from $245.63 extended to +8.3%.",
+    "themes": [
+      "postelection rally",
+      "defense & energy unwind",
+      "mega-cap tech rotation",
+      "beat-and-lower AI risk",
+      "crypto risk-on"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-06T01:42:36+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "The Nasdaq plunged 5.5% into correction territory — its worst chip selloff since Covid — fully erasing the post-election rally as AI spending fears and Democrat data center regulation concerns crushed semis (MU -17.5%, AMD -17.3%, TSM -10.8%) and crypto-adjacent names (MARA -14.5%). Capital rotated hard into defensive safe-havens, with COST and SAP the only green names in a 30-stock universe. Key signals: AMD BUY cut at -16.4% loss, NVDA re-entered at oversold levels (MEDIUM confidence), PLTR SELL extended to +11.6% gain, and AMZN BUY held resilient at +6.0%.",
+    "themes": [
+      "chip wipeout",
+      "defensive rotation",
+      "AI spending repricing",
+      "post-election reversal",
+      "risk-off deleveraging"
     ],
     "compressed": false
   }

@@ -45,11 +45,16 @@
         "date": "2026-10-21",
         "action": "WATCH",
         "price": null
+      },
+      {
+        "date": "2026-11-04",
+        "action": "SELL",
+        "price": 331.9
       }
     ],
-    "mention_count": 9,
-    "last_mentioned": "2026-10-21",
-    "last_note": "Open BUY from Sat @ $343.46 is now -1.1% and losing ground. Foldable iPhone launch is live but failed to lift stock today — three sources report the decline on a green Dow day. Downgrading from BUY re"
+    "mention_count": 10,
+    "last_mentioned": "2026-11-04",
+    "last_note": "AAPL down -1.9% on a broadly green tape with semis surging — extreme relative weakness. Jim Cramer executioner warning, IBD cites Apple tumble on earnings, and IBD midterm focus all bearish. Prior BUY"
   },
   "AI": {
     "signal_history": [],
@@ -68,19 +73,24 @@
         "date": "2026-10-28",
         "action": "BUY",
         "price": 560.26
+      },
+      {
+        "date": "2026-11-04",
+        "action": "BUY",
+        "price": 483.9
+      },
+      {
+        "date": "2026-11-06",
+        "action": "SELL",
+        "price": 404.4
       }
     ],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-28",
-    "last_note": "AMD SELL from Friday at $507.93 is closed at -10.3% loss — learned not to sell into oversold semis. Today AMD rebounds +5.45% on Anthropic IPO AI demand confirmation (CNBC) and US business equipment s"
+    "mention_count": 4,
+    "last_mentioned": "2026-11-06",
+    "last_note": "Open BUY from $483.90 is now -16.4% — cutting the loss. No company-specific catalyst for recovery, pure macro/political repricing. Cathie Wood rotating out of AMD signals institutional repositioning. "
   },
   "AMZN": {
     "signal_history": [
-      {
-        "date": "2026-10-20",
-        "action": "BUY",
-        "price": 262.45
-      },
       {
         "date": "2026-10-21",
         "action": "BUY",
@@ -110,11 +120,31 @@
         "date": "2026-10-28",
         "action": "WATCH",
         "price": null
+      },
+      {
+        "date": "2026-11-03",
+        "action": "BUY",
+        "price": 245.63
+      },
+      {
+        "date": "2026-11-04",
+        "action": "BUY",
+        "price": 250.69
+      },
+      {
+        "date": "2026-11-05",
+        "action": "BUY",
+        "price": 266.03
+      },
+      {
+        "date": "2026-11-06",
+        "action": "BUY",
+        "price": 260.21
       }
     ],
-    "mention_count": 8,
-    "last_mentioned": "2026-10-30",
-    "last_note": "Profit miss on soaring AI capex and freight inflation +11%; AWS accelerated but EPS missed (Yahoo, Reuters, WSJ)"
+    "mention_count": 12,
+    "last_mentioned": "2026-11-06",
+    "last_note": "Reaffirmed — open BUY from $245.63 (Tue) is +6.0% and holding. AMZN is the most resilient Mag-7 name today at -2.2% vs Nasdaq -5.5%. New Amazon vs Google Shopping direct feed tool adds a fresh competi"
   },
   "AVGO": {
     "signal_history": [
@@ -146,16 +176,39 @@
     "last_note": "New signal. Boeing -10.69% on confirmed Q3 miss: delivery targets failed, production rates slashed, $745B backlog is irrelevant without execution. Research notes confirm the move is fundamental, not s"
   },
   "COIN": {
-    "signal_history": [],
+    "signal_history": [
+      {
+        "date": "2026-11-04",
+        "action": "BUY",
+        "price": 145.45
+      },
+      {
+        "date": "2026-11-05",
+        "action": "BUY",
+        "price": 151.5
+      }
+    ],
+    "mention_count": 5,
+    "last_mentioned": "2026-11-05",
+    "last_note": "Open BUY from $145.45 is now +4.2% and working. Postelection risk-on sentiment lifting crypto-adjacent names. MSTR also +5.1% today confirms sector bid. No new negative catalysts."
+  },
+  "COST": {
+    "signal_history": [
+      {
+        "date": "2026-11-06",
+        "action": "BUY",
+        "price": 1065.59
+      }
+    ],
     "mention_count": 3,
-    "last_mentioned": "2026-10-27",
-    "last_note": "Crypto-adjacent selloff — COIN falling with MSTR as Bitcoin enthusiasm fades vs. AI IPO buzz"
+    "last_mentioned": "2026-11-06",
+    "last_note": "One of only two green names in a 30-stock universe on a Nasdaq -5.5% day — extreme relative strength confirms defensive rotation thesis. Consumer staples have led safe-haven rotation since W44. CNBC a"
   },
   "CVX": {
     "signal_history": [],
-    "mention_count": 7,
-    "last_mentioned": "2026-10-17",
-    "last_note": "Crude tailwinds from Yemen geopolitical risk premium + US SPR 17M-barrel solicitation (Reuters)."
+    "mention_count": 8,
+    "last_mentioned": "2026-10-31",
+    "last_note": "Crude tailwind from Hormuz tanker incident and sustained Middle East risk premium (Reuters)"
   },
   "DDOG": {
     "signal_history": [
@@ -178,11 +231,16 @@
         "date": "2026-10-27",
         "action": "BUY",
         "price": 280.24
+      },
+      {
+        "date": "2026-10-31",
+        "action": "WATCH",
+        "price": null
       }
     ],
-    "mention_count": 4,
-    "last_mentioned": "2026-10-27",
-    "last_note": "Open BUY from Tue at $260.36 is now +7.6% — reaffirmed for the third time. BofA PT raised to $335; Anthropic IPO AI buzz is a direct tailwind for AI observability/cloud. Up 3.93% today, momentum intac"
+    "mention_count": 7,
+    "last_mentioned": "2026-11-05",
+    "last_note": "Beat-and-lower earnings reaction — Q4 guidance disappointed despite third straight full-year raise; AI cloud still treacherous"
   },
   "GOOGL": {
     "signal_history": [
@@ -190,11 +248,16 @@
         "date": "2026-10-30",
         "action": "SELL",
         "price": 283.82
+      },
+      {
+        "date": "2026-11-03",
+        "action": "SELL",
+        "price": 278.99
       }
     ],
-    "mention_count": 3,
-    "last_mentioned": "2026-10-30",
-    "last_note": "Historic -12.6% selloff on structural search revenue threat — the market is pricing in existential risk to Google's core business, not a one-quarter miss. CNBC downgrade, SeekingAlpha debate, and WSJ "
+    "mention_count": 4,
+    "last_mentioned": "2026-11-03",
+    "last_note": "Reaffirming open SELL from Fri at $283.82, now +1.7% in our favor. Alphabet lost $766B in market value in October — its worst month ever. UBS cautions against buying, structural search revenue fears p"
   },
   "GS": {
     "signal_history": [],
@@ -204,9 +267,9 @@
   },
   "INTC": {
     "signal_history": [],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-27",
-    "last_note": "AI enthusiasm from Anthropic IPO filing lifts semis broadly; oversold bounce after last week's -8% rout"
+    "mention_count": 4,
+    "last_mentioned": "2026-11-03",
+    "last_note": "Continued post-earnings collapse; BofA pulled Buy on PC slump and slow foundry ramp — prolonged downtrend"
   },
   "JNJ": {
     "signal_history": [
@@ -268,16 +331,6 @@
         "price": 552.09
       },
       {
-        "date": "2026-10-17",
-        "action": "BUY",
-        "price": 552.09
-      },
-      {
-        "date": "2026-10-17",
-        "action": "BUY",
-        "price": 552.09
-      },
-      {
         "date": "2026-10-23",
         "action": "BUY",
         "price": 589.91
@@ -301,17 +354,33 @@
         "date": "2026-10-30",
         "action": "SELL",
         "price": 643.59
+      },
+      {
+        "date": "2026-10-31",
+        "action": "SELL",
+        "price": 636.95
+      },
+      {
+        "date": "2026-11-05",
+        "action": "SELL",
+        "price": 595.04
       }
     ],
-    "mention_count": 12,
-    "last_mentioned": "2026-10-30",
-    "last_note": "Reaffirming open SELL from Tue at $635.20, now -1.3% against us. LHX blowout is a double-edged sword: confirms sector strength but also confirms LMT is now richly priced after a 7.7% win from our earl"
+    "mention_count": 14,
+    "last_mentioned": "2026-11-05",
+    "last_note": "Defense crashes as Vance repudiates Iran war and Democratic sweep signals shift in Middle East policy. Prior open SELL calls from $629-643 range; current price $595 confirms sustained downtrend. Geopo"
   },
   "MARA": {
     "signal_history": [],
-    "mention_count": 8,
-    "last_mentioned": "2026-10-29",
-    "last_note": "Crypto-adjacent bounce; Bitcoin buy thesis cited in multi-source coverage despite ongoing risk-off caution"
+    "mention_count": 10,
+    "last_mentioned": "2026-11-06",
+    "last_note": "Crypto-adjacent names reverse postelection bid; Bitcoin miner risk-off as broader market delevers"
+  },
+  "MCD": {
+    "signal_history": [],
+    "mention_count": 1,
+    "last_mentioned": "2026-11-05",
+    "last_note": "Consumer staples and defensive names surge as capital rotates into lower-risk sectors on election clarity"
   },
   "META": {
     "signal_history": [
@@ -344,6 +413,18 @@
     "mention_count": 6,
     "last_mentioned": "2026-10-29",
     "last_note": "META SELL from Oct 28 at $620.19 is now +1.2% in our favor — reaffirming. Stock falls -1.24% on a broadly green tape with semis surging, confirming extreme relative weakness. AI capex anxiety is multi"
+  },
+  "MSFT": {
+    "signal_history": [
+      {
+        "date": "2026-11-05",
+        "action": "BUY",
+        "price": 555.8
+      }
+    ],
+    "mention_count": 1,
+    "last_mentioned": "2026-11-05",
+    "last_note": "Named alongside AAPL and AMZN as postelection buy signal by IBD. Azure AI momentum well-established from prior earnings beat. Dow surge and consumer/tech rotation provide macro tailwind. Multiple sour"
   },
   "MSTR": {
     "signal_history": [
@@ -404,9 +485,9 @@
   },
   "MU": {
     "signal_history": [],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-30",
-    "last_note": "AMZN/GOOGL earnings shock drags semis; AI capex anxiety reignites chipmaker demand concerns"
+    "mention_count": 4,
+    "last_mentioned": "2026-11-06",
+    "last_note": "AI spending repricing + Democrat data center regulation fears crush semis; Cathie Wood rotating out of AMD signals institutional exit"
   },
   "NET": {
     "signal_history": [
@@ -453,11 +534,21 @@
         "date": "2026-10-29",
         "action": "BUY",
         "price": 215.38
+      },
+      {
+        "date": "2026-10-31",
+        "action": "SELL",
+        "price": 204.64
+      },
+      {
+        "date": "2026-11-06",
+        "action": "BUY",
+        "price": 181.6
       }
     ],
-    "mention_count": 3,
-    "last_mentioned": "2026-10-29",
-    "last_note": "NVDA BUY from Tue at $216.00 is -0.3% — reaffirming for second time. ORCL and MSFT beats confirm AI training and inference demand cycle; Anthropic IPO filing directly cites NVDA chip dependency. Today"
+    "mention_count": 5,
+    "last_mentioned": "2026-11-06",
+    "last_note": "New catalyst: Cramer calls NVDA the cheapest in a decade after a 22% crash from recent highs. Box-NVDA AI Agent partnership announced today confirms enterprise AI demand pipeline remains intact. Prior"
   },
   "ORCL": {
     "signal_history": [
@@ -465,19 +556,19 @@
         "date": "2026-10-29",
         "action": "BUY",
         "price": 144.54
+      },
+      {
+        "date": "2026-11-03",
+        "action": "SELL",
+        "price": 119.22
       }
     ],
-    "mention_count": 1,
-    "last_mentioned": "2026-10-29",
-    "last_note": "Blowout earnings with explicit 2030 cash flow guidance directly rebuts AI spending fears. Multi-source confirmation (Research notes, sector-wide relief rally). MSFT Azure beat is a second confirming c"
+    "mention_count": 3,
+    "last_mentioned": "2026-11-04",
+    "last_note": "$20B AI funding raise and multi-session momentum; squeezing open SELL — market treating dilution as a demand signal"
   },
   "PLTR": {
     "signal_history": [
-      {
-        "date": "2026-10-17",
-        "action": "SELL",
-        "price": 186.03
-      },
       {
         "date": "2026-10-17",
         "action": "SELL",
@@ -517,24 +608,30 @@
         "date": "2026-10-22",
         "action": "SELL",
         "price": 201.72
+      },
+      {
+        "date": "2026-11-04",
+        "action": "SELL",
+        "price": 175.4
+      },
+      {
+        "date": "2026-11-06",
+        "action": "SELL",
+        "price": 154.99
       }
     ],
-    "mention_count": 10,
-    "last_mentioned": "2026-10-29",
-    "last_note": "Valuation compression thesis reasserting — lagging as capital rotates toward hard infra and semis over software"
+    "mention_count": 12,
+    "last_mentioned": "2026-11-06",
+    "last_note": "Reaffirmed — open SELL from $175.40 (Wed) is now +11.6% in our favor. Down 9.7% today extending multi-week valuation compression. Palantir history article confirms stock sells off despite strong quart"
+  },
+  "QCOM": {
+    "signal_history": [],
+    "mention_count": 1,
+    "last_mentioned": "2026-10-31",
+    "last_note": "Intel Effect and AI capex reckoning hammers the entire semiconductor sector (Yahoo/WSJ)"
   },
   "RTX": {
     "signal_history": [
-      {
-        "date": "2026-10-17",
-        "action": "BUY",
-        "price": 193.92
-      },
-      {
-        "date": "2026-10-17",
-        "action": "BUY",
-        "price": 193.92
-      },
       {
         "date": "2026-10-17",
         "action": "BUY",
@@ -574,17 +671,27 @@
         "date": "2026-10-30",
         "action": "BUY",
         "price": 199.4
+      },
+      {
+        "date": "2026-10-31",
+        "action": "BUY",
+        "price": 199.8
+      },
+      {
+        "date": "2026-11-03",
+        "action": "BUY",
+        "price": 202.79
       }
     ],
-    "mention_count": 13,
-    "last_mentioned": "2026-10-30",
-    "last_note": "Reaffirming open BUY from Tue at $197.48, now +1.0%. LHX blowout with $11B missile defense backlog surge is the strongest read-through for RTX: same DoD customer, same program types. Defense rally now"
+    "mention_count": 15,
+    "last_mentioned": "2026-11-03",
+    "last_note": "Reaffirming open BUY from Tue at $197.48, now +2.7% in our favor. Defense holds up relatively well (+1.5%) even as energy geopolitical premium fades on Iran deal hopes. RTX has broader revenue diversi"
   },
   "SAP": {
     "signal_history": [],
-    "mention_count": 1,
-    "last_mentioned": "2026-10-23",
-    "last_note": "EU enterprise software outperforms as US AI trade unwinds; German/EU names benefit from capital rotation"
+    "mention_count": 2,
+    "last_mentioned": "2026-11-06",
+    "last_note": "EU enterprise software holds up as investors flee US chip/AI exposure; relative safe-haven in German/EU tech"
   },
   "SLB": {
     "signal_history": [],
@@ -604,10 +711,38 @@
     "last_mentioned": "2026-10-28",
     "last_note": "Clears buy point per IBD; multi-catalyst bull case — robotaxi thesis, ARK reaffirm, $10B solar deal"
   },
+  "WMT": {
+    "signal_history": [
+      {
+        "date": "2026-10-31",
+        "action": "BUY",
+        "price": 123.51
+      },
+      {
+        "date": "2026-11-03",
+        "action": "BUY",
+        "price": 127.69
+      }
+    ],
+    "mention_count": 3,
+    "last_mentioned": "2026-11-04",
+    "last_note": "Defensive rotation unwind as risk-on returns; consumer staples giving back last week's safe-haven premium"
+  },
   "XOM": {
-    "signal_history": [],
-    "mention_count": 1,
-    "last_mentioned": "2026-10-28",
-    "last_note": "Energy retreating as Iran diplomacy signals ease geopolitical risk premium; Houthi Ras Tanura strike partially offset"
+    "signal_history": [
+      {
+        "date": "2026-10-31",
+        "action": "BUY",
+        "price": 187.25
+      },
+      {
+        "date": "2026-11-05",
+        "action": "SELL",
+        "price": 169.27
+      }
+    ],
+    "mention_count": 3,
+    "last_mentioned": "2026-11-05",
+    "last_note": "Open XOM BUY from $187.25 is now -9.6% — a confirmed loss. New catalyst: Democratic sweep explicitly expected to change US energy policy (Reuters). Iran deal diplomacy removes oil geopolitical premium"
   }
 }
