@@ -192,7 +192,7 @@
       "mega-cap divergence",
       "Fed hawkish hold"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-30T01:13:46+00:00",
@@ -205,7 +205,7 @@
       "growth-to-defensive rotation",
       "search revenue threat"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-10-31T00:56:28+00:00",
@@ -218,7 +218,7 @@
       "defensive rotation",
       "geopolitical oil premium"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-03T02:59:50+00:00",
@@ -231,7 +231,7 @@
       "post-earnings divergence",
       "energy premium fade"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-04T01:34:05+00:00",
@@ -244,7 +244,7 @@
       "defensive unwind",
       "geopolitical premium fade"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-05T01:36:50+00:00",
@@ -269,6 +269,71 @@
       "AI spending repricing",
       "post-election reversal",
       "risk-off deleveraging"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-07T01:02:20+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "Semiconductors and AI names staged a sharp rebound led by AMD (+11% on record revenue) and TSM (+6.3%), reversing last week's brutal chip selloff and confirming intact AI demand. Mega-cap tech (MSFT, AAPL) lagged the recovery while defense and consumer defensives continued their post-election unwind. Capital rotation is selectively back into growth — NVDA and AMZN BUYs are working, PLTR SELL is +8.6% in favor, and MSFT BUY was cut on a fresh negative catalyst (Oracle cloud deal wind-down).",
+    "themes": [
+      "semi recovery",
+      "AI capex rebound",
+      "post-election defense unwind",
+      "mega-cap rotation lag",
+      "selective risk-on"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-10T03:42:56+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "A broad risk-on surge drove the Dow up 1,100+ points, with semiconductors and AI names leading — AMD soared 13.3% on a Google Cloud EPYC design win and Oppenheimer upgrade, NET jumped 9.3% on a blowout Q3 beat-and-raise, and AVGO gained 8.8% on sector momentum. NVDA was the lone major decliner (-4.3%) as a WSJ-reported CEO probe into Jensen Huang created governance and succession uncertainty, prompting a signal flip to SELL. Key lessons reinforce requiring multi-source fundamental confirmation before BUY entries and treating leadership risk as an immediate exit trigger.",
+    "themes": [
+      "semi recovery",
+      "AI chip rivalry",
+      "CEO governance risk",
+      "risk-on rotation",
+      "post-election broadening"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-11T01:22:05+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "A hotter-than-expected CPI print reignited Fed 50bps rate-hike fears, sending Treasury yields surging and dragging Nasdaq lower — NVDA fell 5.5% (extending the open SELL to +5.5% in favor) while MSFT dropped 2.2% as high-multiple AI/tech names bore the brunt. Defense stocks (LMT +2.5%) found a bid after the House blocked Hegseth's impeachment, restoring DoD spending visibility, and crypto-adjacent MARA surged 10.5% even as broader risk appetite deteriorated. Net/TSM showed exceptional relative strength on strong fundamentals, while COIN underperformed its crypto peers, reinforcing caution on exchange-specific names amid rate headwinds.",
+    "themes": [
+      "hot CPI rate-hike fears",
+      "AI semi selloff",
+      "defense rally",
+      "crypto divergence",
+      "yield surge risk-off"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-12T02:22:46+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "CoreWeave's 168% revenue beat reignited the AI infrastructure trade, driving broad semiconductor gains with MU +11.9%, ORCL +8.8%, and INTC +7.5%, while TSM and MU BUYs are well in the money. NVDA surged +2.87% intraday but collapsed ~8% after-hours on multi-source reports of a board vote to remove CEO Jensen Huang, keeping the open SELL from $178.67 firmly in profit. Mega-cap tech (MSFT, META, AMZN) lagged badly on a broadly green tape, reinforcing persistent relative weakness and active SELL signals in those names.",
+    "themes": [
+      "AI infra revival",
+      "NVDA CEO crisis",
+      "semi sector rebound",
+      "mega-cap underperformance",
+      "CoreWeave catalyst"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-13T02:00:27+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "Jensen Huang's abrupt NVDA CEO resignation is the dominant catalyst, sending NVDA down 4.3% while AMD and AVGO surge ~5.5-5.9% on rotation into alternative semis; the open NVDA SELL from $178.67 is now +7.0% in favor. Crypto-adjacent names (MSTR -6.5%, MARA -6.0%) are cratering under rising yield pressure alongside a Microsoft outage dragging mega-cap tech, keeping broad indices in the red. Energy names (XOM +1.84%) caught a bid from a Houthi attack on a Saudi pipeline, while AVGO and GOOGL emerge as the cleanest new BUY setups amid persistent AI infrastructure demand.",
+    "themes": [
+      "NVDA governance crisis",
+      "semi rotation AMD/AVGO",
+      "crypto-adjacent selloff",
+      "yield pressure risk-off",
+      "energy geopolitical premium"
     ],
     "compressed": false
   }
