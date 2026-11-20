@@ -257,7 +257,7 @@
       "beat-and-lower AI risk",
       "crypto risk-on"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-06T01:42:36+00:00",
@@ -270,7 +270,7 @@
       "post-election reversal",
       "risk-off deleveraging"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-07T01:02:20+00:00",
@@ -283,7 +283,7 @@
       "mega-cap rotation lag",
       "selective risk-on"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-10T03:42:56+00:00",
@@ -296,7 +296,7 @@
       "risk-on rotation",
       "post-election broadening"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-11T01:22:05+00:00",
@@ -309,7 +309,7 @@
       "crypto divergence",
       "yield surge risk-off"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-12T02:22:46+00:00",
@@ -334,6 +334,71 @@
       "crypto-adjacent selloff",
       "yield pressure risk-off",
       "energy geopolitical premium"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-14T01:33:48+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "A risk-off wave swept the AI/semiconductor complex for a third consecutive day, driven by the NVDA CEO resignation fallout and an HSBC sector downgrade, pushing AMD -8.75%, AVGO -4.76%, and NVDA lower while capital rotated into defensives like WMT, CVX, and META. Active SELL signals on NVDA (+8.8%) and AMD (+8.8%) are deep in the money, while the META SELL from $628.77 has flipped to a loss and warrants closing. Energy names caught a geopolitical bid from simultaneous Reuters reports of Iranian IRGC tanker mine strikes in the Hormuz Strait and Houthi missile attacks on Saudi forces, reinforcing the CVX BUY thesis.",
+    "themes": [
+      "semi contagion",
+      "NVDA governance crisis",
+      "defensive rotation",
+      "energy geopolitical bid",
+      "hyperscaler GPU grab"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-17T04:04:40+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "A new US rule curbing China's access to AI chips (Reuters/CNBC) triggered a broad risk-off selloff, crushing semiconductors and AI names — Nasdaq fell 2.5% with NVDA, MU, AVGO, and AI ticker all down 4–10%. Defensive rotation into healthcare (UNH +1.1%) and consumer staples (COST +0.7%, WMT +0.25%) were the only bright spots in an almost entirely red 30-stock universe. NVDA's Tuesday earnings remain a binary risk event compounded by ongoing CEO succession uncertainty following Jensen Huang's exit, while open SELL signals on NVDA (+12.6%) and AMD (+13.8%) continue to outperform a struggling BUY book (37% hit rate).",
+    "themes": [
+      "AI chip export curbs",
+      "semi selloff",
+      "defensive rotation",
+      "NVDA earnings risk",
+      "risk-off tape"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-18T03:02:00+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "A broad risk-off wave is crushing AI/software (CRM -9.5%), healthcare (UNH -5.4% on CMS Medicare Advantage clawback), and crypto-adjacent names (MSTR -6.3%) as VIX surges for a fourth consecutive day and a generational rotation from tech to defensives accelerates. Defense (RTX, LMT) and diversified semis (AVGO +2.5%) are the sole survivors, buoyed by dual Middle East escalation events (US strikes on Qeshm Island, Bahrain intercepts) and an NVDA earnings beat validating AI infrastructure demand. Key signals include high-confidence SELLs on NVDA (export curb + CEO uncertainty) and UNH (regulatory liability flip), with new BUYs initiated on RTX, AVGO, and AMZN (White House AI champion designation + Anthropic IPO optionality).",
+    "themes": [
+      "risk-off rotation",
+      "defense rally",
+      "AI/tech selloff",
+      "VIX surge",
+      "geopolitical escalation"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-19T02:43:09+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "Anthropic's record $81.3B IPO dominated the session, lifting AI/cloud and semi names (NET +5.7%, AMD +5.3%, AMZN +3.8%, AVGO +3.6%) while NVDA fell -2.9% as post-CEO-exit governance concerns offset an earnings beat. Energy cratered on US-Iran oil transfer curbs (XOM/CVX/OXY all ~-4–5%), UNH collapsed -10.2% on CMS Medicare Advantage clawback proposals, and crypto-adjacent names sold off on hawkish Fed October minutes signaling more rate hikes. Broad indices barely moved as intense sector rotation offset gains and losses.",
+    "themes": [
+      "Anthropic IPO / AI capex",
+      "semi rotation NVDA-to-AMD/AVGO",
+      "Fed hawkishness resurgence",
+      "energy Iran blockade",
+      "healthcare regulatory crackdown"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-20T02:29:25+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "A broad risk-off selloff accelerated into a 6th consecutive S&P 500 decline, with the AI/semiconductor complex hit hardest by a triple catalyst: a Hunterbrook short-seller report linking AMD firmware to a blacklisted Chinese firm (-7.7%), a California AG subpoena adding legal/governance overhang to NVDA (-ongoing), and Anthropic's IPO pop failing to revive the AI trade. SELL discipline dominated the session with NVDA SELL +6.5% in favor and UNH SELL +15.2%, while only CVX held green on Middle East energy risk premium from a Houthi strike on Riyadh. BUY positions in AVGO, AMZN, and COST are holding but underwater pressure is mounting across the full book.",
+    "themes": [
+      "risk-off selloff",
+      "AI/semi collapse",
+      "short-seller attack",
+      "SELL discipline wins",
+      "energy lone holdout"
     ],
     "compressed": false
   }

@@ -1,66 +1,6 @@
 {
   "recent": [
     {
-      "at": "2026-11-05T01:36:50+00:00",
-      "session": "🌅 PRE-MARKET",
-      "summary": "A Democratic congressional sweep triggered the biggest post-midterm Dow rally in 44 years (+3%), with mega-cap tech (MSFT +6.7%, AMZN +6.1%) and consumer names (MCD +6.5%) surging on election clarity and rotation into lower-risk sectors. Defense (LMT -6.9%) and energy (XOM -4.6%) cratered as Vance repudiated the Iran war and Democratic policy shifts erased geopolitical risk premiums. DDOG collapsed 14.4% on a beat-and-lower earnings reaction, reinforcing that AI/cloud remains treacherous even on strong fundamentals, while the open AMZN BUY from $245.63 extended to +8.3%.",
-      "themes": [
-        "postelection rally",
-        "defense & energy unwind",
-        "mega-cap tech rotation",
-        "beat-and-lower AI risk",
-        "crypto risk-on"
-      ]
-    },
-    {
-      "at": "2026-11-06T01:42:36+00:00",
-      "session": "🌅 PRE-MARKET",
-      "summary": "The Nasdaq plunged 5.5% into correction territory — its worst chip selloff since Covid — fully erasing the post-election rally as AI spending fears and Democrat data center regulation concerns crushed semis (MU -17.5%, AMD -17.3%, TSM -10.8%) and crypto-adjacent names (MARA -14.5%). Capital rotated hard into defensive safe-havens, with COST and SAP the only green names in a 30-stock universe. Key signals: AMD BUY cut at -16.4% loss, NVDA re-entered at oversold levels (MEDIUM confidence), PLTR SELL extended to +11.6% gain, and AMZN BUY held resilient at +6.0%.",
-      "themes": [
-        "chip wipeout",
-        "defensive rotation",
-        "AI spending repricing",
-        "post-election reversal",
-        "risk-off deleveraging"
-      ]
-    },
-    {
-      "at": "2026-11-07T01:02:20+00:00",
-      "session": "🌅 PRE-MARKET",
-      "summary": "Semiconductors and AI names staged a sharp rebound led by AMD (+11% on record revenue) and TSM (+6.3%), reversing last week's brutal chip selloff and confirming intact AI demand. Mega-cap tech (MSFT, AAPL) lagged the recovery while defense and consumer defensives continued their post-election unwind. Capital rotation is selectively back into growth — NVDA and AMZN BUYs are working, PLTR SELL is +8.6% in favor, and MSFT BUY was cut on a fresh negative catalyst (Oracle cloud deal wind-down).",
-      "themes": [
-        "semi recovery",
-        "AI capex rebound",
-        "post-election defense unwind",
-        "mega-cap rotation lag",
-        "selective risk-on"
-      ]
-    },
-    {
-      "at": "2026-11-10T03:42:56+00:00",
-      "session": "🌅 PRE-MARKET",
-      "summary": "A broad risk-on surge drove the Dow up 1,100+ points, with semiconductors and AI names leading — AMD soared 13.3% on a Google Cloud EPYC design win and Oppenheimer upgrade, NET jumped 9.3% on a blowout Q3 beat-and-raise, and AVGO gained 8.8% on sector momentum. NVDA was the lone major decliner (-4.3%) as a WSJ-reported CEO probe into Jensen Huang created governance and succession uncertainty, prompting a signal flip to SELL. Key lessons reinforce requiring multi-source fundamental confirmation before BUY entries and treating leadership risk as an immediate exit trigger.",
-      "themes": [
-        "semi recovery",
-        "AI chip rivalry",
-        "CEO governance risk",
-        "risk-on rotation",
-        "post-election broadening"
-      ]
-    },
-    {
-      "at": "2026-11-11T01:22:05+00:00",
-      "session": "🌅 PRE-MARKET",
-      "summary": "A hotter-than-expected CPI print reignited Fed 50bps rate-hike fears, sending Treasury yields surging and dragging Nasdaq lower — NVDA fell 5.5% (extending the open SELL to +5.5% in favor) while MSFT dropped 2.2% as high-multiple AI/tech names bore the brunt. Defense stocks (LMT +2.5%) found a bid after the House blocked Hegseth's impeachment, restoring DoD spending visibility, and crypto-adjacent MARA surged 10.5% even as broader risk appetite deteriorated. Net/TSM showed exceptional relative strength on strong fundamentals, while COIN underperformed its crypto peers, reinforcing caution on exchange-specific names amid rate headwinds.",
-      "themes": [
-        "hot CPI rate-hike fears",
-        "AI semi selloff",
-        "defense rally",
-        "crypto divergence",
-        "yield surge risk-off"
-      ]
-    },
-    {
       "at": "2026-11-12T02:22:46+00:00",
       "session": "🌅 PRE-MARKET",
       "summary": "CoreWeave's 168% revenue beat reignited the AI infrastructure trade, driving broad semiconductor gains with MU +11.9%, ORCL +8.8%, and INTC +7.5%, while TSM and MU BUYs are well in the money. NVDA surged +2.87% intraday but collapsed ~8% after-hours on multi-source reports of a board vote to remove CEO Jensen Huang, keeping the open SELL from $178.67 firmly in profit. Mega-cap tech (MSFT, META, AMZN) lagged badly on a broadly green tape, reinforcing persistent relative weakness and active SELL signals in those names.",
@@ -83,6 +23,66 @@
         "yield pressure risk-off",
         "energy geopolitical premium"
       ]
+    },
+    {
+      "at": "2026-11-14T01:33:48+00:00",
+      "session": "🌅 PRE-MARKET",
+      "summary": "A risk-off wave swept the AI/semiconductor complex for a third consecutive day, driven by the NVDA CEO resignation fallout and an HSBC sector downgrade, pushing AMD -8.75%, AVGO -4.76%, and NVDA lower while capital rotated into defensives like WMT, CVX, and META. Active SELL signals on NVDA (+8.8%) and AMD (+8.8%) are deep in the money, while the META SELL from $628.77 has flipped to a loss and warrants closing. Energy names caught a geopolitical bid from simultaneous Reuters reports of Iranian IRGC tanker mine strikes in the Hormuz Strait and Houthi missile attacks on Saudi forces, reinforcing the CVX BUY thesis.",
+      "themes": [
+        "semi contagion",
+        "NVDA governance crisis",
+        "defensive rotation",
+        "energy geopolitical bid",
+        "hyperscaler GPU grab"
+      ]
+    },
+    {
+      "at": "2026-11-17T04:04:40+00:00",
+      "session": "🌅 PRE-MARKET",
+      "summary": "A new US rule curbing China's access to AI chips (Reuters/CNBC) triggered a broad risk-off selloff, crushing semiconductors and AI names — Nasdaq fell 2.5% with NVDA, MU, AVGO, and AI ticker all down 4–10%. Defensive rotation into healthcare (UNH +1.1%) and consumer staples (COST +0.7%, WMT +0.25%) were the only bright spots in an almost entirely red 30-stock universe. NVDA's Tuesday earnings remain a binary risk event compounded by ongoing CEO succession uncertainty following Jensen Huang's exit, while open SELL signals on NVDA (+12.6%) and AMD (+13.8%) continue to outperform a struggling BUY book (37% hit rate).",
+      "themes": [
+        "AI chip export curbs",
+        "semi selloff",
+        "defensive rotation",
+        "NVDA earnings risk",
+        "risk-off tape"
+      ]
+    },
+    {
+      "at": "2026-11-18T03:02:00+00:00",
+      "session": "🌅 PRE-MARKET",
+      "summary": "A broad risk-off wave is crushing AI/software (CRM -9.5%), healthcare (UNH -5.4% on CMS Medicare Advantage clawback), and crypto-adjacent names (MSTR -6.3%) as VIX surges for a fourth consecutive day and a generational rotation from tech to defensives accelerates. Defense (RTX, LMT) and diversified semis (AVGO +2.5%) are the sole survivors, buoyed by dual Middle East escalation events (US strikes on Qeshm Island, Bahrain intercepts) and an NVDA earnings beat validating AI infrastructure demand. Key signals include high-confidence SELLs on NVDA (export curb + CEO uncertainty) and UNH (regulatory liability flip), with new BUYs initiated on RTX, AVGO, and AMZN (White House AI champion designation + Anthropic IPO optionality).",
+      "themes": [
+        "risk-off rotation",
+        "defense rally",
+        "AI/tech selloff",
+        "VIX surge",
+        "geopolitical escalation"
+      ]
+    },
+    {
+      "at": "2026-11-19T02:43:09+00:00",
+      "session": "🌅 PRE-MARKET",
+      "summary": "Anthropic's record $81.3B IPO dominated the session, lifting AI/cloud and semi names (NET +5.7%, AMD +5.3%, AMZN +3.8%, AVGO +3.6%) while NVDA fell -2.9% as post-CEO-exit governance concerns offset an earnings beat. Energy cratered on US-Iran oil transfer curbs (XOM/CVX/OXY all ~-4–5%), UNH collapsed -10.2% on CMS Medicare Advantage clawback proposals, and crypto-adjacent names sold off on hawkish Fed October minutes signaling more rate hikes. Broad indices barely moved as intense sector rotation offset gains and losses.",
+      "themes": [
+        "Anthropic IPO / AI capex",
+        "semi rotation NVDA-to-AMD/AVGO",
+        "Fed hawkishness resurgence",
+        "energy Iran blockade",
+        "healthcare regulatory crackdown"
+      ]
+    },
+    {
+      "at": "2026-11-20T02:29:25+00:00",
+      "session": "🌅 PRE-MARKET",
+      "summary": "A broad risk-off selloff accelerated into a 6th consecutive S&P 500 decline, with the AI/semiconductor complex hit hardest by a triple catalyst: a Hunterbrook short-seller report linking AMD firmware to a blacklisted Chinese firm (-7.7%), a California AG subpoena adding legal/governance overhang to NVDA (-ongoing), and Anthropic's IPO pop failing to revive the AI trade. SELL discipline dominated the session with NVDA SELL +6.5% in favor and UNH SELL +15.2%, while only CVX held green on Middle East energy risk premium from a Houthi strike on Riyadh. BUY positions in AVGO, AMZN, and COST are holding but underwater pressure is mounting across the full book.",
+      "themes": [
+        "risk-off selloff",
+        "AI/semi collapse",
+        "short-seller attack",
+        "SELL discipline wins",
+        "energy lone holdout"
+      ]
     }
   ],
   "weekly": [
@@ -100,7 +100,11 @@
     },
     {
       "week": "2026-W45",
-      "summary": "**Week 1 November Summary:** Markets whipsawed between a sharp growth-to-defensive rotation early in the week—hammering AI/cloud names like ORCL (-8.8%) and INTC (-8.8%) while lifting WMT and COST 3-4%—before a broad Election Day risk-on rebound reversed many of those moves, with crypto-adjacent names (MARA +11%, Riot +14%), AI semis (AMD earnings blowout), and cloud (ORCL +5.8%) surging. AMZN remained the standout long throughout on AWS/e-commerce strength, while GOOGL and DDOG stayed in downtrends and energy faded as US-Iran deal hopes eroded geopolitical premium, pressuring the open XOM BUY. New BUYs were initiated on AMD, COIN, and AMZN, AAPL and PLTR were flagged as SELLs, and the track record remained challenged at 47%/33% win rate with the ORCL SELL hitting max loss against the sharp short-squeeze rebound."
+      "summary": "**Summary:** The two-week period was dominated by extreme semiconductor volatility — an initial brutal chip selloff (MU -17.5%, AMD -17.3%, TSM -10.8%) driven by AI spending fears and regulation concerns was followed by a sharp rebound (AMD +11%, TSM +6.3%) confirming AI capex demand remains intact, while mega-cap tech (MSFT, AAPL) and post-election defensives lagged the recovery. Key calls saw AMZN emerge as the standout long (+8.3%), PLTR SELL extend gains to +11.6%, AMD BUY cut at -16.4% loss, and MSFT BUY exited on a fresh negative catalyst, with NVDA re-entered at oversold levels into the bounce. Overall portfolio conviction remains cautious with a challenged 47%/33% win rate, as cloud earnings risk (DDOG -14.4%) and ongoing sector rotation complexity continue to pressure execution."
+    },
+    {
+      "week": "2026-W46",
+      "summary": "**Weekly Summary (2 Weeks)**\n\nMarkets whipsawed between a broad risk-on surge (Dow +1,100+) driving semiconductor and AI gains — AMD +13.3% on a Google Cloud win, NET +9.3% on a strong earnings beat, AVGO +8.8% — and a subsequent risk-off reversal triggered by a hotter-than-expected CPI print reigniting 50bps Fed hike fears, with NVDA the standout loser across both weeks (-4.3% then -5.5%) after a CEO governance probe prompted a SELL flip. Defensives (LMT +2.5%) and crypto (MARA +10.5%) diverged from the broader tech selloff, while NET/TSM showed resilience on fundamentals versus COIN's underperformance highlighting exchange-specific rate sensitivity. Key discipline takeaways: require multi-source confirmation before entering BUY signals, treat leadership/governance risk as an immediate exit trigger, and size down high-multiple AI names into yield-surge environments."
     }
   ]
 }
