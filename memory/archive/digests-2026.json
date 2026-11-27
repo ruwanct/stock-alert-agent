@@ -322,7 +322,7 @@
       "mega-cap underperformance",
       "CoreWeave catalyst"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-13T02:00:27+00:00",
@@ -335,7 +335,7 @@
       "yield pressure risk-off",
       "energy geopolitical premium"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-14T01:33:48+00:00",
@@ -348,7 +348,7 @@
       "energy geopolitical bid",
       "hyperscaler GPU grab"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-17T04:04:40+00:00",
@@ -361,7 +361,7 @@
       "NVDA earnings risk",
       "risk-off tape"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-18T03:02:00+00:00",
@@ -374,7 +374,7 @@
       "VIX surge",
       "geopolitical escalation"
     ],
-    "compressed": false
+    "compressed": true
   },
   {
     "at": "2026-11-19T02:43:09+00:00",
@@ -399,6 +399,71 @@
       "short-seller attack",
       "SELL discipline wins",
       "energy lone holdout"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-21T02:40:31+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "A broad risk-off acceleration has pushed the Nasdaq to its worst week since 2020 and both major indexes into correction territory, driven by a triple catalyst: an SEC accounting probe into Nvidia (per Reuters), a disappointing Anthropic IPO, and massive bearish options bets confirmed in chip stocks (per CNBC). The AI/semiconductor complex is in full rout — NVDA -14%, MARA -18.6%, MU -13.9% — while defensives and energy hold firm, with healthcare (UNH +2.84%) and consumer staples (WMT +1.52%) acting as the only working rotation plays. SELL discipline continues to dominate the track record (58% win rate vs. 28% BUY), with the open NVDA SELL now +19.6% in profit as the standout call of the cycle.",
+    "themes": [
+      "AI/semi rout",
+      "risk-off correction",
+      "defensive rotation",
+      "NVDA SEC probe",
+      "SELL bias dominance"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-24T05:25:29+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "Jensen Huang's reinstatement as NVDA CEO triggered a historic short-squeeze and Nasdaq's best session since April 2025, with NVDA surging +31.5%, MU +19%, and INTC +16% on massive AI infrastructure sentiment reversal. New BUY signals were initiated on NVDA, MU, and MSFT, while energy positions in XOM and CVX were cut as oil sits near 3-month lows and capital rotates hard into growth. The prior NVDA SELL thesis (governance/SEC risk) is now fully resolved; energy BUY discipline flagged as a repeated weak spot with CVX -6.4% and XOM -1.9% on open positions.",
+    "themes": [
+      "Jensen Huang reinstatement",
+      "semi short-squeeze",
+      "AI capex revival",
+      "energy rotation-out",
+      "risk-on rally"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-25T04:27:06+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "Risk-off sentiment resurged as the semiconductor/AI complex (MU -11%, AMD -8.9%, NVDA -5.9%) gave back Monday's euphoria-driven gains amid analyst downgrades, inflation data caution, and PC/auto memory mix concerns. Capital rotated firmly into defensives, with LMT and JNJ leading on Houthi geopolitical escalation and healthcare staples demand, while SAP outperformed on EU tech rotation away from US semis. The BUY book took heavy damage with a 21% hit rate on longs, reinforcing a disciplined posture of cutting losses early and awaiting confirmed bases before re-entry.",
+    "themes": [
+      "semi selloff",
+      "defensive rotation",
+      "geopolitical defense premium",
+      "EU tech rotation",
+      "risk-off discipline"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-26T03:41:54+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "Pre-Thanksgiving risk-off trade hit the AI/semiconductor complex hard (NVDA -3.9%, MU -4.5%, ORCL -5.1%), compounded by an S&P Global credit warning and ongoing governance/regulatory scrutiny on Nvidia, while the Nasdaq staged a dramatic intraday reversal from -1,100 Dow points to close higher. Defensives and low-capex tech held firm, with LMT (+2.1%) buoyed by dual geopolitical catalysts (Kyiv missile strike + Houthi escalation), META (+3.4%) rotating as a safe-haven versus capex-heavy semis, and AAPL continuing its divergence (+30.61% YTD vs. NVDA -21.35%). SELL discipline remains the dominant edge this cycle, with MU SELL +4.5% and NVDA SELL +3.9% both in the money, while the low BUY hit rate (23%) demands a higher confirmation bar for new longs.",
+    "themes": [
+      "AI/semi selloff",
+      "defense rally",
+      "safe-haven rotation",
+      "NVDA governance risk",
+      "risk-off pre-holiday"
+    ],
+    "compressed": false
+  },
+  {
+    "at": "2026-11-27T03:42:41+00:00",
+    "session": "🌅 PRE-MARKET",
+    "summary": "AI/semiconductor stocks remain under sustained multi-day pressure (NVDA -21% from highs, MU SELL +4.5%, ORCL at 52-week low with CDS stress at 360bps), while defensives and low-capex mega-cap tech (LMT, AAPL, META) continue to outperform as safe-haven rotations dominate a Nasdaq correction. SELL discipline is the only proven edge this cycle with a 23% BUY hit rate, as macro tape overrides single-stock fundamentals in risk-off conditions. Mideast escalation (Aramco Jazan refinery attack, Hamas-Israel, Kuwait site) sustains defense premium, and holiday-week thin volume is driving erratic futures swings.",
+    "themes": [
+      "AI/semi selloff",
+      "defense rally",
+      "safe-haven rotation",
+      "SELL discipline",
+      "Mideast escalation"
     ],
     "compressed": false
   }

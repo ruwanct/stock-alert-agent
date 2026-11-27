@@ -22,21 +22,6 @@
         "price": 343.46
       },
       {
-        "date": "2026-10-17",
-        "action": "BUY",
-        "price": 343.46
-      },
-      {
-        "date": "2026-10-17",
-        "action": "BUY",
-        "price": 343.46
-      },
-      {
-        "date": "2026-10-17",
-        "action": "BUY",
-        "price": 343.46
-      },
-      {
         "date": "2026-10-20",
         "action": "BUY",
         "price": 342.94
@@ -50,11 +35,26 @@
         "date": "2026-11-04",
         "action": "SELL",
         "price": 331.9
+      },
+      {
+        "date": "2026-11-25",
+        "action": "BUY",
+        "price": 354.07
+      },
+      {
+        "date": "2026-11-26",
+        "action": "BUY",
+        "price": 355.58
+      },
+      {
+        "date": "2026-11-27",
+        "action": "BUY",
+        "price": 355.58
       }
     ],
-    "mention_count": 10,
-    "last_mentioned": "2026-11-04",
-    "last_note": "AAPL down -1.9% on a broadly green tape with semis surging — extreme relative weakness. Jim Cramer executioner warning, IBD cites Apple tumble on earnings, and IBD midterm focus all bearish. Prior BUY"
+    "mention_count": 13,
+    "last_mentioned": "2026-11-27",
+    "last_note": "REAFFIRMED x2. Open BUY from $354.07 now +0.4%. Multi-source confirms AI agent development as new growth lever while AAPL acts as Nasdaq safe-haven (+30.6% YTD vs NVDA -21%). ETF floor intact."
   },
   "AI": {
     "signal_history": [],
@@ -100,9 +100,9 @@
         "price": 534.06
       }
     ],
-    "mention_count": 10,
-    "last_mentioned": "2026-11-20",
-    "last_note": "Hunterbrook Media short report links AMD firmware to blacklisted Chinese server maker; fund discloses active short position"
+    "mention_count": 11,
+    "last_mentioned": "2026-11-25",
+    "last_note": "Semis give back Monday gains; Hunterbrook China-link overhang persists, no new positive catalyst"
   },
   "AMZN": {
     "signal_history": [
@@ -286,11 +286,16 @@
         "date": "2026-11-20",
         "action": "WATCH",
         "price": null
+      },
+      {
+        "date": "2026-11-24",
+        "action": "SELL",
+        "price": 206.17
       }
     ],
-    "mention_count": 11,
-    "last_mentioned": "2026-11-20",
-    "last_note": "Sole green name in a 29/30 red tape — defensive energy bid from Houthi strike on Riyadh skyscraper confirmed by Reuters. However, open BUY from $219.89 is -6.4% loss and Trump Iran delay comment reduc"
+    "mention_count": 12,
+    "last_mentioned": "2026-11-24",
+    "last_note": "Open BUY from $219.89 is -6.4% loss. Oil soft on supply glut (Reuters). Prior Hormuz risk premium is fading — no new geopolitical catalyst to revive the energy trade today. Exiting to free capital."
   },
   "DDOG": {
     "signal_history": [
@@ -320,9 +325,9 @@
         "price": null
       }
     ],
-    "mention_count": 7,
-    "last_mentioned": "2026-11-05",
-    "last_note": "Beat-and-lower earnings reaction — Q4 guidance disappointed despite third straight full-year raise; AI cloud still treacherous"
+    "mention_count": 9,
+    "last_mentioned": "2026-11-27",
+    "last_note": "High-multiple AI/cloud punished as Nasdaq volatility persists; no new positive catalyst"
   },
   "GOOGL": {
     "signal_history": [
@@ -364,9 +369,9 @@
   },
   "INTC": {
     "signal_history": [],
-    "mention_count": 5,
-    "last_mentioned": "2026-11-12",
-    "last_note": "Broad semiconductor sector recovery lifts beaten-down INTC; catch-up trade after multi-week collapse"
+    "mention_count": 7,
+    "last_mentioned": "2026-11-25",
+    "last_note": "Semi sector rout; INTC lacks AI demand catalyst to hold Monday's sympathy bounce"
   },
   "JNJ": {
     "signal_history": [
@@ -374,11 +379,16 @@
         "date": "2026-10-23",
         "action": "BUY",
         "price": 267.61
+      },
+      {
+        "date": "2026-11-25",
+        "action": "BUY",
+        "price": 276.46
       }
     ],
-    "mention_count": 2,
-    "last_mentioned": "2026-10-23",
-    "last_note": "Defensive rotation is broadening beyond defense into healthcare as growth/AI names crater. JNJ up 3.8% in a -2.8% tape confirms safe-haven bid. No negative catalysts; Nasdaq below 50-day suggests rota"
+    "mention_count": 4,
+    "last_mentioned": "2026-11-25",
+    "last_note": "Defensive rotation into healthcare staples is the clearest working theme today alongside defense. JNJ +2.37% outperforming on a broadly negative tape. No company-specific negative catalyst. Healthcare"
   },
   "JPM": {
     "signal_history": [],
@@ -413,21 +423,6 @@
   "LMT": {
     "signal_history": [
       {
-        "date": "2026-10-17",
-        "action": "BUY",
-        "price": 552.09
-      },
-      {
-        "date": "2026-10-17",
-        "action": "BUY",
-        "price": 552.09
-      },
-      {
-        "date": "2026-10-23",
-        "action": "BUY",
-        "price": 589.91
-      },
-      {
         "date": "2026-10-23",
         "action": "BUY",
         "price": 604.18
@@ -461,17 +456,32 @@
         "date": "2026-11-11",
         "action": "BUY",
         "price": 603.12
+      },
+      {
+        "date": "2026-11-25",
+        "action": "BUY",
+        "price": 586.63
+      },
+      {
+        "date": "2026-11-26",
+        "action": "BUY",
+        "price": 599.24
+      },
+      {
+        "date": "2026-11-27",
+        "action": "BUY",
+        "price": 599.24
       }
     ],
-    "mention_count": 17,
-    "last_mentioned": "2026-11-18",
-    "last_note": "Geopolitical escalation (US Iran strike, Bahrain intercepts) keeps DoD spending premium intact"
+    "mention_count": 20,
+    "last_mentioned": "2026-11-27",
+    "last_note": "REAFFIRMED x2. Open BUY from $586.63 now +2.1%. Multi-source Reuters: Aramco Jazan refinery attack, Hamas-Israel escalation, Kuwait site attack all sustain fresh defense risk premium. Defense rally co"
   },
   "MARA": {
     "signal_history": [],
-    "mention_count": 13,
-    "last_mentioned": "2026-11-13",
-    "last_note": "Bitcoin miner reverses after prior surge; risk-off in crypto-adjacent names on yield pressure"
+    "mention_count": 14,
+    "last_mentioned": "2026-11-21",
+    "last_note": "Crypto-adjacent names crushed as COIN -6.3% and MSTR -9.7% — Bitcoin risk-off accelerates in correction environment"
   },
   "MCD": {
     "signal_history": [],
@@ -520,11 +530,21 @@
         "date": "2026-11-14",
         "action": "WATCH",
         "price": null
+      },
+      {
+        "date": "2026-11-26",
+        "action": "BUY",
+        "price": 609.89
+      },
+      {
+        "date": "2026-11-27",
+        "action": "BUY",
+        "price": 609.89
       }
     ],
-    "mention_count": 9,
-    "last_mentioned": "2026-11-14",
-    "last_note": "Open SELL from $628.77 is now a -2.0% loss as META surges +2.9% today — close the SELL. META is rotating higher on defensive AI-spending divergence from semis. No re-entry on either side until directi"
+    "mention_count": 11,
+    "last_mentioned": "2026-11-27",
+    "last_note": "REAFFIRMED. Open BUY from $609.89 flat. META +3.4% while Nasdaq broadly red — clearest safe-haven rotation signal in mega-cap tech. Low-capex AI model is a structural advantage in current tape."
   },
   "MSFT": {
     "signal_history": [
@@ -542,11 +562,16 @@
         "date": "2026-11-11",
         "action": "SELL",
         "price": 533.16
+      },
+      {
+        "date": "2026-11-24",
+        "action": "BUY",
+        "price": 492.5
       }
     ],
-    "mention_count": 4,
-    "last_mentioned": "2026-11-12",
-    "last_note": "Lagging on a green tape; power cost/subsidy concerns for data centers weigh on sentiment"
+    "mention_count": 5,
+    "last_mentioned": "2026-11-24",
+    "last_note": "Enterprise AI partnerships expanding (Danaher, V2X, Audi, Intel per Finnhub/Yahoo). Chamath frontier model comment is a catalyst. Lagging the rally at +1.65% — catch-up potential as AI sentiment norma"
   },
   "MSTR": {
     "signal_history": [
@@ -601,9 +626,9 @@
         "price": 153.48
       }
     ],
-    "mention_count": 17,
-    "last_mentioned": "2026-11-19",
-    "last_note": "Crypto risk-off continues; Fed rate hike expectations from Oct minutes crush crypto-adjacent names"
+    "mention_count": 19,
+    "last_mentioned": "2026-11-27",
+    "last_note": "Crypto-adjacent relief bounce; speculative pre-holiday short covering after heavy recent selling"
   },
   "MU": {
     "signal_history": [
@@ -611,11 +636,31 @@
         "date": "2026-11-12",
         "action": "BUY",
         "price": 811.3
+      },
+      {
+        "date": "2026-11-24",
+        "action": "BUY",
+        "price": 707.7
+      },
+      {
+        "date": "2026-11-25",
+        "action": "SELL",
+        "price": 629.79
+      },
+      {
+        "date": "2026-11-26",
+        "action": "SELL",
+        "price": 601.25
+      },
+      {
+        "date": "2026-11-27",
+        "action": "SELL",
+        "price": 601.25
       }
     ],
-    "mention_count": 6,
-    "last_mentioned": "2026-11-17",
-    "last_note": "Broad AI chip export curb news hits memory semis hard; prior BUY from $811.30 is -11.4%"
+    "mention_count": 11,
+    "last_mentioned": "2026-11-27",
+    "last_note": "REAFFIRMED x2. Open SELL from $629.79 now +4.5% and extending. AI capex crowding out PC/auto memory mix confirmed across multiple sessions. Prior BUY calls at $811 and $707 both failed badly — no reve"
   },
   "NET": {
     "signal_history": [
@@ -675,31 +720,6 @@
   "NVDA": {
     "signal_history": [
       {
-        "date": "2026-11-07",
-        "action": "BUY",
-        "price": 186.64
-      },
-      {
-        "date": "2026-11-10",
-        "action": "SELL",
-        "price": 178.67
-      },
-      {
-        "date": "2026-11-11",
-        "action": "SELL",
-        "price": 168.89
-      },
-      {
-        "date": "2026-11-12",
-        "action": "SELL",
-        "price": 173.73
-      },
-      {
-        "date": "2026-11-13",
-        "action": "SELL",
-        "price": 166.19
-      },
-      {
         "date": "2026-11-14",
         "action": "SELL",
         "price": 162.85
@@ -723,11 +743,36 @@
         "date": "2026-11-20",
         "action": "SELL",
         "price": 145.98
+      },
+      {
+        "date": "2026-11-21",
+        "action": "SELL",
+        "price": 125.53
+      },
+      {
+        "date": "2026-11-24",
+        "action": "BUY",
+        "price": 165.05
+      },
+      {
+        "date": "2026-11-25",
+        "action": "SELL",
+        "price": 155.38
+      },
+      {
+        "date": "2026-11-26",
+        "action": "SELL",
+        "price": 149.3
+      },
+      {
+        "date": "2026-11-27",
+        "action": "SELL",
+        "price": 149.3
       }
     ],
-    "mention_count": 15,
-    "last_mentioned": "2026-11-20",
-    "last_note": "Open SELL from $156.14 (Tue) now +6.5% in favor — reaffirming for 3rd time. California AG subpoena on chips and former CEO affair (Finnhub/Yahoo) adds fresh legal/governance overhang on top of CEO suc"
+    "mention_count": 20,
+    "last_mentioned": "2026-11-27",
+    "last_note": "REAFFIRMED x8. Open SELL from $155.38 now +3.9% in favor. Analyst piece confirms Jensen Huang return alone does not justify a BUY. Governance, SEC, and export headwinds persist. No multi-source revers"
   },
   "ORCL": {
     "signal_history": [
@@ -742,9 +787,9 @@
         "price": 119.22
       }
     ],
-    "mention_count": 4,
-    "last_mentioned": "2026-11-12",
-    "last_note": "CoreWeave rally + CFO flagged 7GW capacity additions; well-positioned for AI cloud demand surge"
+    "mention_count": 6,
+    "last_mentioned": "2026-11-27",
+    "last_note": "52-week low; 5-yr CDS at 360bps as investors question funding of $664B AI backlog — credit stress accelerating"
   },
   "PLTR": {
     "signal_history": [
@@ -868,9 +913,9 @@
   },
   "SAP": {
     "signal_history": [],
-    "mention_count": 4,
-    "last_mentioned": "2026-11-19",
-    "last_note": "EU tech selling on macro headwinds; Fed hawkishness hits high-multiple European software names"
+    "mention_count": 5,
+    "last_mentioned": "2026-11-25",
+    "last_note": "EU tech rotation; German enterprise software outperforming as capital flees US semi/AI complex"
   },
   "SLB": {
     "signal_history": [],
@@ -938,11 +983,16 @@
         "date": "2026-11-20",
         "action": "SELL",
         "price": 330.48
+      },
+      {
+        "date": "2026-11-21",
+        "action": "BUY",
+        "price": 339.85
       }
     ],
-    "mention_count": 4,
-    "last_mentioned": "2026-11-20",
-    "last_note": "Open SELL from $389.68 (Wed) now +15.2% in favor — booking partial profit but reaffirming. CMS Medicare Advantage clawback is a structural multi-quarter liability, not a one-day event. Stock continues"
+    "mention_count": 6,
+    "last_mentioned": "2026-11-24",
+    "last_note": "Mild rotation selling as capital chases semiconductor rally; CMS clawback overhang persists"
   },
   "WMT": {
     "signal_history": [
@@ -955,11 +1005,16 @@
         "date": "2026-11-03",
         "action": "BUY",
         "price": 127.69
+      },
+      {
+        "date": "2026-11-21",
+        "action": "WATCH",
+        "price": null
       }
     ],
-    "mention_count": 6,
-    "last_mentioned": "2026-11-17",
-    "last_note": "Defensive rotation into consumer staples on broad tech/semi selloff"
+    "mention_count": 7,
+    "last_mentioned": "2026-11-21",
+    "last_note": "WMT is acting as a pure defensive haven — up +1.52% on a day when SPY is -3.64% and QQQ -5.67%. If correction deepens, WMT could attract sustained institutional rotation. Watch for a pullback toward $"
   },
   "XOM": {
     "signal_history": [
@@ -977,10 +1032,20 @@
         "date": "2026-11-13",
         "action": "WATCH",
         "price": null
+      },
+      {
+        "date": "2026-11-21",
+        "action": "BUY",
+        "price": 159.99
+      },
+      {
+        "date": "2026-11-24",
+        "action": "SELL",
+        "price": 156.9
       }
     ],
-    "mention_count": 4,
-    "last_mentioned": "2026-11-13",
-    "last_note": "Houthi attack on Saudi East-West pipeline pumping station is a fresh geopolitical catalyst (Reuters). XOM up +1.84% and prior SELL from $169.27 is now modestly underwater. Watching for follow-through "
+    "mention_count": 6,
+    "last_mentioned": "2026-11-24",
+    "last_note": "Open BUY from $159.99 is now -1.9% with no recovery catalyst. Oil near 3-month low on rising supply (Reuters). Capital is aggressively rotating out of energy into tech — cutting the loss before it dee"
   }
 }
